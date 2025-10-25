@@ -29,4 +29,8 @@ public class AppUser {
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Set<AppRole> roles = new HashSet<>();
+
+    // Mặc định, tất cả user khi được tạo ra sẽ có active = true
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
 }
