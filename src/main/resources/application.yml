@@ -2,13 +2,15 @@ spring:
   application:
     name: ecar-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecardb
-    username: postgres
-    password: 12345
+    url: jdbc:postgresql://localhost:5432/ecardb # postgres sql url
+    username: postgres # postgres username
+    password: postgres # postgres password
+    # config thread-pool
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       maximum-pool-size: 50
       minimum-idle: 25
+  # jpa config
   jpa:
     open-in-view: false
     properties:
@@ -17,16 +19,16 @@ spring:
           lob:
             non_contextual_creation: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
-    show-sql: true
+    show-sql: true # show sql
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # update means check if table in entities existed or not, if not -> create new table with
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id: ${GOOGLE_CLIENT_ID}
-            client-secret: ${GOOGLE_CLIENT_SECRET}
+            client-id: 945115052613-hu47pope4oc2gn1djuv1srm4ju3rt3bv.apps.googleusercontent.com
+            client-secret: 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
             scope: openid, profile, email
 server:
   port: 8080
