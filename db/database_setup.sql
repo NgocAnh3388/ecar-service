@@ -63,8 +63,41 @@ COMMENT ON TABLE bookings IS 'Lưu trữ thông tin các lịch hẹn bảo dư�
 COMMENT ON COLUMN bookings.user_id IS 'Khóa ngoại trỏ tới người dùng đã tạo lịch hẹn.';
 
 
+
 -- =====================================================================
--- BẢNG 4: maintenance_items (LƯU DANH MỤC CÁC HẠNG MỤC BẢO DƯỠNG)
+-- BẢNG 4: service_records (LƯU LỊCH SỬ DỊCH VỤ) -- Bảng Mới
+-- =====================================================================
+CREATE TABLE service_records (
+                                 id BIGSERIAL PRIMARY KEY,
+                                 booking_id BIGINT UNIQUE,
+                                 license_plate VARCHAR(255) NOT NULL,
+                                 kilometer_reading INTEGER NOT NULL,
+                                 service_date TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                                 created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                                 created_by VARCHAR(255) NOT NULL,
+                                 CONSTRAINT fk_records_bookings FOREIGN KEY (booking_id) REFERENCES bookings(id)
+);
+
+COMMENT ON TABLE service_records IS 'Phiếu dịch vụ, lưu lại lịch sử bảo dưỡng đã hoàn thành.';
+
+
+-- =====================================================================
+-- BẢNG 5: service_record_details (LƯU CHI TIẾT CÁC HẠNG MỤC ĐÃ LÀM) -- Bảng Mới
+-- =====================================================================
+CREATE TABLE service_record_details (
+                                        id BIGSERIAL PRIMARY KEY,
+                                        service_record_id BIGINT NOT NULL,
+                                        item_name VARCHAR(255) NOT NULL,
+                                        action VARCHAR(255) NOT NULL,
+                                        notes TEXT,
+                                        CONSTRAINT fk_details_records FOREIGN KEY (service_record_id) REFERENCES service_records(id)
+);
+
+COMMENT ON TABLE service_record_details IS 'Chi tiết từng hạng mục đã thực hiện trong một lần bảo dưỡng.';
+
+
+-- =====================================================================
+-- BẢNG 6: maintenance_items (LƯU DANH MỤC CÁC HẠNG MỤC BẢO DƯỠNG)
 -- =====================================================================
 CREATE TABLE maintenance_items (
                                    id BIGSERIAL PRIMARY KEY,
@@ -73,10 +106,8 @@ CREATE TABLE maintenance_items (
 );
 
 COMMENT ON TABLE maintenance_items IS 'Danh sách tất cả các hạng mục bảo dưỡng có thể có.';
-
-
 -- =====================================================================
--- BẢNG 5: maintenance_schedules (LƯU LỊCH TRÌNH BẢO DƯỠNG CHI TIẾT)
+-- BẢNG 7: maintenance_schedules (LƯU LỊCH TRÌNH BẢO DƯỠNG CHI TIẾT)
 -- =====================================================================
 CREATE TABLE maintenance_schedules (
                                        id BIGSERIAL PRIMARY KEY,
