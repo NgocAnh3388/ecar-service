@@ -4,6 +4,7 @@ import com.ecar.ecarservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.Column;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -49,6 +50,7 @@ public class Booking {
     private String serviceAdvisor; // Cố vấn dịch vụ (có thể null)
 
     @Lob // Dùng cho các trường văn bản dài
+    @Column(columnDefinition = "TEXT")
     private String notes; // Nội dung yêu cầu thêm
 
     // --- Trạng thái của booking ---
