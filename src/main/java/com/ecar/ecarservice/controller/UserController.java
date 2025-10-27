@@ -1,16 +1,21 @@
 package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.UserDto;
+import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
+import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/admin/users")
+@RequestMapping("/api/users")
 public class UserController {
     private final UserService userService;
 
@@ -41,6 +46,13 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build(); // Trả về 204 No Content
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Page<AppUser>> searchUsers(@RequestBody UserSearchRequest request) {
+        Page<AppUser> searchResult = userService.searchUsers(request);
+        return new  ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 
 }

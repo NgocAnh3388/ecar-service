@@ -1,6 +1,6 @@
 package com.ecar.ecarservice;
 
-import com.ecar.ecarservice.cofig.AuditorAwareImpl;
+import com.ecar.ecarservice.config.AuditorAwareImpl;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

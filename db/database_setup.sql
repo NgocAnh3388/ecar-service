@@ -1,4 +1,4 @@
--- XÓA CÁC BẢNG CŨ NẾU TỒN TẠI ĐỂ TRÁNH XUNG ĐỘT
+-- XÓA SẠCH SẼ TẤT CẢ CÁC BẢNG
 DROP TABLE IF EXISTS
     public.service_record_details,
     public.service_records,
@@ -103,9 +103,9 @@ COMMENT ON TABLE service_record_details IS 'Chi tiết từng hạng mục đã 
 -- BẢNG 6: maintenance_item (LƯU DANH MỤC CÁC HẠNG MỤC BẢO DƯỠNG)
 -- =====================================================================
 CREATE TABLE maintenance_item (
-                                   id BIGSERIAL PRIMARY KEY,
-                                   name VARCHAR(255) NOT NULL UNIQUE,
-                                   category VARCHAR(255) NOT NULL
+                                  id BIGSERIAL PRIMARY KEY,
+                                  name VARCHAR(255) NOT NULL UNIQUE,
+                                  category VARCHAR(255) NOT NULL
 );
 
 COMMENT ON TABLE maintenance_item IS 'Danh sách tất cả các hạng mục bảo dưỡng có thể có.';
@@ -115,11 +115,11 @@ COMMENT ON TABLE maintenance_item IS 'Danh sách tất cả các hạng mục b�
 -- BẢNG 7: maintenance_schedule (LƯU LỊCH TRÌNH BẢO DƯỠNG CHI TIẾT)
 -- =====================================================================
 CREATE TABLE maintenance_schedule (
-                                       id BIGSERIAL PRIMARY KEY,
-                                       item_id BIGINT NOT NULL,
-                                       kilometer_mark INTEGER NOT NULL,
-                                       action VARCHAR(255) NOT NULL,
-                                       CONSTRAINT fk_schedules_items FOREIGN KEY (item_id) REFERENCES maintenance_item(id)
+                                      id BIGSERIAL PRIMARY KEY,
+                                      item_id BIGINT NOT NULL,
+                                      kilometer_mark INTEGER NOT NULL,
+                                      action VARCHAR(255) NOT NULL,
+                                      CONSTRAINT fk_schedules_items FOREIGN KEY (item_id) REFERENCES maintenance_item(id)
 );
 
 COMMENT ON TABLE maintenance_schedule IS 'Lịch trình chi tiết: hạng mục nào, làm gì, tại mốc km nào.';
@@ -133,32 +133,32 @@ COMMENT ON TABLE maintenance_schedule IS 'Lịch trình chi tiết: hạng mục
 -- Chèn dữ liệu cho bảng maintenance_item
 INSERT INTO maintenance_item (id, name, category) VALUES
                                                       (1, 'Lọc gió điều hòa', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (2, 'Dầu phanh', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (3, 'Bảo dưỡng hệ thống điều hòa', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (4, 'Pin chìa khóa điều khiển', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (5, 'Pin bộ T-Box', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (6, 'Nước làm mát cho Pin/ động cơ điện', 'HẠNG MỤC BẢO DƯỠNG'),
-                                                       (7, 'Lốp (áp suất, độ mòn, đảo và cân bằng lốp)', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (8, 'Má phanh và đĩa phanh', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (9, 'Đường ống, đầu nối hệ thống phanh', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (10, 'Bộ dẫn động (động cơ điện và hộp số)', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (11, 'Hệ thống treo', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (12, 'Trục truyền động', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (13, 'Khớp cầu', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (14, 'Thước lái và khớp nối cầu', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (15, 'Đường ống làm mát', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (16, 'Pin', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (17, 'Dây cáp của hệ thống điện áp cao', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (18, 'Cổng sạc', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (19, 'Ắc quy 12V', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
-                                                       (20, 'Gạt nước rửa kính / Nước rửa kính', 'HẠNG MỤC BẢO DƯỠNG CHUNG');
+                                                      (2, 'Dầu phanh', 'HẠNG MỤC BẢO DƯỠNG'),
+                                                      (3, 'Bảo dưỡng hệ thống điều hòa', 'HẠNG MỤC BẢO DƯỠNG'),
+                                                      (4, 'Pin chìa khóa điều khiển', 'HẠNG MỤC BẢO DƯỠNG'),
+                                                      (5, 'Pin bộ T-Box', 'HẠNG MỤC BẢO DƯỠNG'),
+                                                      (6, 'Nước làm mát cho Pin/ động cơ điện', 'HẠNG MỤC BẢO DƯỠNG'),
+                                                      (7, 'Lốp (áp suất, độ mòn, đảo và cân bằng lốp)', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (8, 'Má phanh và đĩa phanh', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (9, 'Đường ống, đầu nối hệ thống phanh', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (10, 'Bộ dẫn động (động cơ điện và hộp số)', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (11, 'Hệ thống treo', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (12, 'Trục truyền động', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (13, 'Khớp cầu', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (14, 'Thước lái và khớp nối cầu', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (15, 'Đường ống làm mát', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (16, 'Pin', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (17, 'Dây cáp của hệ thống điện áp cao', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (18, 'Cổng sạc', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (19, 'Ắc quy 12V', 'HẠNG MỤC BẢO DƯỠNG CHUNG'),
+                                                      (20, 'Gạt nước rửa kính / Nước rửa kính', 'HẠNG MỤC BẢO DƯỠNG CHUNG');
 
 -- Chèn dữ liệu cho bảng maintenance_schedule (được sinh tự động theo logic)
 DO $$
     DECLARE
-km_marks INT[] := ARRAY[12000, 24000, 36000, 48000, 60000, 72000, 84000, 96000, 108000, 120000, 132000, 144000, 156000, 168000, 180000, 192000, 204000];
+        km_marks INT[] := ARRAY[12000, 24000, 36000, 48000, 60000, 72000, 84000, 96000, 108000, 120000, 132000, 144000, 156000, 168000, 180000, 192000, 204000];
         km INT;
-BEGIN
+    BEGIN
         FOREACH km IN ARRAY km_marks
             LOOP
                 -- Hạng mục luôn REPLACE
@@ -195,10 +195,10 @@ BEGIN
 
                 -- Các hạng mục chung luôn INSPECT
                 FOR i IN 7..20 LOOP
-                    INSERT INTO maintenance_schedule (item_id, kilometer_mark, action) VALUES (i, km, 'INSPECT');
-                END LOOP;
+                        INSERT INTO maintenance_schedule (item_id, kilometer_mark, action) VALUES (i, km, 'INSPECT');
+                    END LOOP;
             END LOOP;
-        END $$;
+    END $$;
 
 -- Kết thúc script
 SELECT 'Database script executed successfully.';
