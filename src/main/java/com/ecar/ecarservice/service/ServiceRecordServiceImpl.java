@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.dto.CreateServiceRecordRequest;
-import com.ecar.ecarservice.dto.ServiceDetailDto; 
+import com.ecar.ecarservice.dto.ServiceDetailDto;
 import com.ecar.ecarservice.dto.ServiceRecordResponseDto;
 import com.ecar.ecarservice.enitiies.Booking;
 import com.ecar.ecarservice.enitiies.ServiceRecord;

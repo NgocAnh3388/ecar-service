@@ -26,7 +26,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
     public UserDto getUserById(Long id) {
         AppUser user = appUserRepository.findByIdAndActiveTrue(id)

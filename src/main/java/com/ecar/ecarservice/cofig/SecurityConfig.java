@@ -1,5 +1,3 @@
-package com.ecar.ecarservice.cofig;
-
 import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.repositories.AppUserRepository;
@@ -35,11 +33,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/maintenance/**").permitAll()
                         .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
                         .requestMatchers("/api/me").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**").authenticated()
-                        .requestMatchers("/api/service-records").authenticated() // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
+                        .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -64,15 +63,32 @@ public class SecurityConfig {
     public OidcUser processOidcUser(AppUserRepository appUserRepository, OidcUser oidcUser) {
         String sub = oidcUser.getSubject();
         String email = oidcUser.getEmail();
+        String name = oidcUser.getFullName(); // Lấy tên từ Google
 
         AppUser appUser = appUserRepository.findBySub(sub)
-                .or(() -> appUserRepository.findByEmail(email))
+                .map(existingUser -> {
+                    // Nếu user đã tồn tại, cập nhật lại tên (phòng trường hợp họ đổi tên)
+                    existingUser.setFullName(name);
+                    return appUserRepository.save(existingUser);
+                })
                 .orElseGet(() -> {
-                    AppUser newUser = new AppUser();
-                    newUser.setSub(sub);
-                    newUser.setEmail(email);
-                    newUser.getRoles().add(AppRole.CUSTOMER);
-                    return appUserRepository.save(newUser);
+                    // Nếu không có user theo 'sub', thử tìm theo email
+                    return appUserRepository.findByEmail(email)
+                            .map(existingUser -> {
+                                // User đã tồn tại (có thể tạo thủ công), cập nhật 'sub' và 'name' cho họ
+                                existingUser.setSub(sub);
+                                existingUser.setFullName(name);
+                                return appUserRepository.save(existingUser);
+                            })
+                            .orElseGet(() -> {
+                                // User hoàn toàn mới, tạo mới với đầy đủ thông tin
+                                AppUser newUser = new AppUser();
+                                newUser.setSub(sub);
+                                newUser.setEmail(email);
+                                newUser.setFullName(name); // Lưu tên
+                                newUser.getRoles().add(AppRole.CUSTOMER);
+                                return appUserRepository.save(newUser);
+                            });
                 });
 
         if (!appUser.isActive()) {

@@ -11,5 +11,5 @@ import lombok.Setter;
 public class MaintenanceScheduleDto {
     private String itemName;
     private String category;
-    private MaintenanceAction action; // "CHECK" or "REPLACE"
+    private MaintenanceAction action; // "INSPECT" or "REPLACE"
 }

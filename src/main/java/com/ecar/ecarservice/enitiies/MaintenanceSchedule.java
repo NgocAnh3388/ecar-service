@@ -24,5 +24,5 @@ public class MaintenanceSchedule {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MaintenanceAction action; // Hành động: "CHECK" (kiểm tra) hoặc "REPLACE" (thay mới)
+    private MaintenanceAction action; // Hành động: "INSPECT" (kiểm tra) hoặc "REPLACE" (thay mới)
 }
