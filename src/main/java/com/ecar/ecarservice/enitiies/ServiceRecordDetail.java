@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "service_record_details")
 @Getter
@@ -18,11 +20,15 @@ public class ServiceRecordDetail {
     private ServiceRecord serviceRecord;
 
     @Column(nullable = false)
-    private String itemName; // Tên hạng mục, ví dụ: "Dầu phanh"
+    private String itemName;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private MaintenanceAction action; // Hành động đã làm: INSPECT hoặc REPLACE
+    private MaintenanceAction action;
 
-    private String notes; // Ghi chú của kỹ thuật viên
+    private String notes;
+
+    @Column(nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
+
 }

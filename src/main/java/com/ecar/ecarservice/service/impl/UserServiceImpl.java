@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
         return this.appUserRepository.searchAppUserByValue(request.getSearchValue(), pageRequest);
     }
 
-    // Hàm tiện ích để chuyển đổi Entity sang DTO
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());

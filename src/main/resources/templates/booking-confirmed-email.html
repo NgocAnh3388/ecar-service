@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Your Appointment is Confirmed</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { padding: 20px; }
+        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="header">Your Appointment has been Confirmed!</p>
+    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
+    <p>
+        We are pleased to confirm your service appointment for the vehicle with license plate
+        <b><span th:text="${booking.licensePlate}"></span></b> for
+        <b><span th:text="${#temporals.format(booking.appointmentDateTime, 'HH:mm ''on'' dd-MM-yyyy')}"></span></b>.
+    </p>
+    <p>We look forward to seeing you at <b><span th:text="${booking.serviceCenter}"></span></b>.</p>
+    <p>
+        Best regards,<br/>
+        The Ecar Service Center Team
+    </p>
+</div>
+</body>
+</html>

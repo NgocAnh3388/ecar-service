@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Xác nhận Lịch hẹn Bảo dưỡng</title>
+    <title>Service Appointment Confirmation</title>
     <style>
         body { font-family: Arial, sans-serif; }
         .container { padding: 20px; }
@@ -13,34 +13,33 @@
 </head>
 <body>
 <div class="container">
-    <p class="header">Lịch hẹn của bạn đã được ghi nhận!</p>
-    <p>Xin chào <b th:text="${customerName}">Tên khách hàng</b>,</p>
-    <p>Cảm ơn bạn đã đặt lịch bảo dưỡng tại Ecar Service Center. Chúng tôi đã nhận được yêu cầu của bạn với các thông tin sau:</p>
+    <p class="header">Your appointment has been received!</p>
+    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
+    <p>Thank you for booking a service appointment at Ecar Service Center. We have received your request with the following details:</p>
 
-    <!-- Sử dụng table để hiển thị thông tin -->
     <table class="table">
         <tr>
-            <th style="width: 200px;">Biển số xe:</th>
+            <th style="width: 200px;">License Plate:</th>
             <td th:text="${licensePlate}"></td>
         </tr>
         <tr>
-            <th>Dòng xe:</th>
+            <th>Car Model:</th>
             <td th:text="${carModel}"></td>
         </tr>
         <tr>
-            <th>Trung tâm dịch vụ:</th>
+            <th>Service Center:</th>
             <td th:text="${serviceCenter}"></td>
         </tr>
         <tr>
-            <th>Thời gian hẹn:</th>
+            <th>Appointment Time:</th>
             <td th:text="${appointmentTime}"></td>
         </tr>
     </table>
 
-    <p>Lịch hẹn của bạn đang ở trạng thái <b>CHỜ XÁC NHẬN</b>. Chúng tôi sẽ liên hệ lại với bạn sớm nhất.</p>
+    <p>Your appointment status is currently <b>PENDING</b>. We will contact you shortly to confirm.</p>
     <p>
-        Trân trọng,<br/>
-        Đội ngũ Ecar Service Center
+        Best regards,<br/>
+        <b>EV Service Management System</b><br/>
     </p>
 </div>
 </body>

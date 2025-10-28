@@ -1,15 +1,15 @@
 package com.ecar.ecarservice.enitiies;
 
+import com.ecar.ecarservice.enums.CarSegment;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "maintenance_item")
+@Table(name = "car_models")
 @Getter
 @Setter
-public class MaintenanceItem {
-
+public class CarModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +17,7 @@ public class MaintenanceItem {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String category;
+    private CarSegment segment;
 }

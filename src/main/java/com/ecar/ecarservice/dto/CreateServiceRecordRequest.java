@@ -1,15 +1,24 @@
 package com.ecar.ecarservice.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
 
-// DTO để nhận dữ liệu khi tạo một phiếu dịch vụ
 @Getter
 @Setter
 public class CreateServiceRecordRequest {
+    @NotNull(message = "Booking ID cannot be null")
     private Long bookingId;
-    private int kilometerReading;
-    private List<ServiceDetailDto> details;
+
+    @NotNull(message = "Kilometer reading cannot be null")
+    @Positive(message = "Kilometer reading must be a positive number")
+    private Integer kilometerReading;
+
+    @NotEmpty(message = "Service details cannot be empty")
+    private List<@Valid ServiceDetailDto> details;
 }

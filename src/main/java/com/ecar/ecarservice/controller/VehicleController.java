@@ -4,6 +4,7 @@ import com.ecar.ecarservice.dto.VehicleDto;
 import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.VehicleService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,7 +37,7 @@ public class VehicleController {
     }
 
     @PostMapping
-    public ResponseEntity<VehicleDto> addVehicle(@RequestBody VehicleDto vehicleDto, @AuthenticationPrincipal OidcUser oidcUser) {
+    public ResponseEntity<VehicleDto> addVehicle(@Valid @RequestBody VehicleDto vehicleDto, @AuthenticationPrincipal OidcUser oidcUser) {
         AppUser currentUser = getCurrentUser(oidcUser);
         VehicleDto newVehicle = vehicleService.addVehicle(vehicleDto, currentUser);
         return new ResponseEntity<>(newVehicle, HttpStatus.CREATED);

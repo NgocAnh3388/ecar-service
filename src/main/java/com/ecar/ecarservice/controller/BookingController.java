@@ -2,10 +2,11 @@ package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.BookingRequestDto;
 import com.ecar.ecarservice.dto.BookingResponseDto;
+import com.ecar.ecarservice.dto.BookingStatusDto;
 import com.ecar.ecarservice.enitiies.AppUser;
-import com.ecar.ecarservice.enitiies.Booking;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -27,10 +28,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<BookingResponseDto> createBooking(
-            @RequestBody BookingRequestDto bookingDto,
-            @AuthenticationPrincipal OidcUser oidcUser) {
-
+    public ResponseEntity<BookingResponseDto> createBooking(@Valid @RequestBody BookingRequestDto bookingDto, @AuthenticationPrincipal OidcUser oidcUser) {
         AppUser currentUser = appUserRepository.findBySub(oidcUser.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found in database"));
 
@@ -58,6 +56,16 @@ public class BookingController {
 
         BookingResponseDto cancelledBooking = bookingService.cancelBookingByCustomer(id, currentUser);
         return ResponseEntity.ok(cancelledBooking);
+    }
+
+    @GetMapping("/{id}/status")
+    public ResponseEntity<BookingStatusDto> getStatus(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+
+        AppUser currentUser = appUserRepository.findBySub(oidcUser.getSubject())
+                .orElseThrow(() -> new RuntimeException("User not found in database"));
+
+        BookingStatusDto statusDto = bookingService.getBookingStatus(id, currentUser);
+        return ResponseEntity.ok(statusDto);
     }
 
 }

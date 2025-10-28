@@ -44,6 +44,13 @@ spring:
           starttls:
             enable: true
 
+app:
+  frontend:
+    url: http://localhost:4200
+  support:
+    email: support@ecarservice.vn
+    phone: "+84 369 247 905"
+
 server:
   port: 8080
 logging:

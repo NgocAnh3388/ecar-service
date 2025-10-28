@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @Table(name = "vehicles")
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class) // AUDITING
+@EntityListeners(AuditingEntityListener.class)
 public class Vehicle {
 
     @Id
