@@ -6,7 +6,8 @@ DROP TABLE IF EXISTS
     public.user_roles,
     public.maintenance_schedule,
     public.maintenance_item,
-    public.app_user
+    public.app_user,
+    public.vehicles
     CASCADE;
 
 -- =====================================================================
@@ -25,6 +26,25 @@ COMMENT ON COLUMN app_user.sub IS 'Định danh duy nhất từ nhà cung cấp 
 COMMENT ON COLUMN app_user.email IS 'Email của người dùng, dùng để định danh.';
 COMMENT ON COLUMN app_user.full_name IS 'Tên đầy đủ của người dùng (lấy từ Google).';
 COMMENT ON COLUMN app_user.active IS 'Trạng thái tài khoản (true = hoạt động, false = bị khóa/xóa mềm).';
+
+
+-- =====================================================================
+-- BẢNG MỚI: vehicles (LƯU GARA XE CỦA NGƯỜI DÙNG)
+-- =====================================================================
+CREATE TABLE vehicles (
+                          id BIGSERIAL PRIMARY KEY,
+                          owner_id BIGINT NOT NULL,
+                          license_plate VARCHAR(255) NOT NULL UNIQUE,
+                          car_model VARCHAR(255) NOT NULL,
+                          vin_number VARCHAR(255),
+                          active BOOLEAN NOT NULL DEFAULT TRUE,
+                          created_at TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+                          created_by VARCHAR(255) NOT NULL,
+                          updated_at TIMESTAMP WITHOUT TIME ZONE,
+                          updated_by VARCHAR(255),
+                          CONSTRAINT fk_vehicles_owner FOREIGN KEY (owner_id) REFERENCES app_user(id)
+);
+COMMENT ON TABLE vehicles IS 'Lưu thông tin các xe thuộc sở hữu của người dùng.';
 
 
 -- =====================================================================

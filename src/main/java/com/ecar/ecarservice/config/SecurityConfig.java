@@ -37,6 +37,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/maintenance/**").permitAll()
                         .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
                         .requestMatchers("/api/me").authenticated()
+                        .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**").authenticated()
                         .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ

@@ -32,8 +32,8 @@ public class MaintenanceReminderScheduler {
     }
 
 
-    @Scheduled(fixedRate = 30000) // Chạy mỗi 30 giây
-//    @Scheduled(cron = "0 0 8 * * ?") // Chạy vào 8h sáng hàng ngày
+//    @Scheduled(fixedRate = 30000) // Chạy mỗi 30 giây
+    @Scheduled(cron = "0 0 8 * * ?") // Chạy vào 8h sáng hàng ngày
     @Transactional(readOnly = true)
     public void checkAndSendDateBasedReminders() {
         System.out.println("Running date-based maintenance reminder job...");
