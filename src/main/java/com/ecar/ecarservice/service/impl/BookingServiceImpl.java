@@ -9,6 +9,7 @@ import com.ecar.ecarservice.repositories.BookingRepository;
 import com.ecar.ecarservice.service.BookingService;
 import com.ecar.ecarservice.service.EmailService;
 import jakarta.persistence.EntityNotFoundException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -81,6 +82,26 @@ public class BookingServiceImpl implements BookingService {
         Booking cancelledBooking = bookingRepository.save(booking);
 
         // 4. Chuyển đổi sang DTO và trả về để xác nhận
+        return convertToDto(cancelledBooking);
+    }
+
+    @Override
+    @Transactional
+    public BookingResponseDto cancelBookingByCustomer(Long bookingId, AppUser currentUser) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new EntityNotFoundException("Booking not found with id: " + bookingId));
+
+        if (!booking.getUser().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You do not have permission to cancel this booking.");
+        }
+
+        if (booking.getStatus() != BookingStatus.PENDING) {
+            throw new IllegalStateException("This booking cannot be cancelled as it has already been " + booking.getStatus());
+        }
+
+        booking.setStatus(BookingStatus.CANCELLED);
+        Booking cancelledBooking = bookingRepository.save(booking);
+
         return convertToDto(cancelledBooking);
     }
 
