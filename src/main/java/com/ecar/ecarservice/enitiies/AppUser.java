@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -14,6 +15,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "app_user")
+@EntityListeners(AuditingEntityListener.class)
 @Getter
 @Setter
 @ToString
@@ -38,9 +40,9 @@ public class AppUser {
     @Enumerated(EnumType.STRING)
     private Set<AppRole> roles = new HashSet<>();
 
-    // Mặc định, tất cả user khi được tạo ra sẽ có active = true
     @Column(name = "active", nullable = false)
     private boolean active = true;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

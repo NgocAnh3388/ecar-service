@@ -17,8 +17,8 @@ public class MaintenanceController {
     }
 
     @GetMapping("/schedule")
-    public ResponseEntity<List<MaintenanceScheduleDto>> getScheduleByKm(@RequestParam int kilometers) {
-        List<MaintenanceScheduleDto> schedule = maintenanceService.getScheduleByKilometers(kilometers);
+    public ResponseEntity<List<MaintenanceScheduleDto>> getSchedule(@RequestParam String model, @RequestParam int kilometers) {
+        List<MaintenanceScheduleDto> schedule = maintenanceService.getScheduleByKilometers(model, kilometers);
         return ResponseEntity.ok(schedule);
     }
 }

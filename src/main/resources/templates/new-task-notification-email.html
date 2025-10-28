@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>New Task Assigned</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { padding: 20px; }
+        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .table th { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="header">A New Task Has Been Assigned to You</p>
+    <p>Dear <b th:text="${technicianName}">Technician Name</b>,</p>
+    <p>You have been assigned a new service task. Please see the details below:</p>
+
+    <table class="table">
+        <tr>
+            <th style="width: 200px;">Booking ID:</th>
+            <td th:text="${booking.id}"></td>
+        </tr>
+        <tr>
+            <th>License Plate:</th>
+            <td th:text="${booking.licensePlate}"></td>
+        </tr>
+        <tr>
+            <th>Car Model:</th>
+            <td th:text="${booking.carModel}"></td>
+        </tr>
+        <tr>
+            <th>Customer Notes:</th>
+            <td th:text="${booking.notes}"></td>
+        </tr>
+    </table>
+
+    <p>Please check the technician dashboard for more details and to begin the service.</p>
+    <p>
+        Best regards,<br/>
+        The Ecar Service Center System
+    </p>
+</div>
+</body>
+</html>

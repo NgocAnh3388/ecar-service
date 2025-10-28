@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Appointment Status Update</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { padding: 20px; }
+        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="header">Your Appointment Status Has Been Updated</p>
+    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
+    <p>
+        The status for your appointment regarding vehicle
+        <b><span th:text="${booking.licensePlate}"></span></b> has been updated to:
+        <b><span th:text="${booking.status}"></span></b>.
+    </p>
+    <p>You can track the progress on your "My Bookings" page.</p>
+    <p>
+        Best regards,<br/>
+        The Ecar Service Center Team
+    </p>
+</div>
+</body>
+</html>
