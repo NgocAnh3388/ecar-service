@@ -1,7 +1,8 @@
-package com.ecar.ecarservice.service;
+package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.MaintenanceScheduleDto;
 import com.ecar.ecarservice.repositories.MaintenanceScheduleRepository;
+import com.ecar.ecarservice.service.MaintenanceService;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;

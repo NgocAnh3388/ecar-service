@@ -21,7 +21,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true # show sql
     hibernate:
-      ddl-auto: update # update means check if table in entities existed or not, if not -> create new table with
+      ddl-auto: validate # update means check if table in entities existed or not, if not -> create new table with
   security:
     oauth2:
       client:
@@ -30,6 +30,20 @@ spring:
             client-id: 945115052613-hu47pope4oc2gn1djuv1srm4ju3rt3bv.apps.googleusercontent.com
             client-secret: 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
             scope: openid, profile, email
+
+  # Cấu hình gửi mail
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lengochan090105@gmail.com
+    password: pliv pahe tyid jrpz # app password
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 server:
   port: 8080
 logging:

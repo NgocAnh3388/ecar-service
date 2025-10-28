@@ -4,6 +4,7 @@ import com.ecar.ecarservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import jakarta.persistence.Column;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -49,6 +50,7 @@ public class Booking {
     private String serviceAdvisor; // Cố vấn dịch vụ (có thể null)
 
     @Lob // Dùng cho các trường văn bản dài
+    @Column(columnDefinition = "TEXT")
     private String notes; // Nội dung yêu cầu thêm
 
     // --- Trạng thái của booking ---
@@ -63,7 +65,7 @@ public class Booking {
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
-    private String createdBy; // Sẽ lưu email của người tạo
+    private String createdBy;
 
     @LastModifiedDate
     @Column(insertable = false)
@@ -71,5 +73,5 @@ public class Booking {
 
     @LastModifiedBy
     @Column(insertable = false)
-    private String updatedBy; // Sẽ lưu email của người cập nhật
+    private String updatedBy;
 }

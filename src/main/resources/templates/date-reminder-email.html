@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Thông báo Nhắc nhở Bảo dưỡng</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        .container { padding: 20px; }
+        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        .table th { background-color: #f2f2f2; }
+        .category-header { font-weight: bold; background-color: #e9ecef; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="header">Đã đến lúc bảo dưỡng định kỳ cho xe của bạn!</p>
+    <p>Xin chào <b th:text="${customerName}">Tên khách hàng</b>,</p>
+    <p>
+        Hệ thống của Ecar Service Center ghi nhận lần bảo dưỡng cuối cùng của xe
+        <b><span th:text="${licensePlate}"></span></b> là vào ngày
+        <b th:text="${lastServiceDate}"></b>.
+    </p>
+    <p>
+        Kỳ bảo dưỡng tiếp theo của bạn dự kiến là vào ngày
+        <b><span th:text="${nextDueDate}"></span></b>, tức là chỉ còn 15 ngày nữa.
+    </p>
+    <p>Dưới đây là các hạng mục bảo dưỡng đề xuất cho kỳ này:</p>
+
+    <!-- Bảng hiển thị chi tiết các hạng mục -->
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Hạng mục</th>
+            <th>Hành động</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Sử dụng th:each để lặp qua danh sách hạng mục -->
+        <tr th:each="item : ${maintenanceItems}">
+            <!-- Lấy tên hạng mục -->
+            <td th:text="${item.itemName}">Lốp (áp suất, độ mòn, đảo và cân bằng lốp)</td>
+            <!-- Lấy hành động -->
+            <td th:text="${item.action == T(com.ecar.ecarservice.enums.MaintenanceAction).REPLACE ? 'Thay mới' : 'Kiểm tra'}">Kiểm tra</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>Vui lòng đặt lịch hẹn với chúng tôi để đảm bảo chiếc xe của bạn luôn ở trạng thái tốt nhất.</p>
+    <p>
+        Trân trọng,<br/>
+        Đội ngũ Ecar Service Center
+    </p>
+</div>
+</body>
+</html>

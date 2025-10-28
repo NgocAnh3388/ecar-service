@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.cofig;
+package com.ecar.ecarservice.config;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.context.SecurityContextHolder;
