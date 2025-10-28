@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.service.impl;
 
+import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
 import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
@@ -38,9 +39,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUserRoles(Long id, Set<AppRole> roles) {
-        AppUser user = appUserRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+    public UserDto updateUser(UserCreateDTO userCreateDTO) {
+        AppUser user = appUserRepository.findByEmail(userCreateDTO.getEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userCreateDTO.getEmail()));
+        user.setFullName(userCreateDTO.getFullName());
+        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
         user.setRoles(roles);
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
@@ -68,5 +71,13 @@ public class UserServiceImpl implements UserService {
         dto.setActive(user.isActive());
         return dto;
     }
-
+    @Override
+    public void createUser(UserCreateDTO userCreateDTO) {
+        AppUser appUser = new AppUser();
+        appUser.setEmail(userCreateDTO.getEmail());
+        appUser.setFullName(userCreateDTO.getFullName());
+        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
+        appUser.setRoles(roles);
+        this.appUserRepository.save(appUser);
+    }
 }
