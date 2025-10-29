@@ -14,39 +14,36 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "car_model")
+@Table(name = "maintenance_milestone")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class CarModel {
+public class MaintenanceMileStone {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "car_name")
-    private String carName;
+    @Column(name = "kilometer_at")
+    private Long kilometerAt;
 
-    @Column(name = "car_type")
-    private String carType;
-
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
+    @Column(name = "year_at")
+    private Long yearAt;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @CreatedBy
-    @Column(name = "created_by", nullable = false, updatable = false)
+    @Column(nullable = false, updatable = false)
     private String createdBy;
 
     @LastModifiedDate
-    @Column(name = "updated_at", insertable = false)
+    @Column(insertable = false)
     private LocalDateTime updatedAt;
 
     @LastModifiedBy
-    @Column(name = "updated_by", insertable = false)
+    @Column(insertable = false)
     private String updatedBy;
 }

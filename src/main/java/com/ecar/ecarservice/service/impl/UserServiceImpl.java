@@ -9,6 +9,7 @@ import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
@@ -45,11 +46,10 @@ public class UserServiceImpl implements UserService {
         user.setFullName(userCreateDTO.getFullName());
         Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
         user.setRoles(roles);
+        user.setPhoneNo(userCreateDTO.getPhoneNo());
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
     }
-
-
 
     @Override
     public void deleteUser(Long id) {
@@ -59,7 +59,6 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-
     @Override
     public Page<AppUser> searchUsers(UserSearchRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
@@ -67,22 +66,29 @@ public class UserServiceImpl implements UserService {
     }
 
     // Hàm tiện ích để chuyển đổi Entity sang DTO
-        private UserDto convertToDto(AppUser user) {
-            UserDto dto = new UserDto();
-            dto.setId(user.getId());
-            dto.setEmail(user.getEmail());
-            dto.setRoles(user.getRoles());
-            dto.setActive(user.isActive());
-            return dto;
-        }
+    private UserDto convertToDto(AppUser user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setRoles(user.getRoles());
+        dto.setActive(user.isActive());
+        return dto;
+    }
 
     @Override
     public void createUser(UserCreateDTO userCreateDTO) {
         AppUser appUser = new AppUser();
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
+        appUser.setPhoneNo(userCreateDTO.getPhoneNo());
         Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
         appUser.setRoles(roles);
         this.appUserRepository.save(appUser);
     }
+
+    @Override
+    public AppUser getCurrentUser(OidcUser oidcUser) {
+        return this.appUserRepository.findBySub(oidcUser.getSubject())
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
+}

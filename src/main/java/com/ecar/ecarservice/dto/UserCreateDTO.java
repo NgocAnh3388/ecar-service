@@ -8,5 +8,7 @@ public class UserCreateDTO {
 
     private String fullName;
 
+    private String phoneNo;
+
     private String role;
 }
