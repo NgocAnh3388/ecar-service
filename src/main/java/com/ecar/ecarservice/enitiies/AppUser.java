@@ -36,6 +36,9 @@ public class AppUser{
     @Column(name = "full_name")
     private String fullName;
 
+    @Column(name = "phone_no")
+    private String phoneNo;
+
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")

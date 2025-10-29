@@ -22,17 +22,32 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id", nullable = false)
-    private AppUser owner;
+
+    @Column(name = "owner_id")
+    private Long ownerId;
 
     @Column(nullable = false, unique = true)
     private String licensePlate;
 
-    @Column(nullable = false)
-    private String carModel;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "car_model_id", nullable = false)
+    private CarModel carModel;
+
+    @Column(name = "vin_number")
     private String vinNumber;
+
+    @Column(name = "next_km")
+    private Long nextKm;
+
+    @Column(name = "next_date")
+    private LocalDateTime nextDate;
+
+    @Column(name = "old_km")
+    private Long oldKm;
+
+    @Column(name = "old_date")
+    private LocalDateTime oldDate;
 
     @Column(nullable = false)
     private boolean active = true;

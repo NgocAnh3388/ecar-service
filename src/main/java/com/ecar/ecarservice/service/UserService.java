@@ -6,6 +6,7 @@ import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import org.springframework.data.domain.Page;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.List;
 import java.util.Set;
@@ -17,4 +18,6 @@ public interface UserService {
     void createUser(UserCreateDTO userCreateDTO);
     void deleteUser(Long id);
     Page<AppUser> searchUsers(UserSearchRequest request);
+    AppUser getCurrentUser(OidcUser oidcUser);
+
 }
