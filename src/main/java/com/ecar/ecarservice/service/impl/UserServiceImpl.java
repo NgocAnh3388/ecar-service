@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+<<<<<<< Updated upstream
     public UserDto updateUser(UserCreateDTO userCreateDTO) {
         AppUser user = appUserRepository.findByEmail(userCreateDTO.getEmail())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userCreateDTO.getEmail()));
@@ -48,21 +49,33 @@ public class UserServiceImpl implements UserService {
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
     }
+=======
+        public UserDto updateUser(UserCreateDTO userCreateDTO) {
+            AppUser user = appUserRepository.findByEmail(userCreateDTO.getEmail())
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userCreateDTO.getEmail()));
+            user.setFullName(userCreateDTO.getFullName());
+            Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
+            user.setRoles(roles);
+            AppUser updatedUser = appUserRepository.save(user);
+            return convertToDto(updatedUser);
+        }
+>>>>>>> Stashed changes
 
-    @Override
-    public void deleteUser(Long id) {
-        AppUser user = appUserRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
-        user.setActive(false);
-        appUserRepository.save(user);
-    }
+        @Override
+        public void deleteUser(Long id) {
+            AppUser user = appUserRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+            user.setActive(false);
+            appUserRepository.save(user);
+        }
 
-    @Override
-    public Page<AppUser> searchUsers(UserSearchRequest request) {
-        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
-        return this.appUserRepository.searchAppUserByValue(request.getSearchValue(), pageRequest);
-    }
+        @Override
+        public Page<AppUser> searchUsers(UserSearchRequest request) {
+            PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+            return this.appUserRepository.searchAppUserByValue(request.getSearchValue(), pageRequest);
+        }
 
+<<<<<<< Updated upstream
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -81,3 +94,23 @@ public class UserServiceImpl implements UserService {
         this.appUserRepository.save(appUser);
     }
 }
+=======
+        // Hàm tiện ích để chuyển đổi Entity sang DTO
+        private UserDto convertToDto(AppUser user) {
+            UserDto dto = new UserDto();
+            dto.setId(user.getId());
+            dto.setEmail(user.getEmail());
+            return dto;
+        }
+
+        @Override
+        public void createUser(UserCreateDTO userCreateDTO) {
+            AppUser appUser = new AppUser();
+            appUser.setEmail(userCreateDTO.getEmail());
+            appUser.setFullName(userCreateDTO.getFullName());
+            Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
+            appUser.setRoles(roles);
+            this.appUserRepository.save(appUser);
+        }
+    }
+>>>>>>> Stashed changes

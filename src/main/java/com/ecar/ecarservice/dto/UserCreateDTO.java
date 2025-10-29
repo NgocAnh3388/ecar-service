@@ -9,4 +9,8 @@ public class UserCreateDTO {
     private String fullName;
 
     private String role;
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

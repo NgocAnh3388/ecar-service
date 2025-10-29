@@ -22,7 +22,11 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+<<<<<<< Updated upstream
 public class AppUser {
+=======
+public class AppUser{
+>>>>>>> Stashed changes
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
