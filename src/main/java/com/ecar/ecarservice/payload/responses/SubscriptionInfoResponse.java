@@ -6,6 +6,5 @@ public record SubscriptionInfoResponse(
         Long id,
         LocalDateTime startDate,
         LocalDateTime endDate,
-        LocalDateTime paymentDate,
-        String status) {
-}
+        LocalDateTime paymentDate) {
+    }

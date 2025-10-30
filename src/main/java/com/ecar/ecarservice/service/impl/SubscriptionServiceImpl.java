@@ -34,8 +34,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
                 subscriptionInfo.getId(),
                 subscriptionInfo.getStartDate(),
                 subscriptionInfo.getEndDate(),
-                subscriptionInfo.getPaymentDate(),
-                subscriptionInfo.getStatus()
+                subscriptionInfo.getPaymentDate()
         );
     }
 }
