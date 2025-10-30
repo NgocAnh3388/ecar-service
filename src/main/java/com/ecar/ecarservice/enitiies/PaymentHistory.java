@@ -34,6 +34,12 @@ public class PaymentHistory {
     @Column(name = "payment_status")
     private String paymentStatus;
 
+    @Column(name = "payment_id")
+    private String paymentId;
+
+    @Column(name = "num_of_years")
+    private Long numOfYears;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

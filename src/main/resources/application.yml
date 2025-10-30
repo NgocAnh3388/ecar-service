@@ -43,13 +43,12 @@ spring:
           auth: true
           starttls:
             enable: true
-
-app:
-  frontend:
-    url: http://localhost:4200
-  support:
-    email: support@ecarservice.vn
-    phone: "+84 369 247 905"
+paypal:
+  successUrl: http://localhost:4200/paypal/success
+  cancelUrl: http://localhost:4200/paypal/cancel
+  client-id: Ad0ve8-46Llve89fGR4aUhk-4F86DEWWAcZl_73J-vVQxCImtbx7lkmoV65SoigNv_C0G67dSIDMpomG
+  client-secret: EEc9slx2Rcw5Fv3karcYq71p0dYlPQqT6gIGuzncthK-j-tZSPj1Vdl4UphiRqT3gk-WWGK-ATlCGMEy
+  mode: sandbox
 
 server:
   port: 8080

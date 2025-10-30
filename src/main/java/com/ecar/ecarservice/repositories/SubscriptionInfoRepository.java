@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface SubscriptionInfoRepository extends JpaRepository<SubscriptionInfo, Long> {
     Optional<SubscriptionInfo> findFirstByOwnerId(@Param("ownerId") Long ownerId);
+
+    SubscriptionInfo findFirstById(Long id);
 }
