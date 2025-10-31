@@ -68,4 +68,9 @@ public class UserController {
         return new  ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 
+    @RequestMapping(value = "get-by-role/{roleName}", method = RequestMethod.GET)
+    public ResponseEntity<List<AppUser>> getUserListByRole(@PathVariable String roleName) {
+        return ResponseEntity.ok(this.userService.getUserListByRole(roleName));
+    }
+
 }

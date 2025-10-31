@@ -8,5 +8,6 @@ import java.util.List;
 
 @Repository
 public interface ServiceRecordRepository extends JpaRepository<ServiceRecord, Long> {
+    // Tìm lịch sử bảo dưỡng của một xe, sắp xếp theo ngày gần nhất
     List<ServiceRecord> findByLicensePlateOrderByServiceDateDesc(String licensePlate);
 }

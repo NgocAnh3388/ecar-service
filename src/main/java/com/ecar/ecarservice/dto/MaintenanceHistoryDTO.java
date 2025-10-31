@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.dto;
 
+import com.ecar.ecarservice.enums.MaintenanceStatus;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,5 +19,5 @@ public class MaintenanceHistoryDTO {
 
     private LocalDateTime completedAt;
 
-    private String status;
+    private MaintenanceStatus status;
 }

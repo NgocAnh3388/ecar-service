@@ -22,13 +22,11 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @Column(name = "owner_id")
     private Long ownerId;
 
     @Column(nullable = false, unique = true)
     private String licensePlate;
-
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "car_model_id", nullable = false)

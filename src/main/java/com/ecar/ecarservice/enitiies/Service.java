@@ -32,6 +32,9 @@ public class Service {
     @Column(name = "service_type")
     private String serviceType;
 
+    @Column(name = "category")
+    private String category;
+
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -17,7 +16,6 @@ import java.time.LocalDateTime;
 @Table(name = "maintenance_milestone")
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class MaintenanceMileStone {
@@ -30,6 +28,9 @@ public class MaintenanceMileStone {
 
     @Column(name = "year_at")
     private Long yearAt;
+
+    @Column(name = "car_model_id")
+    private Long carModelId;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

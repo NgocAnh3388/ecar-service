@@ -26,32 +26,32 @@ public class SubscriptionController {
     private final PaymentService paymentService;
 
     public SubscriptionController(SubscriptionService subscriptionService,
-                PaymentService paymentService) {
-            this.subscriptionService = subscriptionService;
-            this.paymentService = paymentService;
-        }
-
-        @RequestMapping(value = "", method = RequestMethod.GET)
-        public ResponseEntity<SubscriptionInfoResponse> getSubscription(@AuthenticationPrincipal OidcUser oidcUser) {
-            return ResponseEntity.ok(this.subscriptionService.getSubscription(oidcUser));
-        }
-
-        @RequestMapping(value = "/renew", method = RequestMethod.POST)
-        public ResponseEntity<PaymentResponse> renewSubscription(@AuthenticationPrincipal OidcUser oidcUser,
-                @RequestBody PaymentRequest paymentRequest) {
-            return ResponseEntity.ok(this.paymentService.renew(paymentRequest, oidcUser));
-        }
-
-        @RequestMapping(value = "/execute", method = RequestMethod.POST)
-        public ResponseEntity<Void> execute(@AuthenticationPrincipal OidcUser user,
-                @RequestBody PaymentExecuteRequest request) {
-            this.paymentService.executePayment(request.paymentId(), request.payerId());
-            return ResponseEntity.ok().build();
-        }
-
-        @RequestMapping(value = "/payment-history", method = RequestMethod.GET)
-        public ResponseEntity<List<PaymentHistoryResponse>> getPaymentHistory(@AuthenticationPrincipal OidcUser oidcUser) {
-            return ResponseEntity.ok(this.paymentService.getPaymentHistory(oidcUser));
-        }
-
+                                  PaymentService paymentService) {
+        this.subscriptionService = subscriptionService;
+        this.paymentService = paymentService;
     }
+
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<SubscriptionInfoResponse> getSubscription(@AuthenticationPrincipal OidcUser oidcUser) {
+        return ResponseEntity.ok(this.subscriptionService.getSubscription(oidcUser));
+    }
+
+    @RequestMapping(value = "/renew", method = RequestMethod.POST)
+    public ResponseEntity<PaymentResponse> renewSubscription(@AuthenticationPrincipal OidcUser oidcUser,
+                                                             @RequestBody PaymentRequest paymentRequest) {
+        return ResponseEntity.ok(this.paymentService.renew(paymentRequest, oidcUser));
+    }
+
+    @RequestMapping(value = "/execute", method = RequestMethod.POST)
+    public ResponseEntity<Void> execute(@AuthenticationPrincipal OidcUser user,
+                                        @RequestBody PaymentExecuteRequest request) {
+        this.paymentService.executePayment(request.paymentId(), request.payerId());
+        return ResponseEntity.ok().build();
+    }
+
+    @RequestMapping(value = "/payment-history", method = RequestMethod.GET)
+    public ResponseEntity<List<PaymentHistoryResponse>> getPaymentHistory(@AuthenticationPrincipal OidcUser oidcUser) {
+        return ResponseEntity.ok(this.paymentService.getPaymentHistory(oidcUser));
+    }
+
+}

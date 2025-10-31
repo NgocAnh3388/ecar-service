@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.enitiies;
 
+import com.ecar.ecarservice.enums.MaintenanceStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ import java.time.LocalTime;
 @Table(name = "maintenance_history")
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 public class MaintenanceHistory {
@@ -27,18 +27,21 @@ public class MaintenanceHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
-    @Column(name = "owner_id")
-    private Long owner_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private AppUser owner;
 
-    @Column(name = "staff_id")
-    private Long staff_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "staff_id")
+    private AppUser staff;
 
-    @Column(name = "technician_id")
-    private Long technicianId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "technician_id")
+    private AppUser technician;
 
     @Column(name = "num_of_km")
     private Long numOfKm;
@@ -53,7 +56,7 @@ public class MaintenanceHistory {
     private LocalDateTime completedAt;
 
     @Column(name = "status")
-    private String status;
+    private MaintenanceStatus status;
 
     @Column(name = "is_maintenance")
     private Boolean isMaintenance;
@@ -70,8 +73,9 @@ public class MaintenanceHistory {
     @Column(name = "hand_over_at")
     private LocalDateTime handOverAt;
 
-    @Column(name = "center_id")
-    private Long centerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "center_id")
+    private Center center;
 
     @Column(name = "schedule_time")
     private LocalTime scheduleTime;

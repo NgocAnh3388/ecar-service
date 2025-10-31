@@ -22,7 +22,7 @@ import java.util.Set;
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class AppUser{
+public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -17,41 +17,35 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
 
-
     public VehicleController(VehicleService vehicleService) {
-            this.vehicleService = vehicleService;
+        this.vehicleService = vehicleService;
+    }
 
-        }
+    @GetMapping
+    public ResponseEntity<List<VehicleResponse>> getMyVehicles(@AuthenticationPrincipal OidcUser oidcUser) {
+        return ResponseEntity.ok(vehicleService.getMyVehicles(oidcUser));
+    }
 
-        @GetMapping
+    @PostMapping
+    public ResponseEntity<Void> addVehicle(@RequestBody VehicleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
+        vehicleService.addVehicle(request, oidcUser);
+        return ResponseEntity.ok().build();
+    }
 
-            public ResponseEntity<List<VehicleResponse>> getMyVehicles(@AuthenticationPrincipal OidcUser oidcUser) {
-                return ResponseEntity.ok(vehicleService.getMyVehicles(oidcUser));
-            }
+    @PutMapping("/{vehicleId}")
+    public ResponseEntity<VehicleDto> updateVehicle(
+            @PathVariable Long vehicleId,
+            @RequestBody VehicleDto vehicleDto,
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        VehicleDto updatedVehicle = vehicleService.updateVehicle(vehicleId, vehicleDto, oidcUser);
+        return ResponseEntity.ok(updatedVehicle);
+    }
 
-            @PostMapping
-
-                public ResponseEntity<Void> addVehicle(@RequestBody VehicleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
-                    vehicleService.addVehicle(request, oidcUser);
-                    return ResponseEntity.ok().build();
-                }
-
-                @PutMapping("/{vehicleId}")
-                public ResponseEntity<VehicleDto> updateVehicle(
-                        @PathVariable Long vehicleId,
-                        @RequestBody VehicleDto vehicleDto,
-                        @AuthenticationPrincipal OidcUser oidcUser) {
-
-                    VehicleDto updatedVehicle = vehicleService.updateVehicle(vehicleId, vehicleDto, oidcUser);
-                    return ResponseEntity.ok(updatedVehicle);
-                }
-
-                @DeleteMapping("/{vehicleId}")
-                public ResponseEntity<Void> deleteVehicle(
-                        @PathVariable Long vehicleId,
-                        @AuthenticationPrincipal OidcUser oidcUser) {
-
-                    vehicleService.deleteVehicle(vehicleId, oidcUser);
-                    return ResponseEntity.noContent().build();
-                }
-            }
+    @DeleteMapping("/{vehicleId}")
+    public ResponseEntity<Void> deleteVehicle(
+            @PathVariable Long vehicleId,
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        vehicleService.deleteVehicle(vehicleId, oidcUser);
+        return ResponseEntity.noContent().build();
+    }
+}

@@ -81,18 +81,8 @@ public class ServiceRecordServiceImpl implements ServiceRecordService {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public ServiceRecordResponseDto addDetailToRecord(Long recordId, ServiceDetailDto detailDto) {
-        return null;
-    }
-
-    @Override
-    public ServiceRecordResponseDto getServiceRecordById(Long id) {
-        return null;
-    }
-
     // Hàm tiện ích để chuyển đổi từ Entity ServiceRecord sang DTO ServiceRecordResponseDto
-    public ServiceRecordResponseDto convertToDto(ServiceRecord record) {
+    private ServiceRecordResponseDto convertToDto(ServiceRecord record) {
         ServiceRecordResponseDto recordDto = new ServiceRecordResponseDto();
         recordDto.setId(record.getId());
         recordDto.setLicensePlate(record.getLicensePlate());
