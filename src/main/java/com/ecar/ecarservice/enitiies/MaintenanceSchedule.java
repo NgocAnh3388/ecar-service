@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -14,28 +13,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "subscription_info")
+@Table(name = "maintenance_schedule")
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class SubscriptionInfo {
+public class MaintenanceSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_model_id")
+    private CarModel carModel;
 
-    @Column(name = "start_date")
-    private LocalDateTime startDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maintenance_milestone_id")
+    private MaintenanceMileStone maintenanceMileStone;
 
-    @Column(name = "end_date")
-    private LocalDateTime endDate;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id")
+    private Service service;
 
-    @Column(name = "payment_date")
-    private LocalDateTime paymentDate;
+    @Column(name = "is_default")
+    private Boolean isDefault;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -52,4 +53,8 @@ public class SubscriptionInfo {
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
+
+    public static String getCategory(MaintenanceSchedule schedule) {
+        return schedule.getService().getCategory();
+    }
 }

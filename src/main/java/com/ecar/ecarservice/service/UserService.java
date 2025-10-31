@@ -19,5 +19,6 @@ public interface UserService {
     void deleteUser(Long id);
     Page<AppUser> searchUsers(UserSearchRequest request);
     AppUser getCurrentUser(OidcUser oidcUser);
+    List<AppUser> getUserListByRole(String role);
 
 }

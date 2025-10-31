@@ -91,4 +91,9 @@ public class UserServiceImpl implements UserService {
         return this.appUserRepository.findBySub(oidcUser.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
+
+    @Override
+    public List<AppUser> getUserListByRole(String role) {
+        return this.appUserRepository.findByRoles(AppRole.valueOf(role.toUpperCase()));
+    }
 }

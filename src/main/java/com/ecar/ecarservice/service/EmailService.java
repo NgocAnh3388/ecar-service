@@ -62,7 +62,6 @@ public class EmailService {
         System.out.println("Email sent to: " + to);
     }
 
-
 //    @Async
 //    public void sendDateBasedMaintenanceReminderEmail(AppUser user, String licensePlate, LocalDate nextDueDate, List<MaintenanceScheduleDto> maintenanceItems) {
 //        try {

@@ -12,7 +12,6 @@ public class VehicleDto {
     private String licensePlate;
     private CarModel carModel;
     private String vinNumber;
-
     private Long nextKm;
     private LocalDateTime nextDate;
     private Long oldKm;
