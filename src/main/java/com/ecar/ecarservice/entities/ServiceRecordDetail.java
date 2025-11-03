@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 import com.ecar.ecarservice.enums.MaintenanceAction;
 import jakarta.persistence.*;
 import lombok.Getter;

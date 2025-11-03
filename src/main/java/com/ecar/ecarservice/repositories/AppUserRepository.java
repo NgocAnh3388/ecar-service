@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {

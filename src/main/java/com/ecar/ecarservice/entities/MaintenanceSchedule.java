@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,24 +13,30 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "maintenance_milestone")
+@Table(name = "maintenance_schedule")
 @Getter
 @Setter
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class MaintenanceMileStone {
+public class MaintenanceSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "kilometer_at")
-    private Long kilometerAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_model_id")
+    private CarModel carModel;
 
-    @Column(name = "year_at")
-    private Long yearAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maintenance_milestone_id")
+    private MaintenanceMileStone maintenanceMileStone;
 
-    @Column(name = "car_model_id")
-    private Long carModelId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id")
+    private Service service;
+
+    @Column(name = "is_default")
+    private Boolean isDefault;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -47,4 +53,8 @@ public class MaintenanceMileStone {
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
+
+    public static String getCategory(MaintenanceSchedule schedule) {
+        return schedule.getService().getCategory();
+    }
 }

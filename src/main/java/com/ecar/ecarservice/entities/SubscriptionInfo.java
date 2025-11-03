@@ -1,9 +1,10 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,25 +14,28 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "maintenance_item")
+@Table(name = "subscription_info")
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class MaintenanceItem {
-
+public class SubscriptionInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "maintenance_milestone_id")
-    private Long maintenanceMilestoneId;
+    @Column(name = "owner_id")
+    private Long ownerId;
 
-    @Column(name = "maintenance_history_id")
-    private Long maintenanceHistoryId;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "service_id")
-    private Long serviceId;
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
+
+    @Column(name = "payment_date")
+    private LocalDateTime paymentDate;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -49,4 +53,3 @@ public class MaintenanceItem {
     @Column(insertable = false)
     private String updatedBy;
 }
-
