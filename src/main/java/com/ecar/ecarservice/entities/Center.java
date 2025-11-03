@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,25 +14,25 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "car_model")
+@Table(name = "center")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class CarModel {
+public class Center {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "car_name")
-    private String carName;
+    @Column(name = "center_name")
+    private String centerName;
 
-    @Column(name = "car_type")
-    private String carType;
+    @Column(name = "phone_no")
+    private String phoneNo;
 
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
+    @Column(name = "address")
+    private String address;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

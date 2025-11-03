@@ -2,7 +2,7 @@ package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
-import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.service.UserService;
 import org.springframework.data.domain.Page;

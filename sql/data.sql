@@ -101,6 +101,7 @@ INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, cre
 INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (101, false, 'user100@example.com', 'sub-100', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
 INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (92, true, 'user 91@example.com', 'sub-091', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
 
+
 INSERT INTO public.user_roles (user_id, role) VALUES (1, 'ADMIN');
 INSERT INTO public.user_roles (user_id, role) VALUES (2, 'TECHNICIAN');
 INSERT INTO public.user_roles (user_id, role) VALUES (3, 'ADMIN');
@@ -211,6 +212,7 @@ INSERT INTO public.car_model (id, active, car_name, car_type, created_at, create
 INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (5, true, 'VF8', 'D-segment SUV', '2025-10-27 14:33:21.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
 INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (6, true, 'VF9', 'E-segment SUV', '2025-10-27 14:33:21.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
 
+
 INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (1, 'Center 1', '0987654321', 'abc', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
 INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (2, 'Center 2', '0987654322', 'edf', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
 INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (3, 'Center 3', '0987654323', '123', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
@@ -220,6 +222,7 @@ INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_mil
 INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (3, 9, null, 30, '2025-10-30 16:22:22.257671', 'dinhtul1911@gmail.com', null, null);
 INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (4, 9, null, 32, '2025-10-30 16:22:22.258713', 'dinhtul1911@gmail.com', null, null);
 
+--VF3--
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (4, 48000, 4, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (6, 72000, 6, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (10, 120000, 10, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
@@ -230,6 +233,37 @@ INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at,
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (8, 96000, 8, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (3, 36000, 3, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (2, 24000, 2, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
+
+--VF5--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 2
+FROM maintenance_milestone
+WHERE car_model_id = 1;
+
+
+--VF6--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 3
+FROM maintenance_milestone
+WHERE car_model_id = 1;
+
+--VF7--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 4
+FROM maintenance_milestone
+WHERE car_model_id = 1;
+
+--VF8--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 5
+FROM maintenance_milestone
+WHERE car_model_id = 1;
+
+--VF9--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 6
+FROM maintenance_milestone
+WHERE car_model_id = 1;
 
 
 INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (12, 'M', 'Trục dẫn động và cao su chống bụi', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
@@ -283,6 +317,7 @@ INSERT INTO public.service (id, service_type, service_name, created_at, created_
 INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (53, 'F', 'Giảm sốc', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
 INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (54, 'F', 'Thay thế ốp nhựa nội thất', '2025-10-30 08:56:20.000000', 'system', null, null, 'interior');
 INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (55, 'F', 'Chuẩn đoán đèn bào lỗi và cập nhật phần mềm', '2025-10-30 08:56:20.000000', 'system', null, null, 'other');
+
 
 
 INSERT INTO public.subscription_info (id, owner_id, start_date, end_date, payment_date, created_at, created_by, updated_at, updated_by) VALUES (3, 1, '2025-10-29 09:18:13.724187', '2026-10-29 09:18:13.724187', '2025-10-29 09:18:13.724187', '2025-10-28 22:09:43.787827', 'dinhtul1911@gmail.com', '2025-10-29 09:18:13.726783', 'dinhtul1911@gmail.com');
@@ -499,6 +534,122 @@ INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (33, 1, 5, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (86, 1, 8, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
 
+--VF5--
+-- Xóa lịch bảo dưỡng cũ cho VF5 (car_model_id = 2)
+DELETE FROM public.maintenance_schedule
+WHERE car_model_id = 2;
+
+
+INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+-- Sử dụng MAX(id) + ROW_NUMBER() để đảm bảo ID không trùng lặp và tăng dần
+SELECT
+    (SELECT COALESCE(MAX(id), 0) FROM public.maintenance_schedule) +
+    ROW_NUMBER() OVER (ORDER BY T.maintenance_milestone_id, T.service_id),
+    2 AS car_model_id_vf5, -- <<< car_model_id là 2 (VF5)
+    T.maintenance_milestone_id,
+    T.service_id,
+    '2025-11-03 00:52:00.000000', -- Thời gian tạo mới
+    'system',
+    NULL,
+    NULL,
+    TRUE
+FROM (
+         -- LỌC GIÓ ĐIỀU HÒA (1) & LƯỠI GẠT MƯA/ RỬA KÍNH (15): Mỗi 12k km
+         SELECT 2 AS car_model_id, id AS maintenance_milestone_id, service_id
+         FROM public.maintenance_milestone, (SELECT 1 AS service_id UNION ALL SELECT 15) AS S
+         WHERE car_model_id = 1 AND id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
+         UNION ALL
+         -- HỆ THỐNG ĐIỀU HÒA (3), DUNG DỊCH LÀM MÁT (5), DẦU PHANH (2): Mỗi 24k km
+         SELECT 2, id, service_id
+         FROM public.maintenance_milestone, (SELECT 3 AS service_id UNION ALL SELECT 5 UNION ALL SELECT 2) AS S
+         WHERE car_model_id = 1 AND id IN (2, 4, 6, 8, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
+         UNION ALL
+         -- PIN T-BOX (4): Mỗi 72k km
+         SELECT 2, id, 4 FROM public.maintenance_milestone WHERE car_model_id = 1 AND id IN (6) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
+         UNION ALL
+         -- HẠNG MỤC KIỂM TRA CHUNG (15 dịch vụ): Mỗi 12k km
+         SELECT 2 AS car_model_id, T_MILESTONE.id, S.service_id
+         FROM public.maintenance_milestone AS T_MILESTONE
+                  JOIN (
+             SELECT 6 AS service_id UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL
+             SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 16 UNION ALL
+             SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20 UNION ALL SELECT 21
+         ) AS S ON TRUE
+         WHERE T_MILESTONE.car_model_id = 1 AND T_MILESTONE.id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
+     ) AS T;
+-- VF6--
+INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+SELECT
+    (SELECT MAX(id) FROM public.maintenance_schedule) +
+    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
+    3,  -- car_model_id mới
+    maintenance_milestone_id,
+    service_id,
+    created_at,
+    created_by,
+    updated_at,
+    updated_by,
+    is_default
+FROM
+    public.maintenance_schedule
+WHERE
+    car_model_id = 1; -- Sao chép từ VF3
+
+--VF7--
+INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+SELECT
+    (SELECT MAX(id) FROM public.maintenance_schedule) +
+    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
+    4,  -- car_model_id mới
+    maintenance_milestone_id,
+    service_id,
+    created_at,
+    created_by,
+    updated_at,
+    updated_by,
+    is_default
+FROM
+    public.maintenance_schedule
+WHERE
+    car_model_id = 1; -- Sao chép từ VF3
+
+--Vf8--
+INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+SELECT
+    (SELECT MAX(id) FROM public.maintenance_schedule) +
+    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
+    5,  -- car_model_id mới
+    maintenance_milestone_id,
+    service_id,
+    created_at,
+    created_by,
+    updated_at,
+    updated_by,
+    is_default
+FROM
+    public.maintenance_schedule
+WHERE
+    car_model_id = 1; -- Sao chép từ VF3
+
+--Vf9--
+INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+SELECT
+    (SELECT MAX(id) FROM public.maintenance_schedule) +
+    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
+    6,  -- car_model_id mới
+    maintenance_milestone_id,
+    service_id,
+    created_at,
+    created_by,
+    updated_at,
+    updated_by,
+    is_default
+FROM
+    public.maintenance_schedule
+WHERE
+    car_model_id = 1; -- Sao chép từ VF3
+
+
 INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (4, 3, 'paypal', 'INIT', '2025-10-29 09:14:11.406716', 'dinhtul1911@gmail.com', null, null, 'PAYID-NEAXQWY79717451CM661680U', 1);
 INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (5, 3, 'paypal', 'INIT', '2025-10-29 09:14:27.268727', 'dinhtul1911@gmail.com', null, null, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1);
 INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (6, 3, 'paypal', 'APPROVED', '2025-10-29 09:18:05.660501', 'dinhtul1911@gmail.com', '2025-10-29 09:18:13.724706', 'dinhtul1911@gmail.com', 'PAYID-NEAXSRI0K2341200L885441K', 1);
@@ -513,3 +664,111 @@ INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, tech
 INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (7, 2, 1, null, null, 10000, '2025-10-29 14:44:43.233715', null, null, 0, '2025-10-29 14:44:43.245237', 'dinhtul1911@gmail.com', null, null, true, true, '1111', null, null, 2, '12:00:00', '2025-10-29');
 INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (8, 2, 1, null, null, 30000, '2025-10-30 10:36:21.956052', null, null, 0, '2025-10-30 10:36:21.969414', 'dinhtul1911@gmail.com', null, null, true, true, 'abc', null, null, 2, '12:00:00', '2025-10-30');
 INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (9, 1, 1, 1, 10, 10000, '2025-10-30 10:36:36.394660', '2025-10-30 16:22:22.216102', null, 1, '2025-10-30 10:36:36.395177', 'dinhtul1911@gmail.com', '2025-10-30 16:22:22.228382', 'dinhtul1911@gmail.com', true, true, 'avvc', null, null, 2, '12:00:00', '2025-10-30');
+
+
+
+-- VF3
+-- Cập nhật sequence để tránh trùng id
+-- Cập nhật sequence để tránh trùng id
+-- Cập nhật sequence để tránh trùng id
+SELECT setval(
+               'spare_part_id_seq',
+               COALESCE((SELECT MAX(id) FROM spare_part), 1),
+               true  -- tham số "is_called": true nghĩa là nextval sẽ trả giá trị MAX(id)+1
+       );
+
+-- Sau đó INSERT bình thường mà không cần chỉ định id
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF3-FLT-01','Loc gio dong co','Filter',150000,10,15,1),
+    ('VF3-FLT-02','Loc gio dieu hoa AC','Filter',180000,8,12,1),
+    ('VF3-OIL-01','Dau dong co EV','Oil',250000,6,10,1),
+    ('VF3-CLT-01','Nuoc lam mat dong co','Coolant',200000,12,15,1),
+    ('VF3-BRK-01','Tam phanh truoc EV','Brake',800000,5,10,1),
+    ('VF3-BRK-02','Tam phanh sau EV','Brake',750000,7,10,1),
+    ('VF3-STR-01','Rotuyn truoc','Steering',600000,4,8,1),
+    ('VF3-STR-02','Rotuyn sau','Steering',580000,3,7,1),
+    ('VF3-SUS-01','Giam xoc truoc','Suspension',1500000,4,6,1),
+    ('VF3-SUS-02','Giam xoc sau','Suspension',1400000,3,5,1),
+    ('VF3-WPR-01','Can gat mua','Wiper',200000,10,12,1),
+    ('VF3-WPR-02','Nuoc rua kinh xe','Wiper',150000,20,25,1),
+    ('VF3-BAT-01','Acu quy 12V xe dien','Battery',3500000,2,5,1),
+    ('VF3-LGT-01','Bong den pha','Lighting',350000,6,8,1),
+    ('VF3-LGT-02','Bong den xi nhan','Lighting',120000,8,10,1),
+    ('VF3-TYR-01','Lop truoc','Tire',1800000,4,6,1),
+    ('VF3-TYR-02','Lop sau','Tire',1800000,4,6,1),
+    ('VF3-MTR-01','Dong co quat gio','Motor',900000,2,5,1),
+    ('VF3-SNS-01','Cam bien ABS','Sensor',850000,3,5,1),
+    ('VF3-SNS-02','Cam bien ap suat lop','Sensor',500000,5,8,1);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF5-FLT-01','Loc gio dong co VF5','Filter',160000,12,15,2),
+    ('VF5-FLT-02','Loc gio dieu hoa AC VF5','Filter',190000,10,12,2),
+    ('VF5-OIL-01','Dau dong co VF5','Oil',270000,8,10,2),
+    ('VF5-BRK-01','Tam phanh truoc VF5','Brake',820000,6,10,2),
+    ('VF5-BRK-02','Tam phanh sau VF5','Brake',800000,7,10,2),
+    ('VF5-STR-01','Rotuyn truoc VF5','Steering',620000,5,8,2),
+    ('VF5-SUS-01','Giam xoc truoc VF5','Suspension',1550000,4,6,2),
+    ('VF5-WPR-01','Can gat mua VF5','Wiper',210000,11,12,2),
+    ('VF5-LGT-01','Bong den pha VF5','Lighting',370000,7,8,2),
+    ('VF5-TYR-01','Lop truoc VF5','Tire',1900000,5,6,2),
+    ('VF5-SNS-01','Cam bien ABS VF5','Sensor',870000,4,5,2);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF6-FLT-01','Loc gio dong co VF6','Filter',170000,14,16,3),
+    ('VF6-FLT-02','Loc gio dieu hoa AC VF6','Filter',200000,12,14,3),
+    ('VF6-OIL-01','Dau dong co VF6','Oil',280000,9,11,3),
+    ('VF6-BRK-01','Tam phanh truoc VF6','Brake',830000,6,10,3),
+    ('VF6-BRK-02','Tam phanh sau VF6','Brake',810000,8,10,3),
+    ('VF6-STR-01','Rotuyn truoc VF6','Steering',630000,5,8,3),
+    ('VF6-SUS-01','Giam xoc truoc VF6','Suspension',1560000,4,6,3),
+    ('VF6-WPR-01','Can gat mua VF6','Wiper',220000,10,13,3),
+    ('VF6-LGT-01','Bong den pha VF6','Lighting',380000,7,9,3),
+    ('VF6-TYR-01','Lop truoc VF6','Tire',1950000,5,6,3),
+    ('VF6-SNS-01','Cam bien ABS VF6','Sensor',880000,4,5,3);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF7-FLT-01','Loc gio dong co VF7','Filter',180000,11,15,4),
+    ('VF7-FLT-02','Loc gio dieu hoa AC VF7','Filter',210000,10,13,4),
+    ('VF7-OIL-01','Dau dong co VF7','Oil',290000,7,10,4),
+    ('VF7-BRK-01','Tam phanh truoc VF7','Brake',840000,6,10,4),
+    ('VF7-BRK-02','Tam phanh sau VF7','Brake',820000,9,10,4),
+    ('VF7-STR-01','Rotuyn truoc VF7','Steering',640000,5,8,4),
+    ('VF7-BAT-01','Acu quy 12V VF7','Battery',3600000,2,5,4),
+    ('VF7-LGT-01','Bong den pha VF7','Lighting',390000,8,9,4),
+    ('VF7-TYR-01','Lop truoc VF7','Tire',2000000,5,6,4),
+    ('VF7-SNS-01','Cam bien ABS VF7','Sensor',900000,4,5,4);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF8-FLT-01','Loc gio dong co VF8','Filter',190000,12,16,5),
+    ('VF8-FLT-02','Loc gio dieu hoa AC VF8','Filter',220000,11,14,5),
+    ('VF8-OIL-01','Dau dong co VF8','Oil',300000,8,10,5),
+    ('VF8-BRK-01','Tam phanh truoc VF8','Brake',850000,6,10,5),
+    ('VF8-BRK-02','Tam phanh sau VF8','Brake',830000,10,10,5),
+    ('VF8-STR-01','Rotuyn sau VF8','Steering',650000,4,7,5),
+    ('VF8-SUS-01','Giam xoc sau VF8','Suspension',1570000,4,6,5),
+    ('VF8-LGT-01','Bong den pha VF8','Lighting',400000,8,9,5),
+    ('VF8-TYR-01','Lop truoc VF8','Tire',2050000,5,6,5),
+    ('VF8-SNS-01','Cam bien ABS VF8','Sensor',920000,4,5,5);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF9-FLT-01','Loc gio dong co VF9','Filter',200000,13,17,6),
+    ('VF9-FLT-02','Loc gio dieu hoa AC VF9','Filter',230000,12,15,6),
+    ('VF9-OIL-01','Dau dong co VF9','Oil',310000,9,11,6),
+    ('VF9-BRK-01','Tam phanh truoc VF9','Brake',860000,6,10,6),
+    ('VF9-BRK-02','Tam phanh sau VF9','Brake',840000,11,10,6),
+    ('VF9-STR-01','Rotuyn truoc VF9','Steering',660000,5,8,6),
+    ('VF9-BAT-01','Acu quy 12V VF9','Battery',3650000,2,5,6),
+    ('VF9-LGT-01','Bong den pha VF9','Lighting',410000,8,9,6),
+    ('VF9-TYR-01','Lop truoc VF9','Tire',2100000,5,6,6),
+    ('VF9-SNS-01','Cam bien ABS VF9','Sensor',940000,4,5,6);

@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

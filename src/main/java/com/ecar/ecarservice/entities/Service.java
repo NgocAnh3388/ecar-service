@@ -1,9 +1,10 @@
-package com.ecar.ecarservice.enitiies;
+package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -13,48 +14,40 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "maintenance_schedule")
+@Table(name = "service")
 @Getter
 @Setter
+@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class MaintenanceSchedule {
+public class Service {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "car_model_id")
-    private CarModel carModel;
+    @Column(name = "service_name")
+    private String serviceName;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "maintenance_milestone_id")
-    private MaintenanceMileStone maintenanceMileStone;
+    @Column(name = "service_type")
+    private String serviceType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "service_id")
-    private Service service;
-
-    @Column(name = "is_default")
-    private Boolean isDefault;
+    @Column(name = "category")
+    private String category;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @CreatedBy
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_by", nullable = false, updatable = false)
     private String createdBy;
 
     @LastModifiedDate
-    @Column(insertable = false)
+    @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
     @LastModifiedBy
-    @Column(insertable = false)
+    @Column(name = "updated_by", insertable = false)
     private String updatedBy;
-
-    public static String getCategory(MaintenanceSchedule schedule) {
-        return schedule.getService().getCategory();
-    }
 }

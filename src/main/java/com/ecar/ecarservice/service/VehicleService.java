@@ -1,7 +1,6 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.dto.VehicleDto;
-import com.ecar.ecarservice.enitiies.Vehicle;
 import com.ecar.ecarservice.payload.requests.VehicleRequest;
 import com.ecar.ecarservice.payload.responses.VehicleResponse;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
