@@ -10,6 +10,7 @@ import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.service.MaintenanceService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
@@ -66,4 +67,11 @@ public class MaintenanceController {
         this.maintenanceService.createService(request, oidcUser);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/my-tasks")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
+        return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
+    }
+
 }
