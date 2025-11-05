@@ -8,6 +8,7 @@ import com.ecar.ecarservice.payload.responses.CarModelResponse;
 import com.ecar.ecarservice.payload.responses.VehicleResponse;
 import com.ecar.ecarservice.repositories.CarModelRepository;
 import com.ecar.ecarservice.repositories.VehicleRepository;
+import com.ecar.ecarservice.service.CarModelService;
 import com.ecar.ecarservice.service.UserService;
 import com.ecar.ecarservice.service.VehicleService;
 import jakarta.persistence.EntityNotFoundException;
@@ -64,7 +65,7 @@ public class VehicleServiceImpl implements VehicleService {
     public void addVehicle(VehicleRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
         Vehicle vehicle = new Vehicle();
-        vehicle.setOwnerId(currentUser.getId());
+        vehicle.setOwner(currentUser);
         vehicle.setLicensePlate(request.licensePlate());
         vehicle.setCarModel(this.carModelRepository.getReferenceById(request.carModelId()));
         vehicle.setVinNumber(request.vinNumber());

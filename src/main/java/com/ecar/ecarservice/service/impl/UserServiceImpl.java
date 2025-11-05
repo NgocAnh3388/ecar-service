@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         AppUser user = appUserRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
+                .orElseThrow();
         return convertToDto(user);
     }
 
