@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.scheduler;
 
-import com.ecar.ecarservice.enitiies.AppUser;
-import com.ecar.ecarservice.enitiies.ServiceRecord;
+import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.ServiceRecord;
 import com.ecar.ecarservice.repositories.ServiceRecordRepository;
 import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;

@@ -25,7 +25,6 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
 //    @Column(name = "owner_id")
 //    private Long ownerId;
 

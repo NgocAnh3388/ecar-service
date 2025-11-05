@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class VehicleServiceImpl implements VehicleService {
 
-    private final VehicleRepository vehicleRepository;;
+    private final VehicleRepository vehicleRepository;
     private final UserService userService;
     private final CarModelRepository carModelRepository;
 
