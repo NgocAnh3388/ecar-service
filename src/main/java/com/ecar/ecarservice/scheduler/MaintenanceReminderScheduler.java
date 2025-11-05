@@ -1,9 +1,16 @@
 package com.ecar.ecarservice.scheduler;
 
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.ServiceRecord;
 import com.ecar.ecarservice.repositories.ServiceRecordRepository;
 import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDate;
+import java.util.List;
 
 @Component
 public class MaintenanceReminderScheduler {
