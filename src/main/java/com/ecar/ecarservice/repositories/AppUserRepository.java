@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

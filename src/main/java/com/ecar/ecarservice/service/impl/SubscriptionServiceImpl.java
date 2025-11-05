@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.service.impl;
 
-import com.ecar.ecarservice.enitiies.AppUser;
-import com.ecar.ecarservice.enitiies.SubscriptionInfo;
+import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.SubscriptionInfo;
 import com.ecar.ecarservice.payload.responses.SubscriptionInfoResponse;
 import com.ecar.ecarservice.repositories.SubscriptionInfoRepository;
 import com.ecar.ecarservice.service.SubscriptionService;

@@ -1,10 +1,14 @@
 package com.ecar.ecarservice.entities;
 
+import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.Center;
+import com.ecar.ecarservice.entities.Vehicle;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
