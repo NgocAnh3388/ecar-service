@@ -64,7 +64,7 @@ public class VehicleServiceImpl implements VehicleService {
     public void addVehicle(VehicleRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
         Vehicle vehicle = new Vehicle();
-        vehicle.setOwnerId(currentUser.getId());
+        vehicle.setOwner(currentUser);
         vehicle.setLicensePlate(request.licensePlate());
         vehicle.setCarModel(this.carModelRepository.getReferenceById(request.carModelId()));
         vehicle.setVinNumber(request.vinNumber());
