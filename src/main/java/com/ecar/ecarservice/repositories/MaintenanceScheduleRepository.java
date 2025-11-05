@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.enitiies.MaintenanceSchedule;
+import com.ecar.ecarservice.entities.MaintenanceSchedule;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

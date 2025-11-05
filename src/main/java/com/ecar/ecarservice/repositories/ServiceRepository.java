@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.enitiies.Service;
+import com.ecar.ecarservice.entities.Service;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
