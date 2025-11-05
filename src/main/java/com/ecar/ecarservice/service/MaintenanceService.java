@@ -24,4 +24,7 @@ public interface MaintenanceService {
     List<ServiceGroup> getServiceGroup(Long ticketId);
 
     void createService(ServiceCreateRequest request, OidcUser oidcUser);
+
+    List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user);
+    MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId);
 }

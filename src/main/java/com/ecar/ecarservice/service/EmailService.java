@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.service;
 
-import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.Booking;
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.Booking;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class EmailService {

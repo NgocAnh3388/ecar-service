@@ -1,10 +1,11 @@
 package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
-import com.ecar.ecarservice.entities.*;
+import com.ecar.ecarservice.enitiies.*;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
+import com.ecar.ecarservice.repositories.MaintenanceHistoryRepository;
 import com.ecar.ecarservice.payload.requests.ServiceCreateRequest;
 import com.ecar.ecarservice.payload.responses.MaintenanceTicketResponse;
 import com.ecar.ecarservice.payload.responses.MilestoneResponse;
@@ -13,11 +14,13 @@ import com.ecar.ecarservice.payload.responses.ServiceItem;
 import com.ecar.ecarservice.repositories.*;
 import com.ecar.ecarservice.service.MaintenanceService;
 import com.ecar.ecarservice.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,7 +106,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         return new MaintenanceTicketResponse(
                 history.getId(),
                 history.getOwner().getFullName(),
-                history.getVehicle().getCarModel().getId(),
+                history.getVehicle().getId(),
                 history.getVehicle().getCarModel().getCarName(),
                 history.getVehicle().getLicensePlate(),
                 history.getNumOfKm(),
@@ -164,11 +167,11 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .collect(Collectors
                         .groupingBy(schedule -> schedule.getService().getCategory(),
                                 Collectors.mapping(schedule ->
-                                        new ServiceItem(
-                                                schedule.getId(),
-                                                schedule.getService().getServiceName(),
-                                                schedule.getIsDefault()
-                                        ), Collectors.toList()
+                                    new ServiceItem(
+                                            schedule.getId(),
+                                            schedule.getService().getServiceName(),
+                                            schedule.getIsDefault()
+                                    ), Collectors.toList()
                                 )));
         return rs.entrySet()
                 .stream()
@@ -189,7 +192,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         Map<String, List<ServiceItem>> rs = this.serviceRepository.findAllByServiceType(SERVICE_TYPE_FIX)
                 .stream()
                 .collect(Collectors
-                        .groupingBy(com.ecar.ecarservice.entities.Service::getCategory,
+                        .groupingBy(com.ecar.ecarservice.enitiies.Service::getCategory,
                                 Collectors.mapping(s ->
                                         new ServiceItem(
                                                 s.getId(),
@@ -212,11 +215,13 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Override
     public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
-        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow();
+        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy phiếu dịch vụ với ID: " + request.ticketId()));
+        AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId()).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy kỹ thuật viên với ID: " + request.technicianId()));
         maintenanceHistory.setNumOfKm(request.numOfKm());
-        maintenanceHistory.setTechnician(this.appUserRepository.getReferenceById(request.technicianId()));
         maintenanceHistory.setStaff(currentUser);
-        maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now());
+        maintenanceHistory.setTechnician(assignedTechnician);
+        maintenanceHistory.setStaffReceiveAt(LocalDateTime.now()); // Thời điểm nhân viên tiếp nhận
+        maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now()); // Thời điểm KTV nhận việc
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
         MaintenanceHistory savedMH = this.maintenanceHistoryRepository.save(maintenanceHistory);
 
@@ -235,4 +240,39 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         this.maintenanceItemRepository.saveAll(items);
     }
+
+
+    @Override
+    public List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user) {
+        AppUser currentUser = userService.getCurrentUser(user);
+
+        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatus(currentUser.getId())
+                .stream()
+                .map(this::fromMaintenanceHistory)
+                .toList();
+    }
+
+    @Override
+    @Transactional // <-- THÊM ANNOTATION NÀY VÀO
+    public MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId) {
+        // 1. Tìm bản ghi bảo dưỡng trong DB bằng ID
+        MaintenanceHistory maintenance = maintenanceHistoryRepository.findById(maintenanceId)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance record not found with id: " + maintenanceId));
+
+        // 2. Cập nhật trạng thái và thời gian hoàn thành
+        maintenance.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
+        maintenance.setCompletedAt(LocalDateTime.now());
+
+        // 3. Lưu lại thay đổi vào DB
+        // Do có @Transactional, bạn không cần gọi save() một cách tường minh nữa,
+        // Spring sẽ tự động lưu khi transaction kết thúc. Nhưng để code rõ ràng, bạn có thể giữ lại.
+        MaintenanceHistory updatedMaintenance = maintenanceHistoryRepository.save(maintenance);
+
+        // 4. Map entity đã cập nhật sang DTO và trả về
+        // Vì transaction vẫn còn mở ở đây, việc truy cập vehicle.getCarModel() sẽ thành công.
+        return convertToDTO(updatedMaintenance);
+    }
+
+
+
 }
