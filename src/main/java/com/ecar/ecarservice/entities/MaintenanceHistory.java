@@ -1,5 +1,8 @@
 package com.ecar.ecarservice.entities;
 
+import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.Center;
+import com.ecar.ecarservice.entities.Vehicle;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import jakarta.persistence.*;
 import lombok.Getter;

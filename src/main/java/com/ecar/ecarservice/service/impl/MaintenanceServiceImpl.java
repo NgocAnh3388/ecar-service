@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
-import com.ecar.ecarservice.enitiies.*;
+import com.ecar.ecarservice.entities.*;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
@@ -192,7 +192,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         Map<String, List<ServiceItem>> rs = this.serviceRepository.findAllByServiceType(SERVICE_TYPE_FIX)
                 .stream()
                 .collect(Collectors
-                        .groupingBy(com.ecar.ecarservice.enitiies.Service::getCategory,
+                        .groupingBy(com.ecar.ecarservice.entities.Service::getCategory,
                                 Collectors.mapping(s ->
                                         new ServiceItem(
                                                 s.getId(),
