@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.service.impl;
 
-import com.ecar.ecarservice.entities.Center;
+import com.ecar.ecarservice.enitiies.Center;
 import com.ecar.ecarservice.payload.responses.CenterResponse;
 import com.ecar.ecarservice.repositories.CenterRepository;
 import com.ecar.ecarservice.service.CenterService;

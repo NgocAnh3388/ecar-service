@@ -1,5 +1,7 @@
 package com.ecar.ecarservice.payload.responses;
 
+import com.ecar.ecarservice.enitiies.CarModel;
+
 import java.time.LocalDateTime;
 
 public record VehicleResponse(
