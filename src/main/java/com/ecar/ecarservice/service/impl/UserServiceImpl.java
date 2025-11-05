@@ -12,6 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
+import com.ecar.ecarservice.dto.VehicleDto;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,6 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
         return appUserRepository.findAllByActiveTrue().stream()
                 .map(this::convertToDto)
@@ -33,9 +36,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         AppUser user = appUserRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
+                .orElseThrow();
         return convertToDto(user);
     }
 
@@ -70,10 +74,31 @@ public class UserServiceImpl implements UserService {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPhoneNo(user.getPhoneNo());
         dto.setRoles(user.getRoles());
         dto.setActive(user.isActive());
+
+        // 👇 Map danh sách xe sang VehicleDto
+        if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
+            List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
+                VehicleDto vd = new VehicleDto();
+                vd.setLicensePlate(v.getLicensePlate());
+                vd.setCarModel(v.getCarModel());
+                vd.setVinNumber(v.getVinNumber());
+                vd.setNextKm(v.getNextKm());
+                vd.setNextDate(v.getNextDate());
+                vd.setOldKm(v.getOldKm());
+                vd.setOldDate(v.getOldDate());
+                return vd;
+            }).collect(Collectors.toList());
+
+            dto.setVehicles(vehicleDtos);
+        }
+
         return dto;
     }
+
 
     @Override
     public void createUser(UserCreateDTO userCreateDTO) {
