@@ -1,8 +1,8 @@
 package com.ecar.ecarservice.service.impl;
 
-import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.PaymentHistory;
-import com.ecar.ecarservice.entities.SubscriptionInfo;
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.PaymentHistory;
+import com.ecar.ecarservice.enitiies.SubscriptionInfo;
 import com.ecar.ecarservice.enums.PaymentStatus;
 import com.ecar.ecarservice.payload.requests.PaymentRequest;
 import com.ecar.ecarservice.payload.responses.PaymentHistoryResponse;
@@ -13,7 +13,9 @@ import com.ecar.ecarservice.service.PaymentService;
 import com.ecar.ecarservice.service.UserService;
 import com.paypal.api.payments.*;
 import com.paypal.base.rest.APIContext;
+import com.paypal.base.rest.PayPalRESTException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

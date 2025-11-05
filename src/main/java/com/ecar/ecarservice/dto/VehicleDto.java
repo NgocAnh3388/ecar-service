@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.dto;
 
-import com.ecar.ecarservice.entities.CarModel;
+import com.ecar.ecarservice.enitiies.CarModel;
 import lombok.Getter;
 import lombok.Setter;
 
