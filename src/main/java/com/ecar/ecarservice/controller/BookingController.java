@@ -3,6 +3,8 @@ package com.ecar.ecarservice.controller;
 import com.ecar.ecarservice.dto.BookingRequestDto;
 import com.ecar.ecarservice.dto.BookingResponseDto;
 import com.ecar.ecarservice.entities.AppUser;
+
+import com.ecar.ecarservice.entities.Booking;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.BookingService;
 import org.springframework.http.HttpStatus;
