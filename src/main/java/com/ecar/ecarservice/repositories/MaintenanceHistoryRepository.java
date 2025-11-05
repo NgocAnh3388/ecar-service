@@ -42,4 +42,6 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
             "ORDER BY mh.status, mh.submittedAt")
     List<MaintenanceHistory> findAllWithinToday();
 
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
+    List<MaintenanceHistory> findByTechnicianIdOrderByStatus(Long technicianId);
 }
