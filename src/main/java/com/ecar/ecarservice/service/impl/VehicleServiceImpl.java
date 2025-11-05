@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class VehicleServiceImpl implements VehicleService {
 
-    private final VehicleRepository vehicleRepository;
+    private final VehicleRepository vehicleRepository;;
     private final UserService userService;
     private final CarModelRepository carModelRepository;
 
@@ -65,8 +65,6 @@ public class VehicleServiceImpl implements VehicleService {
     public void addVehicle(VehicleRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
         Vehicle vehicle = new Vehicle();
-        vehicle.setOwner(currentUser);
-        vehicle.setLicensePlate(request.licensePlate());
         vehicle.setOwner(currentUser);
         vehicle.setLicensePlate(request.licensePlate());
         vehicle.setCarModel(this.carModelRepository.getReferenceById(request.carModelId()));
