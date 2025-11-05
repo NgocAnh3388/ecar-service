@@ -2,7 +2,7 @@ package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
-import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.repositories.AppUserRepository;
@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
         AppUser user = appUserRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
+                .orElseThrow();
         return convertToDto(user);
     }
 

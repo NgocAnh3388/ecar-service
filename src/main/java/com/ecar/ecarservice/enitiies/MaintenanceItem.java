@@ -1,48 +1,37 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_history")
+@Table(name = "maintenance_item")
 @Getter
 @Setter
-@ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PaymentHistory {
+public class MaintenanceItem {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subscription_id")
-    private Long subscriptionId;
+    @Column(name = "maintenance_milestone_id")
+    private Long maintenanceMilestoneId;
 
-    @Column(name = "payment_method")
-    private String paymentMethod;
+    @Column(name = "maintenance_history_id")
+    private Long maintenanceHistoryId;
 
-    @Column(name = "payment_status")
-    private String paymentStatus;
-
-    @Column(name = "payment_id")
-    private String paymentId;
-
-    @Column(name = "num_of_years")
-    private Long numOfYears;
-
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(name = "service_id")
+    private Long serviceId;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -60,3 +49,4 @@ public class PaymentHistory {
     @Column(insertable = false)
     private String updatedBy;
 }
+

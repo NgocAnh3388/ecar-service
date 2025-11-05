@@ -68,6 +68,14 @@ public class MaintenanceController {
         this.maintenanceService.createService(request, oidcUser);
         return ResponseEntity.ok().build();
     }
+
+
+    @GetMapping("/my-tasks")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
+        return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
+    }
+
     @PostMapping("/{id}/technician-complete")
     // Chỉ những user có role TECHNICIAN hoặc ADMIN mới được gọi endpoint này
     @PreAuthorize("hasAnyAuthority('ROLE_TECHNICIAN', 'ROLE_ADMIN')")

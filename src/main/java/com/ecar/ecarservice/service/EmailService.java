@@ -1,7 +1,7 @@
 package com.ecar.ecarservice.service;
 
-import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.Booking;
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.Booking;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;

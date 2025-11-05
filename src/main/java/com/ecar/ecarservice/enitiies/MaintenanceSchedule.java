@@ -1,57 +1,42 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
-import com.ecar.ecarservice.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "vehicles")
+@Table(name = "maintenance_schedule")
 @Getter
 @Setter
+@RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Vehicle {
-
+public class MaintenanceSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @Column(name = "owner_id")
-//    private Long ownerId;
-
-    @Column(nullable = false, unique = true)
-    private String licensePlate;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_model_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "car_model_id")
     private CarModel carModel;
 
-    @Column(name = "vin_number")
-    private String vinNumber;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maintenance_milestone_id")
+    private MaintenanceMileStone maintenanceMileStone;
 
-    @Column(name = "next_km")
-    private Long nextKm;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "service_id")
+    private Service service;
 
-    @Column(name = "next_date")
-    private LocalDateTime nextDate;
-
-    @Column(name = "old_km")
-    private Long oldKm;
-
-    @Column(name = "old_date")
-    private LocalDateTime oldDate;
-
-    @Column(nullable = false)
-    private boolean active = true;
+    @Column(name = "is_default")
+    private Boolean isDefault;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -69,10 +54,7 @@ public class Vehicle {
     @Column(insertable = false)
     private String updatedBy;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
-    @JsonBackReference
-    private AppUser owner;
-
-
+    public static String getCategory(MaintenanceSchedule schedule) {
+        return schedule.getService().getCategory();
+    }
 }

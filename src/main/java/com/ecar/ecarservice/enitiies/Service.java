@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,52 +11,43 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_history")
+@Table(name = "service")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PaymentHistory {
+public class Service {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subscription_id")
-    private Long subscriptionId;
+    @Column(name = "service_name")
+    private String serviceName;
 
-    @Column(name = "payment_method")
-    private String paymentMethod;
+    @Column(name = "service_type")
+    private String serviceType;
 
-    @Column(name = "payment_status")
-    private String paymentStatus;
-
-    @Column(name = "payment_id")
-    private String paymentId;
-
-    @Column(name = "num_of_years")
-    private Long numOfYears;
-
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(name = "category")
+    private String category;
 
     @CreatedDate
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @CreatedBy
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_by", nullable = false, updatable = false)
     private String createdBy;
 
     @LastModifiedDate
-    @Column(insertable = false)
+    @Column(name = "updated_at", insertable = false)
     private LocalDateTime updatedAt;
 
     @LastModifiedBy
-    @Column(insertable = false)
+    @Column(name = "updated_by", insertable = false)
     private String updatedBy;
 }

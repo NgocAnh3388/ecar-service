@@ -1,8 +1,8 @@
 package com.ecar.ecarservice.service.impl;
 
-import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.PaymentHistory;
-import com.ecar.ecarservice.entities.SubscriptionInfo;
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.PaymentHistory;
+import com.ecar.ecarservice.enitiies.SubscriptionInfo;
 import com.ecar.ecarservice.enums.PaymentStatus;
 import com.ecar.ecarservice.payload.requests.PaymentRequest;
 import com.ecar.ecarservice.payload.responses.PaymentHistoryResponse;
@@ -20,6 +20,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal; // <-- THÊM IMPORT
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,7 +57,10 @@ public class PaymentServiceImpl implements PaymentService {
             Amount amount = new Amount();
             amount.setCurrency("USD");
             double AMOUNT_PER_YEAR = 1000.0;
-            amount.setTotal(String.format(Locale.forLanguageTag("USD"), "%.2f", AMOUNT_PER_YEAR  * request.numOfYears()));
+
+            // Tính toán tổng số tiền
+            double totalAmountValue = AMOUNT_PER_YEAR * request.numOfYears();
+            amount.setTotal(String.format(Locale.forLanguageTag("USD"), "%.2f", totalAmountValue));
 
             Transaction transaction = new Transaction();
             transaction.setDescription("payment for renew");
@@ -95,6 +99,11 @@ public class PaymentServiceImpl implements PaymentService {
             paymentHistory.setPaymentMethod("paypal");
             paymentHistory.setPaymentStatus(PaymentStatus.INIT.name());
             paymentHistory.setPaymentId(rs.getId());
+
+            // === THÊM DÒNG NÀY ===
+            paymentHistory.setAmount(BigDecimal.valueOf(totalAmountValue));
+            // ======================
+
             this.paymentHistoryRepository.save(paymentHistory);
 
             return new PaymentResponse(redirectUrl);

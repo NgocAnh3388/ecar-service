@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.entities.MaintenanceHistory;
+import com.ecar.ecarservice.enitiies.MaintenanceHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -42,4 +42,6 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
             "ORDER BY mh.status, mh.submittedAt")
     List<MaintenanceHistory> findAllWithinToday();
 
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
+    List<MaintenanceHistory> findByTechnicianIdOrderByStatus(Long technicianId);
 }

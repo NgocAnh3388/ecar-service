@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.config;
 
-import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
         http
@@ -36,20 +37,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/ping/**").permitAll()
                         .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
-                        .requestMatchers("/api/me").authenticated()
-                        .requestMatchers("/api/me/**").authenticated()
+                        .requestMatchers("/api/me", "/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**").authenticated()
-                        .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
+                        .requestMatchers("/api/service-records").authenticated()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(endpoint -> endpoint.oidcUserService(oidcUserService))
                         .defaultSuccessUrl("http://localhost:4200", true)
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("http://localhost:4200/")
+                        .deleteCookies("JSESSIONID")
                 );
 
         return http.build();
     }
+
 
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(AppUserRepository appUserRepository) {

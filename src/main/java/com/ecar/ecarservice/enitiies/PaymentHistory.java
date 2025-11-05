@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,7 +11,6 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -40,9 +39,6 @@ public class PaymentHistory {
 
     @Column(name = "num_of_years")
     private Long numOfYears;
-
-    @Column(name = "amount")
-    private BigDecimal amount;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

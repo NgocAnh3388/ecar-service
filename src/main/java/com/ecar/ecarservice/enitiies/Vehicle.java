@@ -1,6 +1,5 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
-import com.ecar.ecarservice.entities.AppUser;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

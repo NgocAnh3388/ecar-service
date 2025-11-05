@@ -1,4 +1,4 @@
-package com.ecar.ecarservice.entities;
+package com.ecar.ecarservice.enitiies;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -11,38 +11,31 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "payment_history")
+@Table(name = "subscription_info")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class PaymentHistory {
+public class SubscriptionInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "subscription_id")
-    private Long subscriptionId;
+    @Column(name = "owner_id")
+    private Long ownerId;
 
-    @Column(name = "payment_method")
-    private String paymentMethod;
+    @Column(name = "start_date")
+    private LocalDateTime startDate;
 
-    @Column(name = "payment_status")
-    private String paymentStatus;
+    @Column(name = "end_date")
+    private LocalDateTime endDate;
 
-    @Column(name = "payment_id")
-    private String paymentId;
-
-    @Column(name = "num_of_years")
-    private Long numOfYears;
-
-    @Column(name = "amount")
-    private BigDecimal amount;
+    @Column(name = "payment_date")
+    private LocalDateTime paymentDate;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
