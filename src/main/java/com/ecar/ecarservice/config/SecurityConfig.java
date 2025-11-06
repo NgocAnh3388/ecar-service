@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.config;
 
-import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.enitiies.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import jakarta.servlet.http.HttpServletResponse;

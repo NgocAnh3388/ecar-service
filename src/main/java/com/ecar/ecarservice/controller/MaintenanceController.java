@@ -9,6 +9,7 @@ import com.ecar.ecarservice.payload.responses.MaintenanceTicketResponse;
 import com.ecar.ecarservice.payload.responses.MilestoneResponse;
 import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.service.MaintenanceService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +35,7 @@ public class MaintenanceController {
     public ResponseEntity<Page<MaintenanceHistoryDTO>> getMaintenanceHistory(
             @AuthenticationPrincipal OidcUser oidcUser,
             @RequestBody MaintenanceHistorySearchRequest request
-    ) {
+            ) {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceHistory(oidcUser, request));
     }
 
@@ -79,6 +80,8 @@ public class MaintenanceController {
     }
 
     @GetMapping("/technician/my-tasks")
+
+    @GetMapping("/my-tasks")
     @PreAuthorize("hasRole('TECHNICIAN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
@@ -89,5 +92,19 @@ public class MaintenanceController {
     public ResponseEntity<Void> completeService(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
         maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
         return ResponseEntity.ok().build();
+    }
+    @PostMapping("/{id}/technician-complete")
+    // Chỉ những user có role TECHNICIAN hoặc ADMIN mới được gọi endpoint này
+    @PreAuthorize("hasAnyAuthority('ROLE_TECHNICIAN', 'ROLE_ADMIN')")
+    public ResponseEntity<MaintenanceHistoryDTO> completeTechnicianTask(@PathVariable Long id) {
+        try {
+            // Gọi phương thức trong service mà chúng ta vừa implement
+            MaintenanceHistoryDTO updatedDto = maintenanceService.completeTechnicianTask(id);
+            // Nếu thành công, trả về 200 OK cùng với dữ liệu đã được cập nhật
+            return ResponseEntity.ok(updatedDto);
+        } catch (EntityNotFoundException e) {
+            // Nếu service ném ra lỗi không tìm thấy, trả về 404 Not Found
+            return ResponseEntity.notFound().build();
+        }
     }
 }

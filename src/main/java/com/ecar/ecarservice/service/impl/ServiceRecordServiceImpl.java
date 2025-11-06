@@ -3,9 +3,9 @@ package com.ecar.ecarservice.service.impl;
 import com.ecar.ecarservice.dto.CreateServiceRecordRequest;
 import com.ecar.ecarservice.dto.ServiceDetailDto; // <<-- DÒNG BẠN ĐANG THIẾU
 import com.ecar.ecarservice.dto.ServiceRecordResponseDto;
-import com.ecar.ecarservice.entities.Booking;
-import com.ecar.ecarservice.entities.ServiceRecord;
-import com.ecar.ecarservice.entities.ServiceRecordDetail;
+import com.ecar.ecarservice.enitiies.Booking;
+import com.ecar.ecarservice.enitiies.ServiceRecord;
+import com.ecar.ecarservice.enitiies.ServiceRecordDetail;
 import com.ecar.ecarservice.enums.BookingStatus;
 import com.ecar.ecarservice.repositories.BookingRepository;
 import com.ecar.ecarservice.repositories.ServiceRecordRepository;

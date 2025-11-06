@@ -2,7 +2,8 @@ package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.dto.BookingRequestDto;
 import com.ecar.ecarservice.dto.BookingResponseDto;
-import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.enitiies.Booking;
 
 import java.util.List;
 
