@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.payload.responses;
 
-import com.ecar.ecarservice.enitiies.CarModel;
+import com.ecar.ecarservice.entities.CarModel;
 
 import java.time.LocalDateTime;
 

@@ -8,6 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 
 import java.time.LocalDateTime;
 
@@ -22,8 +24,8 @@ public class Vehicle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "owner_id")
-    private Long ownerId;
+//    @Column(name = "owner_id")
+//    private Long ownerId;
 
     @Column(nullable = false, unique = true)
     private String licensePlate;
@@ -65,5 +67,11 @@ public class Vehicle {
     @LastModifiedBy
     @Column(insertable = false)
     private String updatedBy;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    @JsonBackReference
+    private AppUser owner;
+
 
 }

@@ -219,6 +219,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow(() -> new EntityNotFoundException("Service ticket not found with ID: " + request.ticketId()));
         AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId()).orElseThrow(() -> new EntityNotFoundException("Technician not found with ID: " + request.technicianId()));
         maintenanceHistory.setNumOfKm(request.numOfKm());
+
         maintenanceHistory.setStaff(currentUser);
         maintenanceHistory.setTechnician(assignedTechnician);
         maintenanceHistory.setStaffReceiveAt(LocalDateTime.now()); // Thời điểm nhân viên tiếp nhận
