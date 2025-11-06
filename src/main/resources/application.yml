@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ecardb # postgres sql url
     username: postgres # postgres username
-    password: postgres # postgres password
+    password: 12345 # postgres password
     # config thread-pool
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -21,7 +21,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true # show sql
     hibernate:
-      ddl-auto: update # update means check if table in entities existed or not, if not -> create new table with
+      ddl-auto: update
   security:
     oauth2:
       client:

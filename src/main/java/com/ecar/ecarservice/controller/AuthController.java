@@ -26,7 +26,10 @@ public class AuthController {
     private final BCryptPasswordEncoder passwordEncoder;
     private final AuthenticationManager authManager;
 
-    public AuthController(AppUserRepository userRepo, BCryptPasswordEncoder passwordEncoder, AuthenticationManager authManager) {
+
+    public AuthController(AppUserRepository userRepo,
+                          BCryptPasswordEncoder passwordEncoder,
+                          AuthenticationManager authManager) {
         this.userRepo = userRepo;
         this.passwordEncoder = passwordEncoder;
         this.authManager = authManager;
@@ -35,18 +38,20 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AppUser user) {
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message","Email already exists"));
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message","Email already exists"));
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.getRoles().add(AppRole.CUSTOMER);
         user.setActive(true);
         AppUser saved = userRepo.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of(
-                "id", saved.getId(),
-                "email", saved.getEmail(),
-                "name", saved.getFullName(),
-                "roles", saved.getRoles()
-        ));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(Map.of(
+                        "id", saved.getId(),
+                        "email", saved.getEmail(),
+                        "name", saved.getFullName(),
+                        "roles", saved.getRoles()
+                ));
     }
 
     @PostMapping("/login")
@@ -65,7 +70,8 @@ public class AuthController {
                     "roles", user.getRoles()
             ));
         } catch (BadCredentialsException ex) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("message","Invalid email or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("message","Invalid email or password"));
         }
     }
 

@@ -31,37 +31,38 @@ import java.util.stream.Stream;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http,
-                                                   OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers("/api/auth/**", "/api/ping/**").permitAll()
+                        .requestMatchers("/api/ping/**").permitAll()
+                        .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
+                        .requestMatchers("/api/me").authenticated()
                         .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/api/bookings/**", "/api/service-records/**").authenticated()
-                   
+                        .requestMatchers("/api/bookings/**").authenticated()
+                        .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(endpoint -> endpoint.oidcUserService(oidcUserService))
-                )
-                .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
-                        .deleteCookies("JSESSIONID")
-
                         .defaultSuccessUrl("http://localhost:4200", true)
                 );
 
         return http.build();
     }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(AppUserRepository appUserRepository) {
         final OidcUserService delegate = new OidcUserService();
+
         return userRequest -> {
             OidcUser oidcUser = delegate.loadUser(userRequest);
             return processOidcUser(appUserRepository, oidcUser);
@@ -72,50 +73,45 @@ public class SecurityConfig {
     public OidcUser processOidcUser(AppUserRepository appUserRepository, OidcUser oidcUser) {
         String sub = oidcUser.getSubject();
         String email = oidcUser.getEmail();
-        String name = oidcUser.getFullName();
+        String name = oidcUser.getFullName(); // Lấy tên từ Google
 
         AppUser appUser = appUserRepository.findBySub(sub)
-                .map(u -> { u.setFullName(name); return appUserRepository.save(u); })
-                .orElseGet(() -> appUserRepository.findByEmail(email)
-                        .map(u -> { u.setSub(sub); u.setFullName(name); return appUserRepository.save(u); })
-                        .orElseGet(() -> {
-                            AppUser newUser = new AppUser();
-                            newUser.setSub(sub);
-                            newUser.setEmail(email);
-                            newUser.setFullName(name);
-                            newUser.getRoles().add(AppRole.CUSTOMER);
-                            newUser.setActive(true);
-                            return appUserRepository.save(newUser);
-                        })
-                );
+                .map(existingUser -> {
+                    // Nếu user đã tồn tại, cập nhật lại tên (phòng trường hợp họ đổi tên)
+                    existingUser.setFullName(name);
+                    return appUserRepository.save(existingUser);
+                })
+                .orElseGet(() -> {
+                    // Nếu không có user theo 'sub', thử tìm theo email
+                    return appUserRepository.findByEmail(email)
+                            .map(existingUser -> {
+                                // User đã tồn tại (có thể tạo thủ công), cập nhật 'sub' và 'name' cho họ
+                                existingUser.setSub(sub);
+                                existingUser.setFullName(name);
+                                return appUserRepository.save(existingUser);
+                            })
+                            .orElseGet(() -> {
+                                // User hoàn toàn mới, tạo mới với đầy đủ thông tin
+                                AppUser newUser = new AppUser();
+                                newUser.setSub(sub);
+                                newUser.setEmail(email);
+                                newUser.setFullName(name); // Lưu tên
+                                newUser.getRoles().add(AppRole.CUSTOMER);
+                                return appUserRepository.save(newUser);
+                            });
+                });
 
-        if (!appUser.isActive()) throw new RuntimeException("User account is deactivated.");
+        if (!appUser.isActive()) {
+            throw new RuntimeException("User account is deactivated.");
+        }
 
         var dbAuthorities = appUser.getRoles().stream()
-                .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
                 .toList();
 
         var mergedAuthorities = Stream.concat(oidcUser.getAuthorities().stream(), dbAuthorities.stream()).toList();
 
         return new DefaultOidcUser(mergedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo(), "name");
-    }
-
-    @Bean
-    public BCryptPasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
-        provider.setPasswordEncoder(passwordEncoder());
-        return provider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
-        return authentication -> authProvider.authenticate(authentication);
     }
 
     @Bean
@@ -128,5 +124,17 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder()); // dùng BCryptPasswordEncoder đã khai báo
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
+        return authentication -> authProvider.authenticate(authentication);
     }
 }
