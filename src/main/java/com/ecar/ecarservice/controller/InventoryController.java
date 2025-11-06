@@ -10,6 +10,7 @@ import com.ecar.ecarservice.service.InventoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,6 +36,7 @@ public class InventoryController {
 
     // --- Lấy danh sách phụ tùng sắp hết kho ---
     @GetMapping("/low-stock")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<List<StockAlertDTO>> getLowStock() {
         return ResponseEntity.ok(inventoryService.getLowStockAlerts());
     }

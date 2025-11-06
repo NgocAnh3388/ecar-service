@@ -12,6 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +31,10 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional
     public BookingResponseDto createBooking(BookingRequestDto bookingDto, AppUser currentUser) {
+        if (bookingDto.getAppointmentDateTime().isBefore(LocalDateTime.now())) {
+            // Ném ra một ngoại lệ tùy chỉnh hoặc một ngoại lệ chung
+            throw new IllegalStateException("Appointment date and time cannot be in the past.");
+        }
         Booking booking = new Booking();
 
         // Map thông tin từ DTO sang Entity

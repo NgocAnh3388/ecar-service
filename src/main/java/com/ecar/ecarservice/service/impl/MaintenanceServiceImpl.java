@@ -16,8 +16,10 @@ import com.ecar.ecarservice.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -68,7 +70,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     }
 
     @Override
-    public void createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser) {
+    @Transactional
+    public MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser) {
         AppUser currentUser = userService.getCurrentUser(oidcUser);
 
         MaintenanceHistory history = new MaintenanceHistory();
@@ -86,7 +89,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         //TODO: gửi mail xác nhận đã nhận được yêu cầu
 
-        this.maintenanceHistoryRepository.save(history);
+        return this.maintenanceHistoryRepository.save(history);
     }
 
     @Override
@@ -213,8 +216,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Override
     public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
-        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy phiếu dịch vụ với ID: " + request.ticketId()));
-        AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId()).orElseThrow(() -> new EntityNotFoundException("Không tìm thấy kỹ thuật viên với ID: " + request.technicianId()));
+        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow(() -> new EntityNotFoundException("Service ticket not found with ID: " + request.ticketId()));
+        AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId()).orElseThrow(() -> new EntityNotFoundException("Technician not found with ID: " + request.technicianId()));
         maintenanceHistory.setNumOfKm(request.numOfKm());
         maintenanceHistory.setStaff(currentUser);
         maintenanceHistory.setTechnician(assignedTechnician);
@@ -247,5 +250,39 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .stream()
                 .map(this::fromMaintenanceHistory)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
+        // 1. Lấy thông tin KTV đang đăng nhập
+        AppUser currentTechnician = userService.getCurrentUser(oidcUser);
+
+        // 2. Tìm phiếu yêu cầu (ticket) trong DB
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
+
+        // 3. Kiểm tra quyền sở hữu (Security Check)
+        // Dòng này rất quan trọng để tránh NullPointerException
+        if (ticket.getTechnician() == null) {
+            throw new AccessDeniedException("This service ticket has not been assigned to any technician yet.");
+        }
+        if (ticket.getTechnician() == null || !ticket.getTechnician().getId().equals(currentTechnician.getId())) {
+            throw new AccessDeniedException("You are not assigned to this service ticket.");
+        }
+
+        // 4. Kiểm tra trạng thái hợp lệ (Business Logic Check)
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
+            throw new IllegalStateException("Ticket is not in the correct state to be completed. Current state: " + ticket.getStatus());
+        }
+
+        // 5. Cập nhật trạng thái và thời gian hoàn thành
+        ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
+        ticket.setCompletedAt(LocalDateTime.now());
+
+        // 6. Lưu lại thay đổi
+        maintenanceHistoryRepository.save(ticket);
+
+        System.out.println("Successfully completed service ticket with ID: " + ticketId); // Thêm log để debug
     }
 }

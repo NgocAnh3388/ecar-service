@@ -4,6 +4,7 @@ import com.ecar.ecarservice.dto.VehicleDto;
 import com.ecar.ecarservice.payload.requests.VehicleRequest;
 import com.ecar.ecarservice.payload.responses.VehicleResponse;
 import com.ecar.ecarservice.service.VehicleService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -27,7 +28,7 @@ public class VehicleController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> addVehicle(@RequestBody VehicleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
+    public ResponseEntity<Void> addVehicle(@Valid @RequestBody VehicleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
         vehicleService.addVehicle(request, oidcUser);
         return ResponseEntity.ok().build();
     }
