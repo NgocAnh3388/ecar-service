@@ -38,7 +38,9 @@ public class ServiceRecordController {
      * @return Danh sách các bản ghi lịch sử, sắp xếp theo ngày gần nhất.
      */
     @GetMapping("/service-records")
-    public ResponseEntity<List<ServiceRecordResponseDto>> getServiceHistory(@RequestParam String licensePlate) {
+    public ResponseEntity<List<ServiceRecordResponseDto>> getServiceHistory(
+            @RequestParam(name = "licensePlate", required = true) String licensePlate
+    ) {
         List<ServiceRecordResponseDto> history = serviceRecordService.getHistoryByLicensePlate(licensePlate);
         return ResponseEntity.ok(history);
     }

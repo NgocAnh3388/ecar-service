@@ -15,7 +15,6 @@ import java.util.List;
 @Repository
 public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceHistory, Long> {
 
-
     @EntityGraph(attributePaths= {
             "vehicle",
             "vehicle.carModel"
@@ -43,5 +42,8 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
     List<MaintenanceHistory> findAllWithinToday();
     @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
     List<MaintenanceHistory> findByTechnicianIdOrderByStatus(Long technicianId);
+
+    @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
+    List<MaintenanceHistory> findByTechnicianIdOrderByStatusAscSubmittedAtAsc(Long technicianId);
 
 }

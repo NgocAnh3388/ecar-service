@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.entities.MaintenanceHistory;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
 import com.ecar.ecarservice.payload.requests.ServiceCreateRequest;
@@ -10,6 +11,7 @@ import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.service.MaintenanceService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/maintenance")
@@ -28,7 +31,7 @@ public class MaintenanceController {
         this.maintenanceService = maintenanceService;
     }
 
-    @RequestMapping(value = "/history", method = RequestMethod.POST)
+    @PostMapping("/history")
     public ResponseEntity<Page<MaintenanceHistoryDTO>> getMaintenanceHistory(
             @AuthenticationPrincipal OidcUser oidcUser,
             @RequestBody MaintenanceHistorySearchRequest request
@@ -36,42 +39,57 @@ public class MaintenanceController {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceHistory(oidcUser, request));
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<Void> createSchedule(@RequestBody MaintenanceScheduleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
-        this.maintenanceService.createSchedule(request, oidcUser);
-        return ResponseEntity.ok().build();
+    @PostMapping("/create") // Dùng @PostMapping cho gọn
+    public ResponseEntity<Map<String, Long>> createSchedule(@RequestBody MaintenanceScheduleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
+        MaintenanceHistory newTicket = this.maintenanceService.createSchedule(request, oidcUser);
+
+        // Trả về một đối tượng JSON chứa ID
+        Map<String, Long> response = Map.of("ticketId", newTicket.getId());
+
+        // Trả về status 201 Created cùng với ID
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @RequestMapping("/all")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getTickets(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTickets(user));
     }
 
-    @RequestMapping(value = "/milestone/{carModelId}", method = RequestMethod.GET)
+    @GetMapping("/milestone/{carModelId}")
     public ResponseEntity<List<MilestoneResponse>> getMilestone(@PathVariable Long carModelId) {
         return ResponseEntity.ok(this.maintenanceService.getMilestone(carModelId));
     }
 
-    @RequestMapping(value = "/service-group/{carModelId}/{milestoneId}", method = RequestMethod.GET)
+    @GetMapping("/service-group/{carModelId}/{milestoneId}")
     public ResponseEntity<List<ServiceGroup>> getMaintenanceServiceGroupByCarModelIdAndMilestoneId(@PathVariable Long carModelId,
                                                                                                    @PathVariable Long milestoneId) {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceServiceGroup(carModelId, milestoneId));
     }
 
-    @RequestMapping(value = "/service-group/{ticketId}", method = RequestMethod.GET)
+    @GetMapping("/service-group/{ticketId}")
     public ResponseEntity<List<ServiceGroup>> getServiceGroup(@PathVariable Long ticketId) {
         return ResponseEntity.ok(this.maintenanceService.getServiceGroup(ticketId));
     }
 
-    @RequestMapping(value = "/service-create", method = RequestMethod.POST)
+    @PostMapping("/service-create")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<Void> createService(@AuthenticationPrincipal OidcUser oidcUser, @RequestBody ServiceCreateRequest request) {
         this.maintenanceService.createService(request, oidcUser);
         return ResponseEntity.ok().build();
     }
-    @GetMapping("/my-tasks")
+
+    @GetMapping("/technician/my-tasks")
     @PreAuthorize("hasRole('TECHNICIAN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
+    }
+
+    @PutMapping("/technician/tasks/{ticketId}/complete")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<Void> completeService(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
+        maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
+        return ResponseEntity.ok().build();
     }
     @PostMapping("/{id}/technician-complete")
     // Chỉ những user có role TECHNICIAN hoặc ADMIN mới được gọi endpoint này

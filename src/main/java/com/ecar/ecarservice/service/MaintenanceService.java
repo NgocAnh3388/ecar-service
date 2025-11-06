@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.entities.MaintenanceHistory;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
 import com.ecar.ecarservice.payload.requests.ServiceCreateRequest;
@@ -15,8 +16,8 @@ import java.util.List;
 
 public interface MaintenanceService {
     Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request);
-    void createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser);
-    List<MaintenanceTicketResponse> getTickets(OidcUser user);
+    // Sửa dòng này
+    MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser);    List<MaintenanceTicketResponse> getTickets(OidcUser user);
     List<MilestoneResponse> getMilestone(Long carModelId);
 
     List<ServiceGroup> getMaintenanceServiceGroup(Long modelId,Long maintenanceScheduleId);
@@ -26,5 +27,7 @@ public interface MaintenanceService {
     void createService(ServiceCreateRequest request, OidcUser oidcUser);
 
     List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user);
-    MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId);
+
+    void completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
+
 }

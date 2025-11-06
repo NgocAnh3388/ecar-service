@@ -33,6 +33,9 @@ public class ServiceRecordServiceImpl implements ServiceRecordService {
     @Override
     @Transactional
     public ServiceRecordResponseDto createServiceRecord(CreateServiceRecordRequest request) {
+        if (request.getDetails() == null || request.getDetails().isEmpty()) {
+            throw new IllegalArgumentException("Service details cannot be empty.");
+        }
         // 1. Tìm booking gốc từ ID
         Booking booking = bookingRepository.findById(request.getBookingId())
                 .orElseThrow(() -> new EntityNotFoundException("Booking not found with id: " + request.getBookingId()));

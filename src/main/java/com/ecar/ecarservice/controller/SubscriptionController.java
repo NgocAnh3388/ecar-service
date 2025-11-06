@@ -7,6 +7,7 @@ import com.ecar.ecarservice.payload.responses.PaymentResponse;
 import com.ecar.ecarservice.payload.responses.SubscriptionInfoResponse;
 import com.ecar.ecarservice.service.PaymentService;
 import com.ecar.ecarservice.service.SubscriptionService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -38,7 +39,7 @@ public class SubscriptionController {
 
     @RequestMapping(value = "/renew", method = RequestMethod.POST)
     public ResponseEntity<PaymentResponse> renewSubscription(@AuthenticationPrincipal OidcUser oidcUser,
-                                                             @RequestBody PaymentRequest paymentRequest) {
+                                                             @Valid @RequestBody PaymentRequest paymentRequest) {
         return ResponseEntity.ok(this.paymentService.renew(paymentRequest, oidcUser));
     }
 
