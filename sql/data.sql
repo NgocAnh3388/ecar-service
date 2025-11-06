@@ -234,63 +234,34 @@ INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at,
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (3, 36000, 3, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (2, 24000, 2, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
 
--- VF5
-INSERT INTO maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM maintenance_milestone) + ROW_NUMBER() OVER (ORDER BY id) AS id,
-    kilometer_at,
-    year_at,
-    created_at,
-    created_by,
-    2 AS car_model_id
+--VF5--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 2
 FROM maintenance_milestone
 WHERE car_model_id = 1;
 
--- VF6
-INSERT INTO maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM maintenance_milestone) + ROW_NUMBER() OVER (ORDER BY id) AS id,
-    kilometer_at,
-    year_at,
-    created_at,
-    created_by,
-    3
+
+--VF6--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 3
 FROM maintenance_milestone
 WHERE car_model_id = 1;
 
--- VF7
-INSERT INTO maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM maintenance_milestone) + ROW_NUMBER() OVER (ORDER BY id) AS id,
-    kilometer_at,
-    year_at,
-    created_at,
-    created_by,
-    4
+--VF7--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 4
 FROM maintenance_milestone
 WHERE car_model_id = 1;
 
--- VF8
-INSERT INTO maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM maintenance_milestone) + ROW_NUMBER() OVER (ORDER BY id) AS id,
-    kilometer_at,
-    year_at,
-    created_at,
-    created_by,
-    5
+--VF8--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 5
 FROM maintenance_milestone
 WHERE car_model_id = 1;
 
--- VF9
-INSERT INTO maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM maintenance_milestone) + ROW_NUMBER() OVER (ORDER BY id) AS id,
-    kilometer_at,
-    year_at,
-    created_at,
-    created_by,
-    6
+--VF9--
+INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
+SELECT kilometer_at, year_at, created_at, created_by, 6
 FROM maintenance_milestone
 WHERE car_model_id = 1;
 
@@ -564,12 +535,17 @@ INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (86, 1, 8, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
 
 --VF5--
+-- Xóa lịch bảo dưỡng cũ cho VF5 (car_model_id = 2)
+DELETE FROM public.maintenance_schedule
+WHERE car_model_id = 2;
+
+
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
 -- Sử dụng MAX(id) + ROW_NUMBER() để đảm bảo ID không trùng lặp và tăng dần
 SELECT
     (SELECT COALESCE(MAX(id), 0) FROM public.maintenance_schedule) +
     ROW_NUMBER() OVER (ORDER BY T.maintenance_milestone_id, T.service_id),
-    2 AS car_model_id_vf5,
+    2 AS car_model_id_vf5, -- <<< car_model_id là 2 (VF5)
     T.maintenance_milestone_id,
     T.service_id,
     '2025-11-03 00:52:00.000000', -- Thời gian tạo mới
@@ -606,7 +582,7 @@ INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone
 SELECT
     (SELECT MAX(id) FROM public.maintenance_schedule) +
     ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
-    3,
+    3,  -- car_model_id mới
     maintenance_milestone_id,
     service_id,
     created_at,
@@ -617,7 +593,7 @@ SELECT
 FROM
     public.maintenance_schedule
 WHERE
-    car_model_id = 1;
+    car_model_id = 1; -- Sao chép từ VF3
 
 --VF7--
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
@@ -635,7 +611,7 @@ SELECT
 FROM
     public.maintenance_schedule
 WHERE
-    car_model_id = 1;
+    car_model_id = 1; -- Sao chép từ VF3
 
 --Vf8--
 INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
@@ -701,104 +677,98 @@ SELECT setval(
                true  -- tham số "is_called": true nghĩa là nextval sẽ trả giá trị MAX(id)+1
        );
 
--- VF3
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
+-- Sau đó INSERT bình thường mà không cần chỉ định id
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
 VALUES
-    ('VF3-FLT-01','Loc gio dong co','Filter',150000,10,15,1,NOW(),NOW()),
-    ('VF3-FLT-02','Loc gio dieu hoa AC','Filter',180000,8,12,1,NOW(),NOW()),
-    ('VF3-OIL-01','Dau dong co EV','Oil',250000,6,10,1,NOW(),NOW()),
-    ('VF3-CLT-01','Nuoc lam mat dong co','Coolant',200000,12,15,1,NOW(),NOW()),
-    ('VF3-BRK-01','Tam phanh truoc EV','Brake',800000,5,10,1,NOW(),NOW()),
-    ('VF3-BRK-02','Tam phanh sau EV','Brake',750000,7,10,1,NOW(),NOW()),
-    ('VF3-STR-01','Rotuyn truoc','Steering',600000,4,8,1,NOW(),NOW()),
-    ('VF3-STR-02','Rotuyn sau','Steering',580000,3,7,1,NOW(),NOW()),
-    ('VF3-SUS-01','Giam xoc truoc','Suspension',1500000,4,6,1,NOW(),NOW()),
-    ('VF3-SUS-02','Giam xoc sau','Suspension',1400000,3,5,1,NOW(),NOW()),
-    ('VF3-WPR-01','Can gat mua','Wiper',200000,10,12,1,NOW(),NOW()),
-    ('VF3-WPR-02','Nuoc rua kinh xe','Wiper',150000,20,25,1,NOW(),NOW()),
-    ('VF3-BAT-01','Acu quy 12V xe dien','Battery',3500000,2,5,1,NOW(),NOW()),
-    ('VF3-LGT-01','Bong den pha','Lighting',350000,6,8,1,NOW(),NOW()),
-    ('VF3-LGT-02','Bong den xi nhan','Lighting',120000,8,10,1,NOW(),NOW()),
-    ('VF3-TYR-01','Lop truoc','Tire',1800000,4,6,1,NOW(),NOW()),
-    ('VF3-TYR-02','Lop sau','Tire',1800000,4,6,1,NOW(),NOW()),
-    ('VF3-MTR-01','Dong co quat gio','Motor',900000,2,5,1,NOW(),NOW()),
-    ('VF3-SNS-01','Cam bien ABS','Sensor',850000,3,5,1,NOW(),NOW()),
-    ('VF3-SNS-02','Cam bien ap suat lop','Sensor',500000,5,8,1,NOW(),NOW());
+    ('VF3-FLT-01','Loc gio dong co','Filter',150000,10,15,1),
+    ('VF3-FLT-02','Loc gio dieu hoa AC','Filter',180000,8,12,1),
+    ('VF3-OIL-01','Dau dong co EV','Oil',250000,6,10,1),
+    ('VF3-CLT-01','Nuoc lam mat dong co','Coolant',200000,12,15,1),
+    ('VF3-BRK-01','Tam phanh truoc EV','Brake',800000,5,10,1),
+    ('VF3-BRK-02','Tam phanh sau EV','Brake',750000,7,10,1),
+    ('VF3-STR-01','Rotuyn truoc','Steering',600000,4,8,1),
+    ('VF3-STR-02','Rotuyn sau','Steering',580000,3,7,1),
+    ('VF3-SUS-01','Giam xoc truoc','Suspension',1500000,4,6,1),
+    ('VF3-SUS-02','Giam xoc sau','Suspension',1400000,3,5,1),
+    ('VF3-WPR-01','Can gat mua','Wiper',200000,10,12,1),
+    ('VF3-WPR-02','Nuoc rua kinh xe','Wiper',150000,20,25,1),
+    ('VF3-BAT-01','Acu quy 12V xe dien','Battery',3500000,2,5,1),
+    ('VF3-LGT-01','Bong den pha','Lighting',350000,6,8,1),
+    ('VF3-LGT-02','Bong den xi nhan','Lighting',120000,8,10,1),
+    ('VF3-TYR-01','Lop truoc','Tire',1800000,4,6,1),
+    ('VF3-TYR-02','Lop sau','Tire',1800000,4,6,1),
+    ('VF3-MTR-01','Dong co quat gio','Motor',900000,2,5,1),
+    ('VF3-SNS-01','Cam bien ABS','Sensor',850000,3,5,1),
+    ('VF3-SNS-02','Cam bien ap suat lop','Sensor',500000,5,8,1);
 
--- VF5
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
-VALUES
-    ('VF5-FLT-01','Loc gio dong co VF5','Filter',160000,12,15,2,NOW(),NOW()),
-    ('VF5-FLT-02','Loc gio dieu hoa AC VF5','Filter',190000,10,12,2,NOW(),NOW()),
-    ('VF5-OIL-01','Dau dong co VF5','Oil',270000,8,10,2,NOW(),NOW()),
-    ('VF5-BRK-01','Tam phanh truoc VF5','Brake',820000,6,10,2,NOW(),NOW()),
-    ('VF5-BRK-02','Tam phanh sau VF5','Brake',800000,7,10,2,NOW(),NOW()),
-    ('VF5-STR-01','Rotuyn truoc VF5','Steering',620000,5,8,2,NOW(),NOW()),
-    ('VF5-SUS-01','Giam xoc truoc VF5','Suspension',1550000,4,6,2,NOW(),NOW()),
-    ('VF5-WPR-01','Can gat mua VF5','Wiper',210000,11,12,2,NOW(),NOW()),
-    ('VF5-LGT-01','Bong den pha VF5','Lighting',370000,7,8,2,NOW(),NOW()),
-    ('VF5-TYR-01','Lop truoc VF5','Tire',1900000,5,6,2,NOW(),NOW()),
-    ('VF5-SNS-01','Cam bien ABS VF5','Sensor',870000,4,5,2,NOW(),NOW());
 
--- VF6
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
 VALUES
-    ('VF6-FLT-01','Loc gio dong co VF6','Filter',170000,14,16,3,NOW(),NOW()),
-    ('VF6-FLT-02','Loc gio dieu hoa AC VF6','Filter',200000,12,14,3,NOW(),NOW()),
-    ('VF6-OIL-01','Dau dong co VF6','Oil',280000,9,11,3,NOW(),NOW()),
-    ('VF6-BRK-01','Tam phanh truoc VF6','Brake',830000,6,10,3,NOW(),NOW()),
-    ('VF6-BRK-02','Tam phanh sau VF6','Brake',810000,8,10,3,NOW(),NOW()),
-    ('VF6-STR-01','Rotuyn truoc VF6','Steering',630000,5,8,3,NOW(),NOW()),
-    ('VF6-SUS-01','Giam xoc truoc VF6','Suspension',1560000,4,6,3,NOW(),NOW()),
-    ('VF6-WPR-01','Can gat mua VF6','Wiper',220000,10,13,3,NOW(),NOW()),
-    ('VF6-LGT-01','Bong den pha VF6','Lighting',380000,7,9,3,NOW(),NOW()),
-    ('VF6-TYR-01','Lop truoc VF6','Tire',1950000,5,6,3,NOW(),NOW()),
-    ('VF6-SNS-01','Cam bien ABS VF6','Sensor',880000,4,5,3,NOW(),NOW());
+    ('VF5-FLT-01','Loc gio dong co VF5','Filter',160000,12,15,2),
+    ('VF5-FLT-02','Loc gio dieu hoa AC VF5','Filter',190000,10,12,2),
+    ('VF5-OIL-01','Dau dong co VF5','Oil',270000,8,10,2),
+    ('VF5-BRK-01','Tam phanh truoc VF5','Brake',820000,6,10,2),
+    ('VF5-BRK-02','Tam phanh sau VF5','Brake',800000,7,10,2),
+    ('VF5-STR-01','Rotuyn truoc VF5','Steering',620000,5,8,2),
+    ('VF5-SUS-01','Giam xoc truoc VF5','Suspension',1550000,4,6,2),
+    ('VF5-WPR-01','Can gat mua VF5','Wiper',210000,11,12,2),
+    ('VF5-LGT-01','Bong den pha VF5','Lighting',370000,7,8,2),
+    ('VF5-TYR-01','Lop truoc VF5','Tire',1900000,5,6,2),
+    ('VF5-SNS-01','Cam bien ABS VF5','Sensor',870000,4,5,2);
 
--- VF7
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
-VALUES
-    ('VF7-FLT-01','Loc gio dong co VF7','Filter',180000,11,15,4,NOW(),NOW()),
-    ('VF7-FLT-02','Loc gio dieu hoa AC VF7','Filter',210000,10,13,4,NOW(),NOW()),
-    ('VF7-OIL-01','Dau dong co VF7','Oil',290000,7,10,4,NOW(),NOW()),
-    ('VF7-BRK-01','Tam phanh truoc VF7','Brake',840000,6,10,4,NOW(),NOW()),
-    ('VF7-BRK-02','Tam phanh sau VF7','Brake',820000,9,10,4,NOW(),NOW()),
-    ('VF7-STR-01','Rotuyn truoc VF7','Steering',640000,5,8,4,NOW(),NOW()),
-    ('VF7-BAT-01','Acu quy 12V VF7','Battery',3600000,2,5,4,NOW(),NOW()),
-    ('VF7-LGT-01','Bong den pha VF7','Lighting',390000,8,9,4,NOW(),NOW()),
-    ('VF7-TYR-01','Lop truoc VF7','Tire',2000000,5,6,4,NOW(),NOW()),
-    ('VF7-SNS-01','Cam bien ABS VF7','Sensor',900000,4,5,4,NOW(),NOW());
 
--- VF8
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
 VALUES
-    ('VF8-FLT-01','Loc gio dong co VF8','Filter',190000,12,16,5,NOW(),NOW()),
-    ('VF8-FLT-02','Loc gio dieu hoa AC VF8','Filter',220000,11,14,5,NOW(),NOW()),
-    ('VF8-OIL-01','Dau dong co VF8','Oil',300000,8,10,5,NOW(),NOW()),
-    ('VF8-BRK-01','Tam phanh truoc VF8','Brake',850000,6,10,5,NOW(),NOW()),
-    ('VF8-BRK-02','Tam phanh sau VF8','Brake',830000,10,10,5,NOW(),NOW()),
-    ('VF8-STR-01','Rotuyn sau VF8','Steering',650000,4,7,5,NOW(),NOW()),
-    ('VF8-SUS-01','Giam xoc sau VF8','Suspension',1570000,4,6,5,NOW(),NOW()),
-    ('VF8-LGT-01','Bong den pha VF8','Lighting',400000,8,9,5,NOW(),NOW()),
-    ('VF8-TYR-01','Lop truoc VF8','Tire',2050000,5,6,5,NOW(),NOW()),
-    ('VF8-SNS-01','Cam bien ABS VF8','Sensor',920000,4,5,5,NOW(),NOW());
+    ('VF6-FLT-01','Loc gio dong co VF6','Filter',170000,14,16,3),
+    ('VF6-FLT-02','Loc gio dieu hoa AC VF6','Filter',200000,12,14,3),
+    ('VF6-OIL-01','Dau dong co VF6','Oil',280000,9,11,3),
+    ('VF6-BRK-01','Tam phanh truoc VF6','Brake',830000,6,10,3),
+    ('VF6-BRK-02','Tam phanh sau VF6','Brake',810000,8,10,3),
+    ('VF6-STR-01','Rotuyn truoc VF6','Steering',630000,5,8,3),
+    ('VF6-SUS-01','Giam xoc truoc VF6','Suspension',1560000,4,6,3),
+    ('VF6-WPR-01','Can gat mua VF6','Wiper',220000,10,13,3),
+    ('VF6-LGT-01','Bong den pha VF6','Lighting',380000,7,9,3),
+    ('VF6-TYR-01','Lop truoc VF6','Tire',1950000,5,6,3),
+    ('VF6-SNS-01','Cam bien ABS VF6','Sensor',880000,4,5,3);
 
--- VF9
-INSERT INTO spare_part
-(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, updated_at)
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
 VALUES
-    ('VF9-FLT-01','Loc gio dong co VF9','Filter',200000,13,17,6,NOW(),NOW()),
-    ('VF9-FLT-02','Loc gio dieu hoa AC VF9','Filter',230000,12,15,6,NOW(),NOW()),
-    ('VF9-OIL-01','Dau dong co VF9','Oil',310000,9,11,6,NOW(),NOW()),
-    ('VF9-BRK-01','Tam phanh truoc VF9','Brake',860000,6,10,6,NOW(),NOW()),
-    ('VF9-BRK-02','Tam phanh sau VF9','Brake',840000,11,10,6,NOW(),NOW()),
-    ('VF9-STR-01','Rotuyn truoc VF9','Steering',660000,5,8,6,NOW(),NOW()),
-    ('VF9-BAT-01','Acu quy 12V VF9','Battery',3650000,2,5,6,NOW(),NOW()),
-    ('VF9-LGT-01','Bong den pha VF9','Lighting',410000,8,9,6,NOW(),NOW()),
-    ('VF9-TYR-01','Lop truoc VF9','Tire',2100000,5,6,6,NOW(),NOW()),
-    ('VF9-SNS-01','Cam bien ABS VF9','Sensor',940000,4,5,6,NOW(),NOW());
+    ('VF7-FLT-01','Loc gio dong co VF7','Filter',180000,11,15,4),
+    ('VF7-FLT-02','Loc gio dieu hoa AC VF7','Filter',210000,10,13,4),
+    ('VF7-OIL-01','Dau dong co VF7','Oil',290000,7,10,4),
+    ('VF7-BRK-01','Tam phanh truoc VF7','Brake',840000,6,10,4),
+    ('VF7-BRK-02','Tam phanh sau VF7','Brake',820000,9,10,4),
+    ('VF7-STR-01','Rotuyn truoc VF7','Steering',640000,5,8,4),
+    ('VF7-BAT-01','Acu quy 12V VF7','Battery',3600000,2,5,4),
+    ('VF7-LGT-01','Bong den pha VF7','Lighting',390000,8,9,4),
+    ('VF7-TYR-01','Lop truoc VF7','Tire',2000000,5,6,4),
+    ('VF7-SNS-01','Cam bien ABS VF7','Sensor',900000,4,5,4);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF8-FLT-01','Loc gio dong co VF8','Filter',190000,12,16,5),
+    ('VF8-FLT-02','Loc gio dieu hoa AC VF8','Filter',220000,11,14,5),
+    ('VF8-OIL-01','Dau dong co VF8','Oil',300000,8,10,5),
+    ('VF8-BRK-01','Tam phanh truoc VF8','Brake',850000,6,10,5),
+    ('VF8-BRK-02','Tam phanh sau VF8','Brake',830000,10,10,5),
+    ('VF8-STR-01','Rotuyn sau VF8','Steering',650000,4,7,5),
+    ('VF8-SUS-01','Giam xoc sau VF8','Suspension',1570000,4,6,5),
+    ('VF8-LGT-01','Bong den pha VF8','Lighting',400000,8,9,5),
+    ('VF8-TYR-01','Lop truoc VF8','Tire',2050000,5,6,5),
+    ('VF8-SNS-01','Cam bien ABS VF8','Sensor',920000,4,5,5);
+
+
+INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+VALUES
+    ('VF9-FLT-01','Loc gio dong co VF9','Filter',200000,13,17,6),
+    ('VF9-FLT-02','Loc gio dieu hoa AC VF9','Filter',230000,12,15,6),
+    ('VF9-OIL-01','Dau dong co VF9','Oil',310000,9,11,6),
+    ('VF9-BRK-01','Tam phanh truoc VF9','Brake',860000,6,10,6),
+    ('VF9-BRK-02','Tam phanh sau VF9','Brake',840000,11,10,6),
+    ('VF9-STR-01','Rotuyn truoc VF9','Steering',660000,5,8,6),
+    ('VF9-BAT-01','Acu quy 12V VF9','Battery',3650000,2,5,6),
+    ('VF9-LGT-01','Bong den pha VF9','Lighting',410000,8,9,6),
+    ('VF9-TYR-01','Lop truoc VF9','Tire',2100000,5,6,6),
+    ('VF9-SNS-01','Cam bien ABS VF9','Sensor',940000,4,5,6);
