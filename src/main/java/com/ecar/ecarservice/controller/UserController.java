@@ -32,9 +32,12 @@ public class UserController {
 
     // 2. Get User with ID
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
-        return ResponseEntity.ok(userService.getUserById(id));
+        UserDto userDto = userService.getUserById(id);
+        return ResponseEntity.ok(userDto);
     }
+
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     public ResponseEntity<AppUser> getUserInfo(@AuthenticationPrincipal OidcUser oidcUser) {
@@ -73,4 +76,13 @@ public class UserController {
         return ResponseEntity.ok(this.userService.getUserListByRole(roleName));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getMe(@AuthenticationPrincipal OidcUser oidcUser) {
+        if (oidcUser == null || oidcUser.getEmail() == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        // Lấy user từ DB để có vehicles
+        UserDto userDto = userService.getUserByEmail(oidcUser.getEmail());
+        return ResponseEntity.ok(userDto);
+    }
 }

@@ -38,8 +38,9 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
-        AppUser user = appUserRepository.findByIdAndActiveTrue(id)
-                .orElseThrow();
+        // Dùng join fetch để load vehicles + carModel
+        AppUser user = appUserRepository.findByIdWithVehicles(id)
+                .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
         return convertToDto(user);
     }
 
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
         return this.appUserRepository.searchAppUserByValue(request.getSearchValue(), pageRequest);
     }
 
-    // Hàm tiện ích để chuyển đổi Entity sang DTO
+    // Chuyển Entity sang DTO, map cả vehicles
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -79,7 +80,6 @@ public class UserServiceImpl implements UserService {
         dto.setRoles(user.getRoles());
         dto.setActive(user.isActive());
 
-        // 👇 Map danh sách xe sang VehicleDto
         if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
             List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
                 VehicleDto vd = new VehicleDto();
@@ -98,7 +98,6 @@ public class UserServiceImpl implements UserService {
 
         return dto;
     }
-
 
     @Override
     public void createUser(UserCreateDTO userCreateDTO) {
@@ -120,5 +119,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<AppUser> getUserListByRole(String role) {
         return this.appUserRepository.findByRoles(AppRole.valueOf(role.toUpperCase()));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public UserDto getUserByEmail(String email) {
+        AppUser user = appUserRepository.findByEmailWithVehicles(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
+        return convertToDto(user); // map vehicles luôn
     }
 }

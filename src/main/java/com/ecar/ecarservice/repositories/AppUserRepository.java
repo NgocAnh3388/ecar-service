@@ -15,11 +15,18 @@ import java.util.Set;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+
     Optional<AppUser> findBySub(String sub);
     Optional<AppUser> findByEmail(String email);
 
     List<AppUser> findAllByActiveTrue();
     Optional<AppUser> findByIdAndActiveTrue(Long id);
+
+    @Query("SELECT au FROM AppUser au LEFT JOIN FETCH au.vehicles v LEFT JOIN FETCH v.carModel WHERE au.id = :id AND au.active = true")
+    Optional<AppUser> findByIdWithVehicles(@Param("id") Long id);
+
+    @Query("SELECT u FROM AppUser u LEFT JOIN FETCH u.vehicles v LEFT JOIN FETCH v.carModel WHERE u.email = :email")
+    Optional<AppUser> findByEmailWithVehicles(@Param("email") String email);
 
     @Query("SELECT au FROM AppUser au WHERE au.email LIKE %:searchValue%")
     Page<AppUser> searchAppUserByValue(@Param("searchValue") String searchValue,
