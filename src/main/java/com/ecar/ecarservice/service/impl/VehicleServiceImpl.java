@@ -8,6 +8,7 @@ import com.ecar.ecarservice.payload.responses.CarModelResponse;
 import com.ecar.ecarservice.payload.responses.VehicleResponse;
 import com.ecar.ecarservice.repositories.CarModelRepository;
 import com.ecar.ecarservice.repositories.VehicleRepository;
+import com.ecar.ecarservice.service.CarModelService;
 import com.ecar.ecarservice.service.UserService;
 import com.ecar.ecarservice.service.VehicleService;
 import jakarta.persistence.EntityNotFoundException;
