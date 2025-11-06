@@ -38,10 +38,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers("/api/auth/**", "/api/ping/**").permitAll()
                         .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**", "/api/service-records/**").authenticated()
+                   
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -50,6 +52,8 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
                         .deleteCookies("JSESSIONID")
+
+                        .defaultSuccessUrl("http://localhost:4200", true)
                 );
 
         return http.build();
