@@ -80,8 +80,6 @@ public class MaintenanceController {
     }
 
     @GetMapping("/technician/my-tasks")
-
-    @GetMapping("/my-tasks")
     @PreAuthorize("hasRole('TECHNICIAN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
