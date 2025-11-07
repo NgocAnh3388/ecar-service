@@ -72,7 +72,7 @@ public class AppUser {
     private String updatedBy;
 
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
-    @JsonIgnore
+    @JsonManagedReference
     private List<Vehicle> vehicles;
 
 }

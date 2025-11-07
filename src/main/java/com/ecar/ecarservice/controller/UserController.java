@@ -5,6 +5,7 @@ import com.ecar.ecarservice.dto.UserDto;
 import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class UserController {
     // 3. Update User (ví dụ: chỉ cập nhật role)
     @RequestMapping(value = "", method = RequestMethod.PUT)
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> updateUser(@RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         return ResponseEntity.ok(userService.updateUser(userCreateDTO));
     }
 
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public ResponseEntity<Void> createUser(@RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         this.userService.createUser(userCreateDTO);
         return ResponseEntity.ok().build();
     }

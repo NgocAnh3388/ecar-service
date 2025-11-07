@@ -36,7 +36,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Transactional(readOnly = true)
     public List<VehicleResponse> getMyVehicles(OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
-        return vehicleRepository.findByOwnerIdAndActiveTrue(currentUser.getId())
+        return vehicleRepository.findByOwnerIdAndActiveTrueOrderByIdAsc(currentUser.getId())
                 .stream()
                 .map(this::fromVehicle)
                 .toList();
