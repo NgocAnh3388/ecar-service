@@ -199,11 +199,11 @@ VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF3'), '29A-111.11', '
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
 VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF5'), '30A-222.22', 'VIN002', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF6'), '51G-111.13', 'VIN003', (SELECT id FROM app_user WHERE email = 'customer01@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF6'), '51G-111.13', 'VIN003', (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF7'), '51H-111.14', 'VIN004', (SELECT id FROM app_user WHERE email = 'customer02@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF7'), '51H-111.14', 'VIN004', (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF8'), '60B-222.15', 'VIN005', (SELECT id FROM app_user WHERE email = 'customer03@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF8'), '60B-222.15', 'VIN005', (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
 
 
 -- =================================================================================
@@ -211,25 +211,25 @@ VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF8'), '60B-222.15', '
 -- =================================================================================
 INSERT INTO public.subscription_info (owner_id, start_date, end_date, payment_date, created_by, created_at, updated_by, updated_at)
 VALUES
-    -- Scenario 1: Active subscription for user 'wendyhimekawa@gmail.com'
+    -- Scenario 1: Active subscription for user 'customerrole01@gmai.com'
     (
-        (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com'),
+        (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'),
         '2025-01-15 10:00:00',
         '2026-01-15 10:00:00',
         '2025-01-15 10:00:00',
         'system', NOW(), 'system', NOW()
     ),
-    -- Scenario 2: Subscription about to expire for user 'customer01@example.com'
+    -- Scenario 2: Subscription about to expire for user 'customer030@example.com'
     (
-        (SELECT id FROM app_user WHERE email = 'customer01@example.com'),
+        (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'),
         '2024-12-01 14:30:00',
         '2025-12-01 14:30:00',
         '2024-12-01 14:30:00',
         'system', NOW(), 'system', NOW()
     ),
-    -- Scenario 3: Expired subscription for user 'customer02@example.com'
+    -- Scenario 3: Expired subscription for user 'customer031@example.com'
     (
-        (SELECT id FROM app_user WHERE email = 'customer02@example.com'),
+        (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'),
         '2024-09-01 11:00:00',
         '2025-09-01 11:00:00',
         '2024-09-01 11:00:00',
@@ -250,11 +250,11 @@ VALUES
 -- =================================================================================
 INSERT INTO public.payment_history (subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years, amount)
 VALUES
-    -- Payment history for Subscription belonging to 'wendyhimekawa@gmail.com'
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
-    -- Payment history for Subscription belonging to 'customer01@example.com'
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customer01@example.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customer01@example.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2024-11-20 14:28:00', 'system_seed', '2024-11-20 14:30:00', 'system_callback', 'PAYID-VALID-00003', 1, 1000.00),
+    -- Payment history for Subscription belonging to 'customerrole01@gmai.com'
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
+    -- Payment history for Subscription belonging to 'customer030@example.com'
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2024-11-20 14:28:00', 'system_seed', '2024-11-20 14:30:00', 'system_callback', 'PAYID-VALID-00003', 1, 1000.00),
     -- Payment history for Subscription belonging to 'lengochan090105@gmail.com'
     ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:11', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQWY79717451CM661680U', 1, 1000.00),
     ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:27', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1, 1000.00),
@@ -384,11 +384,11 @@ WHERE
 -- =================================================================================
 -- Scenario 1: A NEW appointment, pending staff acceptance (status=0)
 INSERT INTO public.maintenance_history (vehicle_id, owner_id, num_of_km, submitted_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at)
-VALUES ((SELECT id FROM vehicles WHERE license_plate = '51G-111.13'), (SELECT id FROM app_user WHERE email = 'customer01@example.com'), 5000, '2025-12-09 09:00:00', 0, true, false, 'First periodic maintenance check.', 1, '10:00:00', '2025-12-15'::DATE, 'customer01@example.com', '2025-12-09 09:00:00');
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '51G-111.13'), (SELECT id FROM app_user WHERE email = 'customerrole01@gmai.com'), 5000, '2025-12-09 09:00:00', 0, true, false, 'First periodic maintenance check.', 1, '10:00:00', '2025-12-15'::DATE, 'customerrole01@gmai.com', '2025-12-09 09:00:00');
 
 -- Scenario 4: A fully completed record that will have a corresponding service_record
 INSERT INTO public.maintenance_history (vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at, updated_by, updated_at)
-VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), (SELECT id FROM app_user WHERE email = 'staff01@example.com'), (SELECT id FROM app_user WHERE email = 'tech01@example.com'), 10000, '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00', 3, true, true, 'General check-up and minor repairs.', 2, '12:00:00', '2025-10-30'::DATE, 'lengochan090105@gmail.com', '2025-10-30 10:36:36', 'staff01@example.com', '2025-10-30 17:15:00');
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), (SELECT id FROM app_user WHERE email = 'staffrole001@gmail.com'), (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com'), 10000, '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00', 3, true, true, 'General check-up and minor repairs.', 2, '12:00:00', '2025-10-30'::DATE, 'lengochan090105@gmail.com', '2025-10-30 10:36:36', 'staffrole001@gmail.com', '2025-10-30 17:15:00');
 
 -- A booking record that corresponds to the completed maintenance history
 INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
@@ -396,7 +396,7 @@ VALUES((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '037
 
 -- service_records: Links to the BOOKING, not the maintenance_history
 INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
-VALUES ((SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00'), '29A-111.11', 10000, '2025-10-30 17:00:00', 'staff01@example.com', '2025-10-30 17:00:00');
+VALUES ((SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00'), '29A-111.11', 10000, '2025-10-30 17:00:00', 'staffrole001@gmail.com', '2025-10-30 17:00:00');
 
 -- service_record_details
 INSERT INTO public.service_record_details (service_record_id, item_name, action, notes) VALUES
@@ -416,7 +416,7 @@ VALUES
         (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
         (SELECT id FROM maintenance_milestone WHERE car_model_id = 1 AND year_at = 1),
         NULL,
-        'tech01@example.com',
+        'technicianrole01@gmail.com',
         '2025-10-30 16:22:22',
         NULL,
         NULL
@@ -426,7 +426,7 @@ VALUES
         (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
         NULL,
         27,
-        'tech01@example.com',
+        'technicianrole01@gmail.com',
         '2025-10-30 16:22:22',
         NULL,
         NULL
@@ -436,7 +436,7 @@ VALUES
         (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
         NULL,
         30,
-        'tech01@example.com',
+        'technicianrole01@gmail.com',
         '2025-10-30 16:22:22',
         NULL,
         NULL
@@ -446,7 +446,7 @@ VALUES
         (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
         NULL,
         32,
-        'tech01@example.com',
+        'technicianrole01@gmail.com',
         '2025-10-30 16:22:22',
         NULL,
         NULL
@@ -480,7 +480,7 @@ VALUES (
            '29A-111.11',
            10000,
            '2025-10-30 17:00:00',
-           'staff01@example.com',
+           'staffrole001@gmail.com',
            '2025-10-30 17:00:00'
        );
 

@@ -2,20 +2,25 @@ package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
+import com.ecar.ecarservice.dto.VehicleDto;
 import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
-import jakarta.persistence.EntityNotFoundException;
-import com.ecar.ecarservice.dto.VehicleDto;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +35,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-//        return appUserRepository.findAllByActiveTrue().stream()
         return appUserRepository.findAllByActiveTrueOrderByCreatedAtDesc().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -39,7 +43,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
-        // Dùng join fetch để load vehicles + carModel
         AppUser user = appUserRepository.findByIdWithVehicles(id)
                 .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
         return convertToDto(user);
@@ -48,20 +51,16 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserCreateDTO userUpdateDTO) {
-        // Bước 1: Tìm người dùng theo ID từ URL
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        // Bước 2: Xử lý cập nhật email, đảm bảo tính duy nhất
         if (!user.getEmail().equalsIgnoreCase(userUpdateDTO.getEmail())) {
-            // Nếu email thay đổi, kiểm tra xem email mới đã tồn tại chưa
             appUserRepository.findByEmail(userUpdateDTO.getEmail()).ifPresent(existingUser -> {
                 throw new IllegalStateException("Email " + userUpdateDTO.getEmail() + " is already in use.");
             });
             user.setEmail(userUpdateDTO.getEmail());
         }
 
-        // Bước 3: Cập nhật các thông tin khác từ DTO
         user.setFullName(userUpdateDTO.getFullName());
         user.setPhoneNo(userUpdateDTO.getPhoneNo());
 
@@ -74,12 +73,12 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        // Bước 4: Lưu và trả về kết quả
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
     }
 
     @Override
+    @Transactional
     public void deleteUser(Long id) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
@@ -88,12 +87,34 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<AppUser> searchUsers(UserSearchRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
-        return this.appUserRepository.searchAppUserByValue(request.getSearchValue(), pageRequest);
+
+        // Bước 1: Chỉ lấy về ID và thông tin phân trang
+        Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
+
+        if (!idsPage.hasContent()) {
+            return new PageImpl<>(Collections.emptyList(), pageRequest, 0);
+        }
+
+        List<Long> userIds = idsPage.getContent();
+
+        // Bước 2: Lấy đầy đủ thông tin cho các ID đã tìm thấy trong 1 query duy nhất
+        List<AppUser> usersWithDetails = this.appUserRepository.findAllWithDetailsByIds(userIds);
+
+        // Sắp xếp lại danh sách usersWithDetails theo thứ tự của userIds để đảm bảo phân trang đúng
+        Map<Long, AppUser> userMap = usersWithDetails.stream()
+                .collect(Collectors.toMap(AppUser::getId, Function.identity()));
+
+        List<AppUser> sortedUsers = userIds.stream()
+                .map(userMap::get)
+                .collect(Collectors.toList());
+
+        // Trả về một Page mới với dữ liệu đã được tải đầy đủ
+        return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
     }
 
-    // Chuyển Entity sang DTO, map cả vehicles
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -123,12 +144,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void createUser(UserCreateDTO userCreateDTO) {
+        appUserRepository.findByEmail(userCreateDTO.getEmail()).ifPresent(u -> {
+            throw new IllegalStateException("Email already exists");
+        });
         AppUser appUser = new AppUser();
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
         appUser.setPhoneNo(userCreateDTO.getPhoneNo());
-        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
+        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
         appUser.setRoles(roles);
         this.appUserRepository.save(appUser);
     }
@@ -149,6 +174,6 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserByEmail(String email) {
         AppUser user = appUserRepository.findByEmailWithVehicles(email)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
-        return convertToDto(user); // map vehicles luôn
+        return convertToDto(user);
     }
 }

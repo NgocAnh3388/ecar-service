@@ -107,19 +107,31 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     }
 
     private MaintenanceTicketResponse fromMaintenanceHistory(MaintenanceHistory history) {
+        // Lấy thông tin một cách an toàn, nếu null thì trả về null
+        String ownerFullName = (history.getOwner() != null) ? history.getOwner().getFullName() : null;
+        String staffFullName = (history.getStaff() != null) ? history.getStaff().getFullName() : null;
+        Long staffId = (history.getStaff() != null) ? history.getStaff().getId() : null;
+        String technicianFullName = (history.getTechnician() != null) ? history.getTechnician().getFullName() : null;
+        Long technicianId = (history.getTechnician() != null) ? history.getTechnician().getId() : null;
+
+        // Vehicle và CarModel gần như chắc chắn không null, nhưng vẫn có thể kiểm tra nếu cần
+        Long carModelId = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getId() : null;
+        String carName = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getCarName() : null;
+        String licensePlate = (history.getVehicle() != null) ? history.getVehicle().getLicensePlate() : "N/A";
+
         return new MaintenanceTicketResponse(
                 history.getId(),
-                history.getOwner().getFullName(),
-                history.getVehicle().getCarModel().getId(),
-                history.getVehicle().getCarModel().getCarName(),
-                history.getVehicle().getLicensePlate(),
+                ownerFullName,
+                carModelId,
+                carName,
+                licensePlate,
                 history.getNumOfKm(),
                 history.getSubmittedAt(),
-                history.getStaff() == null ? null : history.getStaff().getFullName(),
-                history.getStaff() == null ? null : history.getStaff().getId(),
+                staffFullName,
+                staffId,
                 history.getStaffReceiveAt(),
-                history.getTechnician() == null ? null :history.getTechnician().getFullName(),
-                history.getTechnician() == null ? null : history.getTechnician().getId(),
+                technicianFullName,
+                technicianId,
                 history.getTechnicianReceivedAt(),
                 history.getCompletedAt(),
                 history.getStatus(),
@@ -130,6 +142,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 history.getScheduleTime()
         );
     }
+
 
     private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
         return MaintenanceHistoryDTO.builder()

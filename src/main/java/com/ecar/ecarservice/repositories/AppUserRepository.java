@@ -11,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Repository
 public interface AppUserRepository extends JpaRepository<AppUser, Long> {
@@ -19,7 +18,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findBySub(String sub);
     Optional<AppUser> findByEmail(String email);
 
-//    List<AppUser> findAllByActiveTrue();
     List<AppUser> findAllByActiveTrueOrderByCreatedAtDesc();
 
     Optional<AppUser> findByIdAndActiveTrue(Long id);
@@ -30,9 +28,29 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     @Query("SELECT u FROM AppUser u LEFT JOIN FETCH u.vehicles v LEFT JOIN FETCH v.carModel WHERE u.email = :email")
     Optional<AppUser> findByEmailWithVehicles(@Param("email") String email);
 
-    @Query("SELECT au FROM AppUser au WHERE au.email LIKE %:searchValue%")
-    Page<AppUser> searchAppUserByValue(@Param("searchValue") String searchValue,
-                                       Pageable pageable);
+    /**
+     * BƯỚC 1: Tìm kiếm và chỉ trả về ID của các user. Rất nhanh và hiệu quả.
+     */
+    @Query(value = "SELECT au.id FROM app_user au WHERE " +
+            "LOWER(unaccent(au.full_name)) LIKE LOWER(unaccent(CONCAT('%', :searchValue, '%'))) " +
+            "OR LOWER(au.email) LIKE LOWER(CONCAT('%', :searchValue, '%')) " +
+            "OR au.phone_no LIKE CONCAT('%', :searchValue, '%')",
+            countQuery = "SELECT count(*) FROM app_user au WHERE " +
+                    "LOWER(unaccent(au.full_name)) LIKE LOWER(unaccent(CONCAT('%', :searchValue, '%'))) " +
+                    "OR LOWER(au.email) LIKE LOWER(CONCAT('%', :searchValue, '%')) " +
+                    "OR au.phone_no LIKE CONCAT('%', :searchValue, '%')",
+            nativeQuery = true)
+    Page<Long> searchUserIdsByValue(@Param("searchValue") String searchValue, Pageable pageable);
+
+    /**
+     * BƯỚC 2: Từ danh sách ID, lấy đầy đủ thông tin User, Roles, và Vehicles trong 1 query duy nhất.
+     */
+    @Query("SELECT DISTINCT u FROM AppUser u " +
+            "LEFT JOIN FETCH u.roles " +
+            "LEFT JOIN FETCH u.vehicles v " +
+            "LEFT JOIN FETCH v.carModel " +
+            "WHERE u.id IN :ids")
+    List<AppUser> findAllWithDetailsByIds(@Param("ids") List<Long> ids);
 
     List<AppUser> findByRoles(AppRole role);
 }
