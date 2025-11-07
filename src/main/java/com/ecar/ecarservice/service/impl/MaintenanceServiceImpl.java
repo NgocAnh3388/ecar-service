@@ -292,27 +292,62 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         System.out.println("Successfully completed service ticket with ID: " + ticketId); // Thêm log để debug
     }
 
+//    @Override
+//    @Transactional
+//    public MaintenanceHistoryDTO completeTechnicianTask(Long ticketId) {
+//        // 1. Tìm phiếu yêu cầu (ticket) trong DB
+//        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+//                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
+//
+//        // 2. Kiểm tra trạng thái hợp lệ
+//        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
+//            throw new IllegalStateException("Ticket is not in the correct state to be completed by a technician. Current state: " + ticket.getStatus());
+//        }
+//
+//        // 3. Cập nhật trạng thái và thời gian hoàn thành
+//        ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
+//        ticket.setCompletedAt(LocalDateTime.now());
+//
+//        // 4. Lưu lại thay đổi
+//        MaintenanceHistory updatedTicket = maintenanceHistoryRepository.save(ticket);
+//
+//        // 5. Chuyển đổi sang DTO để trả về
+//        return convertToDTO(updatedTicket);
+//    }
+
     @Override
-    @Transactional
-    public MaintenanceHistoryDTO completeTechnicianTask(Long ticketId) {
+    @Transactional // THÊM: Triển khai phương thức mới
+    public MaintenanceHistoryDTO completeTechnicianTask(Long id) {
         // 1. Tìm phiếu yêu cầu (ticket) trong DB
-        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
-                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + id));
 
         // 2. Kiểm tra trạng thái hợp lệ
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
-            throw new IllegalStateException("Ticket is not in the correct state to be completed by a technician. Current state: " + ticket.getStatus());
+            throw new IllegalStateException("Ticket is not in the correct state to be completed. Current state: " + ticket.getStatus());
         }
 
         // 3. Cập nhật trạng thái và thời gian hoàn thành
         ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
         ticket.setCompletedAt(LocalDateTime.now());
 
-        // 4. Lưu lại thay đổi
-        MaintenanceHistory updatedTicket = maintenanceHistoryRepository.save(ticket);
+        // 4. Lưu lại và chuyển đổi sang DTO để trả về
+        MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
 
-        // 5. Chuyển đổi sang DTO để trả về
-        return convertToDTO(updatedTicket);
+        // Cập nhật lại thông tin next_km, next_date cho xe
+        Vehicle vehicle = savedTicket.getVehicle();
+        if (vehicle != null) {
+            // Logic giả định: mốc bảo dưỡng tiếp theo là sau 12000km hoặc 1 năm
+            long nextKm = (savedTicket.getNumOfKm() / 12000 + 1) * 12000;
+            LocalDateTime nextDate = savedTicket.getCompletedAt().plusYears(1);
+
+            vehicle.setOldKm(savedTicket.getNumOfKm());
+            vehicle.setOldDate(savedTicket.getCompletedAt());
+            vehicle.setNextKm(nextKm);
+            vehicle.setNextDate(nextDate);
+            vehicleRepository.save(vehicle);
+        }
+
+        return convertToDTO(savedTicket);
     }
-
 }

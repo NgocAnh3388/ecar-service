@@ -3,12 +3,14 @@ package com.ecar.ecarservice.controller;
 import com.ecar.ecarservice.dto.BookingResponseDto;
 import com.ecar.ecarservice.service.BookingService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/bookings")
+@PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
 public class BookingAdminController {
 
     private final BookingService bookingService;

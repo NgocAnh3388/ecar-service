@@ -94,7 +94,7 @@ public class MaintenanceController {
 
     @PutMapping("/{id}/technician-complete") // Dùng @PutMapping sẽ đúng ngữ nghĩa hơn là @PostMapping
     // Sửa thành hasAnyRole và bỏ tiền tố 'ROLE_'
-    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN', 'STAFF')")
     public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(@PathVariable Long id) { // Đổi tên để tránh trùng lặp
         try {
             // Gọi phương thức trong service mà chúng ta vừa implement

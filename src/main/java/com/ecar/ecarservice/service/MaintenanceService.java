@@ -16,7 +16,6 @@ import java.util.List;
 
 public interface MaintenanceService {
     Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request);
-    // Sửa dòng này
     MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser);    List<MaintenanceTicketResponse> getTickets(OidcUser user);
     List<MilestoneResponse> getMilestone(Long carModelId);
 
@@ -30,6 +29,7 @@ public interface MaintenanceService {
 
     void completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
 
-    MaintenanceHistoryDTO completeTechnicianTask(Long ticketId);
+//    MaintenanceHistoryDTO completeTechnicianTask(Long ticketId);
+    MaintenanceHistoryDTO completeTechnicianTask(Long id);
 
 }

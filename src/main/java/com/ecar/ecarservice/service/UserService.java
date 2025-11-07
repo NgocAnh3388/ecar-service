@@ -15,7 +15,7 @@ public interface UserService {
     List<UserDto> getAllUsers();
     UserDto getUserById(Long id);
     UserDto getUserByEmail(String email);
-    UserDto updateUser(UserCreateDTO userCreateDTO);
+    UserDto updateUser(Long id, UserCreateDTO userUpdateDTO);
     void createUser(UserCreateDTO userCreateDTO);
     void deleteUser(Long id);
     Page<AppUser> searchUsers(UserSearchRequest request);
