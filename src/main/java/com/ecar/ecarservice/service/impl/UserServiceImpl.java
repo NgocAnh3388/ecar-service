@@ -46,13 +46,35 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto updateUser(UserCreateDTO userCreateDTO) {
-        AppUser user = appUserRepository.findByEmail(userCreateDTO.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + userCreateDTO.getEmail()));
-        user.setFullName(userCreateDTO.getFullName());
-        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole()));
-        user.setRoles(roles);
-        user.setPhoneNo(userCreateDTO.getPhoneNo());
+    @Transactional
+    public UserDto updateUser(Long id, UserCreateDTO userUpdateDTO) {
+        // Bước 1: Tìm người dùng theo ID từ URL
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        // Bước 2: Xử lý cập nhật email, đảm bảo tính duy nhất
+        if (!user.getEmail().equalsIgnoreCase(userUpdateDTO.getEmail())) {
+            // Nếu email thay đổi, kiểm tra xem email mới đã tồn tại chưa
+            appUserRepository.findByEmail(userUpdateDTO.getEmail()).ifPresent(existingUser -> {
+                throw new IllegalStateException("Email " + userUpdateDTO.getEmail() + " is already in use.");
+            });
+            user.setEmail(userUpdateDTO.getEmail());
+        }
+
+        // Bước 3: Cập nhật các thông tin khác từ DTO
+        user.setFullName(userUpdateDTO.getFullName());
+        user.setPhoneNo(userUpdateDTO.getPhoneNo());
+
+        if (userUpdateDTO.getRole() != null) {
+            try {
+                Set<AppRole> roles = Set.of(AppRole.valueOf(userUpdateDTO.getRole().toUpperCase()));
+                user.setRoles(roles);
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Invalid role specified: " + userUpdateDTO.getRole());
+            }
+        }
+
+        // Bước 4: Lưu và trả về kết quả
         AppUser updatedUser = appUserRepository.save(user);
         return convertToDto(updatedUser);
     }

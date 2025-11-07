@@ -43,6 +43,7 @@ public class InventoryController {
 
     // --- Tạo mới phụ tùng ---
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<SparePartDTO> createPart(@Valid @RequestBody SparePartCreateDTO createDto) {
         // SỬA: Service giờ đã trả về DTO
         SparePartDTO createdDto = inventoryService.createPart(createDto);
@@ -51,6 +52,7 @@ public class InventoryController {
 
     // --- Cập nhật phụ tùng ---
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<SparePartDTO> updatePart(
             @PathVariable Long id,
             @Valid @RequestBody SparePartCreateDTO updateDto) {
@@ -61,6 +63,7 @@ public class InventoryController {
 
     // --- Cập nhật tồn kho ---
     @PatchMapping("/{id}/stock")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<SparePartDTO> updateStock(
             @PathVariable Long id,
             @Valid @RequestBody StockUpdateDTO stockDto) {
@@ -71,6 +74,7 @@ public class InventoryController {
 
     // --- Xóa phụ tùng ---
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<Void> deletePart(@PathVariable Long id) {
         inventoryService.deletePart(id);
         return ResponseEntity.noContent().build();

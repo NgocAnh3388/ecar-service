@@ -5,6 +5,7 @@ import com.ecar.ecarservice.dto.ServiceRecordResponseDto;
 import com.ecar.ecarservice.service.ServiceRecordService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ServiceRecordController {
      * @return Thông tin chi tiết của phiếu dịch vụ vừa được tạo.
      */
     @PostMapping("/admin/service-records")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ServiceRecordResponseDto> createServiceRecord(@RequestBody CreateServiceRecordRequest request) {
         ServiceRecordResponseDto createdRecord = serviceRecordService.createServiceRecord(request);
         return new ResponseEntity<>(createdRecord, HttpStatus.CREATED);

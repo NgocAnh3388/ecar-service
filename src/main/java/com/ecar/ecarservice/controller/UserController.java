@@ -46,14 +46,16 @@ public class UserController {
     }
 
     // 3. Update User (ví dụ: chỉ cập nhật role)
-    @RequestMapping(value = "", method = RequestMethod.PUT)
+    @PutMapping("/{id}") // SỬA: Dùng @PutMapping và lấy ID từ đường dẫn
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> updateUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
-        return ResponseEntity.ok(userService.updateUser(userCreateDTO));
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreateDTO userUpdateDTO) {
+        // Gọi service với cả id và DTO chứa thông tin mới
+        return ResponseEntity.ok(userService.updateUser(id, userUpdateDTO));
     }
 
     // 4. Delete User
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") // THÊM: Chỉ Admin mới được xóa
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build(); // Trả về 204 No Content
@@ -66,7 +68,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.POST)
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<Page<AppUser>> searchUsers(@RequestBody UserSearchRequest request) {
         Page<AppUser> searchResult = userService.searchUsers(request);
         return new  ResponseEntity<>(searchResult, HttpStatus.OK);
