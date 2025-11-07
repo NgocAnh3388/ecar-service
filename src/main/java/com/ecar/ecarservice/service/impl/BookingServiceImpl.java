@@ -33,7 +33,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingResponseDto createBooking(BookingRequestDto bookingDto, AppUser currentUser) {
         if (bookingDto.getAppointmentDateTime().isBefore(LocalDateTime.now())) {
             // Ném ra một ngoại lệ tùy chỉnh hoặc một ngoại lệ chung
-            throw new IllegalStateException("Appointment date and time cannot be in the past.");
+            throw new IllegalArgumentException("Appointment date and time cannot be in the past.");
         }
         Booking booking = new Booking();
 
@@ -61,7 +61,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingResponseDto> getBookingsForCurrentUser(AppUser currentUser) {
-        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId());
+//        List<Booking> bookings = bookingRepository.findByUserId(currentUser.getId());
+        List<Booking> bookings = bookingRepository.findByUserIdOrderByAppointmentDateTimeDesc(currentUser.getId());
         return bookings.stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
@@ -69,7 +70,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     @Transactional(readOnly = true)
     public List<BookingResponseDto> getAllBookings() {
-        return bookingRepository.findAll().stream()
+//        return bookingRepository.findAll().stream()
+        return bookingRepository.findAllByOrderByAppointmentDateTimeDesc().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -110,6 +112,8 @@ public class BookingServiceImpl implements BookingService {
 
         return convertToDto(cancelledBooking);
     }
+
+
 
     private BookingResponseDto convertToDto(Booking booking) {
         BookingResponseDto dto = new BookingResponseDto();

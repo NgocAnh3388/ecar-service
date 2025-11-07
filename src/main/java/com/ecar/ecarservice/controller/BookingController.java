@@ -6,6 +6,7 @@ import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.entities.Booking;
 import com.ecar.ecarservice.repositories.AppUserRepository;
 import com.ecar.ecarservice.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -28,7 +29,7 @@ public class BookingController {
 
     @PostMapping
     public ResponseEntity<BookingResponseDto> createBooking(
-            @RequestBody BookingRequestDto bookingDto,
+            @Valid @RequestBody BookingRequestDto bookingDto,
             @AuthenticationPrincipal OidcUser oidcUser) {
 
         AppUser currentUser = appUserRepository.findBySub(oidcUser.getSubject())

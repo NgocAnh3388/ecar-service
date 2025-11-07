@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return appUserRepository.findAllByActiveTrue().stream()
+//        return appUserRepository.findAllByActiveTrue().stream()
+        return appUserRepository.findAllByActiveTrueOrderByCreatedAtDesc().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

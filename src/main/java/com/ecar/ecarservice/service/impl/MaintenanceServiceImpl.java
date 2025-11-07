@@ -62,7 +62,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     public Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request) {
         AppUser currentUser = userService.getCurrentUser(oidcUser);
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
-        return this.maintenanceHistoryRepository.search(
+//        return this.maintenanceHistoryRepository.search(
+        return this.maintenanceHistoryRepository.searchByOwner(
                         currentUser.getId(),
                         request.getSearchValue(),
                         pageRequest)
@@ -93,11 +94,13 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MaintenanceTicketResponse> getTickets(OidcUser user) {
 //        LocalDate today = LocalDate.now();
 //        LocalDateTime start = today.atStartOfDay();
 //        LocalDateTime end   = today.plusDays(1).atStartOfDay();
-        return this.maintenanceHistoryRepository.findAllWithinToday()
+//        return this.maintenanceHistoryRepository.findAllWithinToday()
+        return this.maintenanceHistoryRepository.findAllAndSortForManagement()
                 .stream()
                 .map(this::fromMaintenanceHistory)
                 .toList();
@@ -244,10 +247,12 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user) {
         AppUser currentUser = userService.getCurrentUser(user);
 
-        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatus(currentUser.getId())
+//        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatus(currentUser.getId())
+        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatusAscTechnicianReceivedAtDesc(currentUser.getId())
                 .stream()
                 .map(this::fromMaintenanceHistory)
                 .toList();
@@ -286,4 +291,28 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         System.out.println("Successfully completed service ticket with ID: " + ticketId); // Thêm log để debug
     }
+
+    @Override
+    @Transactional
+    public MaintenanceHistoryDTO completeTechnicianTask(Long ticketId) {
+        // 1. Tìm phiếu yêu cầu (ticket) trong DB
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
+
+        // 2. Kiểm tra trạng thái hợp lệ
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
+            throw new IllegalStateException("Ticket is not in the correct state to be completed by a technician. Current state: " + ticket.getStatus());
+        }
+
+        // 3. Cập nhật trạng thái và thời gian hoàn thành
+        ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
+        ticket.setCompletedAt(LocalDateTime.now());
+
+        // 4. Lưu lại thay đổi
+        MaintenanceHistory updatedTicket = maintenanceHistoryRepository.save(ticket);
+
+        // 5. Chuyển đổi sang DTO để trả về
+        return convertToDTO(updatedTicket);
+    }
+
 }

@@ -91,10 +91,11 @@ public class MaintenanceController {
         maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/{id}/technician-complete")
-    // Chỉ những user có role TECHNICIAN hoặc ADMIN mới được gọi endpoint này
-    @PreAuthorize("hasAnyAuthority('ROLE_TECHNICIAN', 'ROLE_ADMIN')")
-    public ResponseEntity<MaintenanceHistoryDTO> completeTechnicianTask(@PathVariable Long id) {
+
+    @PutMapping("/{id}/technician-complete") // Dùng @PutMapping sẽ đúng ngữ nghĩa hơn là @PostMapping
+    // Sửa thành hasAnyRole và bỏ tiền tố 'ROLE_'
+    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN')")
+    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(@PathVariable Long id) { // Đổi tên để tránh trùng lặp
         try {
             // Gọi phương thức trong service mà chúng ta vừa implement
             MaintenanceHistoryDTO updatedDto = maintenanceService.completeTechnicianTask(id);

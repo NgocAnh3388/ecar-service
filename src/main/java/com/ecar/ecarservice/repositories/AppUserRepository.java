@@ -19,7 +19,9 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findBySub(String sub);
     Optional<AppUser> findByEmail(String email);
 
-    List<AppUser> findAllByActiveTrue();
+//    List<AppUser> findAllByActiveTrue();
+    List<AppUser> findAllByActiveTrueOrderByCreatedAtDesc();
+
     Optional<AppUser> findByIdAndActiveTrue(Long id);
 
     @Query("SELECT au FROM AppUser au LEFT JOIN FETCH au.vehicles v LEFT JOIN FETCH v.carModel WHERE au.id = :id AND au.active = true")

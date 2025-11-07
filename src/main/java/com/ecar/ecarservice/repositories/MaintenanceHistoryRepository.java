@@ -14,32 +14,51 @@ import java.util.List;
 
 @Repository
 public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceHistory, Long> {
-
-    @EntityGraph(attributePaths= {
-            "vehicle",
-            "vehicle.carModel"
-    }, type = EntityGraph.EntityGraphType.FETCH)
-    @Query(value = "SELECT mh " +
-            "FROM MaintenanceHistory mh " +
+    @EntityGraph(attributePaths = { "vehicle", "vehicle.carModel" })
+    @Query(value = "SELECT mh FROM MaintenanceHistory mh " +
             "WHERE mh.owner.id = :ownerId " +
-            "AND mh.vehicle.licensePlate LIKE %:searchValue% " +
+            "AND lower(mh.vehicle.licensePlate) LIKE lower(concat('%', :searchValue, '%')) " +
             "ORDER BY mh.createdAt DESC")
-    Page<MaintenanceHistory> search(@Param("ownerId") Long ownerId,
-                                    @Param("searchValue") String searchValue,
-                                    Pageable pageable);
+    Page<MaintenanceHistory> searchByOwner(@Param("ownerId") Long ownerId,
+                                           @Param("searchValue") String searchValue,
+                                           Pageable pageable);
 
-    @EntityGraph(attributePaths = {
-            "vehicle",
-            "vehicle.carModel",
-            "owner",
-            "center",
-            "staff",
-            "technician"
-    }, type = EntityGraph.EntityGraphType.FETCH)
-    @Query("SELECT mh " +
-            "FROM MaintenanceHistory mh " +
-            "ORDER BY mh.status, mh.submittedAt")
-    List<MaintenanceHistory> findAllWithinToday();
+//    @EntityGraph(attributePaths= {
+//            "vehicle",
+//            "vehicle.carModel"
+//    }, type = EntityGraph.EntityGraphType.FETCH)
+//    @Query(value = "SELECT mh " +
+//            "FROM MaintenanceHistory mh " +
+//            "WHERE mh.owner.id = :ownerId " +
+//            "AND mh.vehicle.licensePlate LIKE %:searchValue% " +
+//            "ORDER BY mh.createdAt DESC")
+//    Page<MaintenanceHistory> search(@Param("ownerId") Long ownerId,
+//                                    @Param("searchValue") String searchValue,
+//                                    Pageable pageable);
+
+    @EntityGraph(attributePaths = { "vehicle", "vehicle.carModel", "owner", "center", "staff", "technician" })
+    @Query("SELECT mh FROM MaintenanceHistory mh ORDER BY mh.status ASC, mh.submittedAt DESC")
+    List<MaintenanceHistory> findAllAndSortForManagement();
+
+
+//    @EntityGraph(attributePaths = {
+//            "vehicle",
+//            "vehicle.carModel",
+//            "owner",
+//            "center",
+//            "staff",
+//            "technician"
+//    }, type = EntityGraph.EntityGraphType.FETCH)
+//    @Query("SELECT mh " +
+//            "FROM MaintenanceHistory mh " +
+//            "ORDER BY mh.status, mh.submittedAt")
+//    List<MaintenanceHistory> findAllWithinToday();
+
+
+    @EntityGraph(attributePaths = { "vehicle", "vehicle.carModel", "owner", "center" })
+    List<MaintenanceHistory> findByTechnicianIdOrderByStatusAscTechnicianReceivedAtDesc(Long technicianId);
+
+
     @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
     List<MaintenanceHistory> findByTechnicianIdOrderByStatus(Long technicianId);
 
