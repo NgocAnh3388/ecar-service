@@ -1,774 +1,532 @@
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (26, false, 'user 25@example.com', 'sub-025', '2025-10-27 13:32:10.434719', 'dinhtul1911@gmail.com', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le 11111', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (102, true, 'abc@abc.com', null, null, null, '2025-10-27 13:47:07.053776', 'dinhtul1911@gmail.com', 'abc', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (1, true, 'dinhtul1911@gmail.com', '109909289039762949476', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (57, true, 'user 56@example.com', 'sub-056', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (9, true, 'user  8@example.com', 'sub-008', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (10, true, 'user  9@example.com', 'sub-009', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (93, true, 'user 92@example.com', 'sub-092', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (27, true, 'user 26@example.com', 'sub-026', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (25, true, 'user 24@example.com', 'sub-024', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (91, false, 'user 90@example.com', 'sub-090', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (11, false, 'user 10@example.com', 'sub-010', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (39, true, 'user 38@example.com', 'sub-038', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (40, true, 'user 39@example.com', 'sub-039', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (42, true, 'user 41@example.com', 'sub-041', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (41, false, 'user 40@example.com', 'sub-040', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (55, true, 'user 54@example.com', 'sub-054', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (94, true, 'user 93@example.com', 'sub-093', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (43, true, 'user 42@example.com', 'sub-042', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (12, true, 'user 11@example.com', 'sub-011', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (7, true, 'user  6@example.com', 'sub-006', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (8, true, 'user  7@example.com', 'sub-007', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (73, true, 'user 72@example.com', 'sub-072', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (89, true, 'user 88@example.com', 'sub-088', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (90, true, 'user 89@example.com', 'sub-089', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (56, true, 'user 55@example.com', 'sub-055', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (58, true, 'user 57@example.com', 'sub-057', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (75, true, 'user 74@example.com', 'sub-074', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (54, true, 'user 53@example.com', 'sub-053', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (74, true, 'user 73@example.com', 'sub-073', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (76, true, 'user 75@example.com', 'sub-075', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (78, true, 'user 77@example.com', 'sub-077', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (59, true, 'user 58@example.com', 'sub-058', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (77, true, 'user 76@example.com', 'sub-076', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (60, true, 'user 59@example.com', 'sub-059', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (61, false, 'user 60@example.com', 'sub-060', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (79, true, 'user 78@example.com', 'sub-078', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (53, true, 'user 52@example.com', 'sub-052', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (30, true, 'user 29@example.com', 'sub-029', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (45, true, 'user 44@example.com', 'sub-044', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (22, true, 'user 21@example.com', 'sub-021', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (72, true, 'user 71@example.com', 'sub-071', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (6, true, 'user  5@example.com', 'sub-005', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (64, true, 'user 63@example.com', 'sub-063', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (95, true, 'user 94@example.com', 'sub-094', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (37, true, 'user 36@example.com', 'sub-036', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (35, true, 'user 34@example.com', 'sub-034', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (14, true, 'user 13@example.com', 'sub-013', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (28, true, 'user 27@example.com', 'sub-027', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (20, true, 'user 19@example.com', 'sub-019', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (24, true, 'user 23@example.com', 'sub-023', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (96, true, 'user 95@example.com', 'sub-095', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (100, true, 'user 99@example.com', 'sub-099', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (98, true, 'user 97@example.com', 'sub-097', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (84, true, 'user 83@example.com', 'sub-083', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (32, true, 'user 31@example.com', 'sub-031', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (48, true, 'user 47@example.com', 'sub-047', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (67, true, 'user 66@example.com', 'sub-066', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (68, true, 'user 67@example.com', 'sub-067', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (49, true, 'user 48@example.com', 'sub-048', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (19, true, 'user 18@example.com', 'sub-018', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (66, true, 'user 65@example.com', 'sub-065', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (33, true, 'user 32@example.com', 'sub-032', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (16, true, 'user 15@example.com', 'sub-015', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (17, true, 'user 16@example.com', 'sub-016', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (18, true, 'user 17@example.com', 'sub-017', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (51, false, 'user 50@example.com', 'sub-050', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (63, true, 'user 62@example.com', 'sub-062', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (65, true, 'user 64@example.com', 'sub-064', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (86, true, 'user 85@example.com', 'sub-085', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (50, true, 'user 49@example.com', 'sub-049', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (4, true, 'user  3@example.com', 'sub-003', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (3, true, 'user  2@example.com', 'sub-002', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (47, true, 'user 46@example.com', 'sub-046', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (70, true, 'user 69@example.com', 'sub-069', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (69, true, 'user 68@example.com', 'sub-068', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (62, true, 'user 61@example.com', 'sub-061', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (52, true, 'user 51@example.com', 'sub-051', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (83, true, 'user 82@example.com', 'sub-082', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (87, true, 'user 86@example.com', 'sub-086', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (85, true, 'user 84@example.com', 'sub-084', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (2, true, 'user  1@example.com', 'sub-001', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (82, true, 'user 81@example.com', 'sub-081', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (81, false, 'user 80@example.com', 'sub-080', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (80, true, 'user 79@example.com', 'sub-079', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (88, true, 'user 87@example.com', 'sub-087', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (71, false, 'user 70@example.com', 'sub-070', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (5, true, 'user  4@example.com', 'sub-004', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (23, true, 'user 22@example.com', 'sub-022', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (46, true, 'user 45@example.com', 'sub-045', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (21, false, 'user 20@example.com', 'sub-020', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (44, true, 'user 43@example.com', 'sub-043', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (38, true, 'user 37@example.com', 'sub-037', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (13, true, 'user 12@example.com', 'sub-012', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (36, true, 'user 35@example.com', 'sub-035', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (15, true, 'user 14@example.com', 'sub-014', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (34, true, 'user 33@example.com', 'sub-033', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (29, true, 'user 28@example.com', 'sub-028', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (97, true, 'user 96@example.com', 'sub-096', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (31, false, 'user 30@example.com', 'sub-030', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (99, true, 'user 98@example.com', 'sub-098', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (101, false, 'user100@example.com', 'sub-100', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
-INSERT INTO public.app_user (id, active, email, sub, updated_at, updated_by, created_at, created_by, full_name, phone_no) VALUES (92, true, 'user 91@example.com', 'sub-091', '2025-10-11 08:34:17.121222', 'seed', '2025-10-11 08:34:17.121222', 'seed', 'tu dinh le', null);
+-- RUN THIS COMMAND FIRST TO CLEAR OLD DATA IF NEEDED
+TRUNCATE TABLE
+    public.app_user,
+    public.user_roles,
+    public.car_model,
+    public.center,
+    public.service,
+    public.maintenance_milestone,
+    public.vehicles,
+    public.subscription_info,
+    public.payment_history,
+    public.maintenance_history,
+    public.maintenance_item,
+    public.maintenance_schedule,
+    public.spare_part,
+    public.service_records,
+    public.service_record_details,
+    public.bookings,
+    public.expense
+    RESTART IDENTITY CASCADE;
+
+-- =================================================================================
+-- STEP 1: INSERT DATA FOR BASE TABLES
+-- =================================================================================
+
+-- =================================================================================
+-- app_user
+-- =================================================================================
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                          (true, 'lengochan090105@gmail.com', '117568473599883678495', 'Lê Ngọc Hân', '0373587001', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'dinhthingocanh0308@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'namhoai020505@gmail.com', '118080103497063505858', 'Nam Hoài', '0373587009', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'boyhayhaha12345@gmail.com', '10414838788924653426', 'Nguyễn Đăng Phú', '0373587010', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'kassassinrk@gmail.com', '101853864144089879263', 'Nguyễn Dũng', '0373587011', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staffrole001@gmail.com', '103635268146202778075', 'Staff Role', '0373587002', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'technicianrole01@gmail.com', '112040040855698268458 ', 'Technician Role','0373587003', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customerrole01@gmai.com', '110833741228031693365', 'Customer Role', '0373587004', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                          -- Sample Staff Accounts (user01x)
+                                                                                                                          (true, 'staff010@example.com', 'sub-010', 'Võ Đức Anh', '0912345010','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff011@example.com', 'sub-011', 'Nguyễn Quốc Bảo', '0912345011', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff012@example.com', 'sub-012', 'Huỳnh Vũ Bằng', '0912345012', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff013@example.com', 'sub-013', 'Nguyễn Ngọc Minh Châu', '0912345013','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff014@example.com', 'sub-014', 'Nguyễn Ngọc Trân Châu', '0912345014','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff015@example.com', 'sub-015', 'Phạm Huy Cường', '0912345015','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff016@example.com', 'sub-016', 'Lê Thị Ngọc Hân', '0912345016','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff017@example.com', 'sub-017', 'Nguyễn Thị Thanh Hân', '0912345017','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff018@example.com', 'sub-018', 'Trần Công Hiệp', '0912345018','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'staff019@example.com', 'sub-019', 'Phan Sơn Hoàng', '0912345019','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                          -- Sample Technician Accounts (user02x)
+                                                                                                                          (true, 'tech020@example.com', 'sub-020', 'Đặng Nguyễn Trung Huy', '0912345020','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech021@example.com', 'sub-021', 'Nguyễn Phan Minh Hưng', '0912345021','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech022@example.com', 'sub-022', 'Lê Quang Khải', '0912345022','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech023@example.com', 'sub-023', 'Lê Nguyên Khan', '0912345023','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech024@example.com', 'sub-024', 'Dương Hồng Khang', '0912345024','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech025@example.com', 'sub-025', 'Nguyễn Đăng Khoa', '0912345025','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech026@example.com', 'sub-026', 'Nguyễn Ngọc Kiều My', '0912345026','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech027@example.com', 'sub-027', 'Phan Cao Trọng Nghĩa', '0912345027','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech028@example.com', 'sub-028', 'Trần Thúy Ngọc', '0912345028','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'tech029@example.com', 'sub-029', 'Lê Hoàng Uyển Nhi', '0912345029','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                          -- Sample Customer Accounts (user03x, user04x)
+                                                                                                                          (true, 'customer030@example.com', 'sub-030', 'Châu Hiệp Phát', '0912345030','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer031@example.com', 'sub-031', 'Nguyễn Hồng Phúc', '0912345031','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer032@example.com', 'sub-032', 'Phan Tâm Phương', '0912345032','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer033@example.com', 'sub-033', 'Võ Hồng Phương', '0912345033','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer034@example.com', 'sub-034', 'Lê Nguyễn Ngọc Quý', '0912345034','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer035@example.com', 'sub-035', 'Nguyễn Kim Quyên', '0912345035','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer036@example.com', 'sub-036', 'Ngô Thị Mỹ Quỳnh', '0912345036','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer037@example.com', 'sub-037', 'Huỳnh Trúc Tâm', '0912345037','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer038@example.com', 'sub-038', 'Trần Hưng Thịnh', '0912345038','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                          -- Sample Customer Accounts (user03x, user04x)
+                                                                                                                          (true, 'customer039@example.com', 'sub-039', 'Bùi Ngọc Minh Thư', '0912345039','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer040@example.com', 'sub-040', 'Đoàn Thị Kiều Thư', '0912345040','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer041@example.com', 'sub-041', 'Lê Minh Thư', '0912345041','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer042@example.com', 'sub-042', 'Nguyễn Lý Mỹ Tiên', '0912345042','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer043@example.com', 'sub-043', 'Nguyễn Thị Cẩm Tiên', '0912345043','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer044@example.com', 'sub-044', 'Nguyễn Thị Cẩm Tiên', '0912345044','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer045@example.com', 'sub-045', 'Trần Ngọc Quế Trang', '0912345045','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer046@example.com', 'sub-046', 'Võ Thị Thùy Trinh', '0912345046','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer047@example.com', 'sub-047', 'Huỳnh Thị Thanh Trúc', '0912345047','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'customer048@example.com', 'sub-048', 'Nguyễn Thanh Trúc', '0912345048','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+
+-- =================================================================================
+-- user_roles
+-- =================================================================================
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, CASE
+               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh0308@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
+               WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
+               WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
+               ELSE 'CUSTOMER'
+    END FROM public.app_user;
+
+-- =================================================================================
+-- car_model
+-- =================================================================================
+INSERT INTO public.car_model (car_name, car_type, created_by, created_at, active, updated_at, updated_by) VALUES
+                                                                                                              ('VF3', 'Mini SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system'),
+                                                                                                              ('VF5', 'A-Segment SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system'),
+                                                                                                              ('VF6', 'B-Segment SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system'),
+                                                                                                              ('VF7', 'C-Segment SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system'),
+                                                                                                              ('VF8', 'D-Segment SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system'),
+                                                                                                              ('VF9', 'E-Segment SUV', 'system', '2025-10-11 08:34:17', true, '2025-10-11 08:34:17', 'system');
+
+-- =================================================================================
+-- center
+-- =================================================================================
+INSERT INTO public.center (center_name, phone_no, address, created_by, created_at, updated_at, updated_by) VALUES
+                                                                                                               ('ECar Binh Duong', '0987654321', '1 Binh Duong Avenue, Thu Dau Mot City', 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system'),
+                                                                                                               ('ECar Thu Duc', '0987654322', '1 Vo Van Ngan, Thu Duc City, HCMC', 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system'),
+                                                                                                               ('ECar District 1', '0987654323', '123 Le Loi, District 1, HCMC', 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+
+-- =================================================================================
+-- service
+-- =================================================================================
+INSERT INTO public.service (id, service_type, service_name, category, created_by, created_at, updated_at, updated_by) VALUES
+                                                                                                                          -- Nhóm 1: Dịch vụ bảo dưỡng định kỳ (service_type = 'M')
+                                                                                                                          (1, 'M', 'Cabin Air Filter', 'replace', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (2, 'M', 'Brake Fluid', 'replace', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (3, 'M', 'Air Conditioning System', 'replace', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (4, 'M', 'T-BOX Battery', 'replace', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (5, 'M', 'Coolant for High-Voltage Battery/Electric Motor', 'replace', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (6, 'M', 'Tires (tread wear, pressure, rotation, and balancing)', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (7, 'M', 'Wheels (damage, deformation, and cracks)', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (8, 'M', 'Brake Pads and Discs', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (9, 'M', 'Brake Fluid Lines and Connections', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (10, 'M', 'Electric Powertrain (motor-gearbox)', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (11, 'M', 'Axle and Suspension System', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (12, 'M', 'Drive Shaft and Dust Boots', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (13, 'M', 'Suspension Ball Joints', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (14, 'M', 'Steering Gear and Ball Joints', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (15, 'M', 'Wiper Blades / Windshield Washer Fluid', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (16, 'M', 'Coolant Hoses Inspection', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (17, 'M', 'High-Voltage Battery', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (18, 'M', 'High-Voltage Cables and Related Wires', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (19, 'M', 'Charging Port', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (20, 'M', '12V Battery', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (21, 'M', 'Check for Underbody Corrosion', 'general', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          -- Nhóm 2: Dịch vụ sửa chữa (service_type = 'F')
+                                                                                                                          (26, 'F', 'Brake Pad Replacement', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (27, 'F', 'ABS Sensor Replacement', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (28, 'F', 'Brake Disc Repair/Replacement', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (29, 'F', 'Parking Brake Service', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (30, 'F', 'Brake Caliper Service', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (31, 'F', 'Brake Line Leak Inspection/Repair', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (32, 'F', 'Other Brake Services', 'brake', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (33, 'F', 'Steering Wheel Service', 'steering', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (34, 'F', 'Power Steering Service', 'steering', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (35, 'F', 'Steering Rack Service', 'steering', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (36, 'F', 'Steering Column Service', 'steering', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (37, 'F', 'Power Steering Hose Service', 'steering', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (38, 'F', 'Horn Repair', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (39, 'F', 'Battery Service/Replacement', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (40, 'F', 'AC Evaporator Temperature Sensor', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (41, 'F', 'Condenser Service', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (42, 'F', 'High-Pressure Hose Service', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (43, 'F', 'AC Vent Repair', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (44, 'F', 'Blower Motor Repair', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (45, 'F', 'Radiator Service', 'cooling', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (46, 'F', 'Radiator Fan Motor', 'cooling', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (47, 'F', 'High-Pressure Coolant Hose', 'cooling', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (48, 'F', 'Thermostat Service', 'cooling', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (49, 'F', 'Tire Puncture Repair', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (50, 'F', 'Tire/Wheel Replacement', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (51, 'F', 'Spare Tire Replacement', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (52, 'F', 'Tire Pressure Monitoring System (TPMS) Sensor', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (53, 'F', 'Shock Absorber Replacement', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (54, 'F', 'Interior Plastic Trim Replacement', 'interior', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (55, 'F', 'Error Light Diagnosis and Software Update', 'other', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system');
 
 
-INSERT INTO public.user_roles (user_id, role) VALUES (1, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (2, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (3, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (4, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (5, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (6, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (7, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (8, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (9, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (10, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (11, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (12, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (13, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (14, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (15, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (16, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (17, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (18, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (19, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (20, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (21, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (22, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (23, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (24, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (25, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (27, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (28, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (29, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (30, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (31, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (32, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (33, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (34, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (35, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (36, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (37, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (38, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (39, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (40, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (41, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (42, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (43, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (44, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (45, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (46, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (47, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (48, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (49, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (50, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (51, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (52, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (53, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (54, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (55, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (56, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (57, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (58, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (59, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (60, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (61, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (62, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (63, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (64, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (65, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (66, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (67, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (68, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (69, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (70, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (71, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (72, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (73, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (74, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (75, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (76, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (77, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (78, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (79, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (80, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (81, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (82, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (83, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (84, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (85, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (86, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (87, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (88, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (89, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (90, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (91, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (92, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (93, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (94, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (95, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (96, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (97, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (98, 'TECHNICIAN');
-INSERT INTO public.user_roles (user_id, role) VALUES (99, 'ADMIN');
-INSERT INTO public.user_roles (user_id, role) VALUES (100, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (101, 'STAFF');
-INSERT INTO public.user_roles (user_id, role) VALUES (26, 'CUSTOMER');
-INSERT INTO public.user_roles (user_id, role) VALUES (102, 'CUSTOMER');
+-- =================================================================================
+-- STEP 2: INSERT DATA FOR TABLES WITH FOREIGN KEYS
+-- =================================================================================
 
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (1, true, 'VF3', 'mini SUV', '2025-10-27 14:31:53.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (2, true, 'VF5', 'A-segment SUV', '2025-10-27 14:31:53.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (3, true, 'VF6', 'B-segment SUV', '2025-10-27 14:31:53.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (4, true, 'VF7', 'C-segment SUV', '2025-10-27 14:33:21.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (5, true, 'VF8', 'D-segment SUV', '2025-10-27 14:33:21.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
-INSERT INTO public.car_model (id, active, car_name, car_type, created_at, created_by, updated_at, updated_by) VALUES (6, true, 'VF9', 'E-segment SUV', '2025-10-27 14:33:21.000000', 'system', '2025-10-27 14:31:57.000000', 'system');
+-- =================================================================================
+-- maintenance_milestone (car_model)
+-- =================================================================================
+INSERT INTO public.maintenance_milestone (kilometer_at, year_at, car_model_id, created_by, created_at, updated_at, updated_by)
+SELECT km, year_at, cm.id, 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system'
+FROM public.car_model cm, (VALUES (12000, 1), (24000, 2), (36000, 3), (48000, 4), (60000, 5), (72000, 6), (84000, 7), (96000, 8), (108000, 9), (120000, 10)) AS milestones(km, year_at);
 
 
-INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (1, 'Center 1', '0987654321', 'abc', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
-INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (2, 'Center 2', '0987654322', 'edf', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
-INSERT INTO public.center (id, center_name, phone_no, address, created_at, created_by, updated_at, updated_by) VALUES (3, 'Center 3', '0987654323', '123', '2025-10-28 12:49:30.000000', 'system', '2025-10-28 12:49:34.000000', 'system');
-
-INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (1, 9, 1, null, '2025-10-30 16:22:22.246192', 'dinhtul1911@gmail.com', null, null);
-INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (2, 9, null, 27, '2025-10-30 16:22:22.256101', 'dinhtul1911@gmail.com', null, null);
-INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (3, 9, null, 30, '2025-10-30 16:22:22.257671', 'dinhtul1911@gmail.com', null, null);
-INSERT INTO public.maintenance_item (id, maintenance_history_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by) VALUES (4, 9, null, 32, '2025-10-30 16:22:22.258713', 'dinhtul1911@gmail.com', null, null);
-
---VF3--
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (4, 48000, 4, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (6, 72000, 6, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (10, 120000, 10, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (5, 60000, 5, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (1, 12000, 1, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (7, 84000, 7, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (9, 108000, 9, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (8, 96000, 8, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (3, 36000, 3, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-INSERT INTO public.maintenance_milestone (id, kilometer_at, year_at, created_at, created_by, updated_at, updated_by, car_model_id) VALUES (2, 24000, 2, '2025-10-27 09:38:55.669793', 'system', null, null, 1);
-
---VF5--
-INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT kilometer_at, year_at, created_at, created_by, 2
-FROM maintenance_milestone
-WHERE car_model_id = 1;
+-- =================================================================================
+-- vehicles. app_user (qua owner_id), car_model (qua car_model_id)
+-- =================================================================================
+INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, next_km, next_date, old_km, old_date, created_by, created_at, updated_at, updated_by)
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF3'), '29A-111.11', 'VIN001', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 24000, '2026-10-30 17:00:00', 10000, '2025-10-30 17:00:00', 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF5'), '30A-222.22', 'VIN002', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF6'), '51G-111.13', 'VIN003', (SELECT id FROM app_user WHERE email = 'customer01@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF7'), '51H-111.14', 'VIN004', (SELECT id FROM app_user WHERE email = 'customer02@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF8'), '60B-222.15', 'VIN005', (SELECT id FROM app_user WHERE email = 'customer03@example.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
 
 
---VF6--
-INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT kilometer_at, year_at, created_at, created_by, 3
-FROM maintenance_milestone
-WHERE car_model_id = 1;
+-- =================================================================================
+-- subscription_info (Bảng gói dịch vụ). phụ thuộc vào app_user
+-- =================================================================================
+INSERT INTO public.subscription_info (owner_id, start_date, end_date, payment_date, created_by, created_at, updated_by, updated_at)
+VALUES
+    -- Scenario 1: Active subscription for user 'wendyhimekawa@gmail.com'
+    (
+        (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com'),
+        '2025-01-15 10:00:00',
+        '2026-01-15 10:00:00',
+        '2025-01-15 10:00:00',
+        'system', NOW(), 'system', NOW()
+    ),
+    -- Scenario 2: Subscription about to expire for user 'customer01@example.com'
+    (
+        (SELECT id FROM app_user WHERE email = 'customer01@example.com'),
+        '2024-12-01 14:30:00',
+        '2025-12-01 14:30:00',
+        '2024-12-01 14:30:00',
+        'system', NOW(), 'system', NOW()
+    ),
+    -- Scenario 3: Expired subscription for user 'customer02@example.com'
+    (
+        (SELECT id FROM app_user WHERE email = 'customer02@example.com'),
+        '2024-09-01 11:00:00',
+        '2025-09-01 11:00:00',
+        '2024-09-01 11:00:00',
+        'system', NOW(), 'system', NOW()
+    ),
+    -- Scenario 4: Active subscription for the admin 'lengochan090105@gmail.com'
+    (
+        (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
+        '2025-10-29 09:18:13',
+        '2026-10-29 09:18:13',
+        '2025-10-29 09:18:13',
+        'lengochan090105@gmail.com', NOW(), 'lengochan090105@gmail.com', NOW()
+    );
 
---VF7--
-INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT kilometer_at, year_at, created_at, created_by, 4
-FROM maintenance_milestone
-WHERE car_model_id = 1;
 
---VF8--
-INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT kilometer_at, year_at, created_at, created_by, 5
-FROM maintenance_milestone
-WHERE car_model_id = 1;
-
---VF9--
-INSERT INTO maintenance_milestone (kilometer_at, year_at, created_at, created_by, car_model_id)
-SELECT kilometer_at, year_at, created_at, created_by, 6
-FROM maintenance_milestone
-WHERE car_model_id = 1;
-
-
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (12, 'M', 'Trục dẫn động và cao su chống bụi', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (14, 'M', 'Cơ cấu lái và khớp cầu', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (10, 'M', 'Bộ truyền động điện (động cơ-hộp số)', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (20, 'M', 'Ắc quy 12V', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (7, 'M', 'Vành (hư hỏng, biến dạng và các vết nứt)', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (1, 'M', 'Lọc gió điều hòa', '2025-10-27 09:37:11.591427', 'system', null, null, 'replace');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (5, 'M', 'Dung dịch làm mát cho pin điện áp cao/động cơ điện', '2025-10-27 09:37:11.591427', 'system', null, null, 'replace');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (6, 'M', 'Lốp (mòn ta-lông, áp suất, quay và cân bằng)', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (13, 'M', 'Khớp cầu hệ thống treo', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (3, 'M', 'Hệ thống điều hòa', '2025-10-27 09:37:11.591427', 'system', null, null, 'replace');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (15, 'M', 'Lưỡi gạt mưa/ dung dịch rửa kính', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (21, 'M', 'Kiểm tra tình trạng rỉ mòn khu vực gầm xe', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (11, 'M', 'Cầu xe và hệ thống treo', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (19, 'M', 'Cổng sạc', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (18, 'M', 'Cáp điện cao áp và các dây điện liên quan', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (16, 'M', 'Kiểm tra ống nước làm mát', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (17, 'M', 'Pin điện áp cao', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (2, 'M', 'Dầu phanh', '2025-10-27 09:37:11.591427', 'system', null, null, 'replace');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (8, 'M', 'Má phanh và đĩa phanh', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (9, 'M', 'Đường ống dầu phanh và các vị trí kết nối', '2025-10-27 09:37:14.789334', 'system', null, null, 'general');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (4, 'M', 'Pin bộ T-BOX', '2025-10-27 09:37:11.591427', 'system', null, null, 'replace');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (26, 'F', 'Má phanh', '2025-10-30 08:56:00.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (27, 'F', 'Cảm biến ABS', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (28, 'F', 'Sữa chữa, thay thế đĩa phanh', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (29, 'F', 'Phanh tay', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (30, 'F', 'Cụm phanh', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (31, 'F', 'Ktra, sữa chữa, thay thế rò rỉ đường ống dầu', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (32, 'F', 'Khác', '2025-10-30 08:56:20.000000', 'system', null, null, 'brake');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (33, 'F', 'Vô lăng', '2025-10-30 08:56:20.000000', 'system', null, null, 'steering');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (34, 'F', 'Trợ lực lái', '2025-10-30 08:56:20.000000', 'system', null, null, 'steering');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (35, 'F', 'Thước lái', '2025-10-30 08:56:20.000000', 'system', null, null, 'steering');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (36, 'F', 'Trụ lái', '2025-10-30 08:56:20.000000', 'system', null, null, 'steering');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (37, 'F', 'Ty ô trợ lực', '2025-10-30 08:56:20.000000', 'system', null, null, 'steering');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (38, 'F', 'Còi', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (39, 'F', 'Ắc quy', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (40, 'F', 'Cảm biến nhiệt độ giàn lạnh', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (41, 'F', 'Giàn nóng', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (42, 'F', 'Ty ô cao áp', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (43, 'F', 'Cửa gió điều hoà', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (44, 'F', 'Mô tơ quạt điều hoà', '2025-10-30 08:56:20.000000', 'system', null, null, 'electric');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (45, 'F', 'Két nước làm mát', '2025-10-30 08:56:20.000000', 'system', null, null, 'cooling');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (46, 'F', 'Quạt làm mát két nước', '2025-10-30 08:56:20.000000', 'system', null, null, 'cooling');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (47, 'F', 'Ty ô cao áp', '2025-10-30 08:56:20.000000', 'system', null, null, 'cooling');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (48, 'F', 'Van hằng nhiệt', '2025-10-30 08:56:20.000000', 'system', null, null, 'cooling');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (49, 'F', 'Vá lốp', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (50, 'F', 'Thay lốp/vành', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (51, 'F', 'Thay lốp dự phòng', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (52, 'F', 'Cảm biến áp suất lốp', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (53, 'F', 'Giảm sốc', '2025-10-30 08:56:20.000000', 'system', null, null, 'suspension');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (54, 'F', 'Thay thế ốp nhựa nội thất', '2025-10-30 08:56:20.000000', 'system', null, null, 'interior');
-INSERT INTO public.service (id, service_type, service_name, created_at, created_by, updated_at, updated_by, category) VALUES (55, 'F', 'Chuẩn đoán đèn bào lỗi và cập nhật phần mềm', '2025-10-30 08:56:20.000000', 'system', null, null, 'other');
+-- =================================================================================
+-- payment_history
+-- =================================================================================
+INSERT INTO public.payment_history (subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years, amount)
+VALUES
+    -- Payment history for Subscription belonging to 'wendyhimekawa@gmail.com'
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
+    -- Payment history for Subscription belonging to 'customer01@example.com'
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customer01@example.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customer01@example.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2024-11-20 14:28:00', 'system_seed', '2024-11-20 14:30:00', 'system_callback', 'PAYID-VALID-00003', 1, 1000.00),
+    -- Payment history for Subscription belonging to 'lengochan090105@gmail.com'
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:11', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQWY79717451CM661680U', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:27', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-10-29 09:18:05', 'lengochan090105@gmail.com', '2025-10-29 09:18:13', 'system_callback', 'PAYID-NEAXSRI0K2341200L885441K', 1, 1000.00);
 
 
 
-INSERT INTO public.subscription_info (id, owner_id, start_date, end_date, payment_date, created_at, created_by, updated_at, updated_by) VALUES (3, 1, '2025-10-29 09:18:13.724187', '2026-10-29 09:18:13.724187', '2025-10-29 09:18:13.724187', '2025-10-28 22:09:43.787827', 'dinhtul1911@gmail.com', '2025-10-29 09:18:13.726783', 'dinhtul1911@gmail.com');
-
-
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (179, 1, 1, 2, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (180, 1, 1, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (181, 1, 1, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (182, 1, 1, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (183, 1, 2, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (185, 1, 2, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (187, 1, 3, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (188, 1, 3, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (186, 1, 3, 2, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (189, 1, 3, 5, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (190, 1, 4, 3, '2025-10-27 09:44:49.228690', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (191, 1, 4, 4, '2025-10-27 09:44:49.228690', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (192, 1, 4, 5, '2025-10-27 09:44:49.228690', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (193, 1, 5, 2, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (194, 1, 5, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (195, 1, 5, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (196, 1, 5, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (197, 1, 7, 2, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (198, 1, 7, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (199, 1, 7, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (200, 1, 7, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (201, 1, 8, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (202, 1, 8, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (203, 1, 8, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (204, 1, 9, 2, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (205, 1, 9, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (206, 1, 9, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (207, 1, 9, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (208, 1, 10, 3, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (209, 1, 10, 4, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (210, 1, 10, 5, '2025-10-27 09:44:49.196471', 'system', null, null, false);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (184, 1, 2, 4, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (75, 1, 7, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (149, 1, 1, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (40, 1, 2, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (56, 1, 8, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (114, 1, 6, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (25, 1, 7, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (88, 1, 10, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (91, 1, 3, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (165, 1, 7, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (142, 1, 4, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (162, 1, 4, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (148, 1, 10, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (43, 1, 5, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (9, 1, 9, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (146, 1, 8, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (135, 1, 7, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (132, 1, 4, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (8, 1, 8, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (123, 1, 5, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (120, 1, 2, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (11, 1, 2, 2, '2025-10-27 09:44:49.228690', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (2, 1, 2, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (22, 1, 4, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (5, 1, 5, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (104, 1, 6, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (116, 1, 8, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (50, 1, 2, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (152, 1, 4, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (155, 1, 7, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (164, 1, 6, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (167, 1, 9, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (107, 1, 9, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (41, 1, 3, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (129, 1, 1, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (54, 1, 6, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (105, 1, 7, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (63, 1, 5, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (119, 1, 1, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (117, 1, 9, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (57, 1, 9, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (59, 1, 1, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (174, 1, 6, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (95, 1, 7, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (168, 1, 10, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (131, 1, 3, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (87, 1, 9, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (176, 1, 8, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (158, 1, 10, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (15, 1, 10, 2, '2025-10-27 09:44:49.228690', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (166, 1, 8, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (28, 1, 10, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (103, 1, 5, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (64, 1, 6, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (127, 1, 9, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (136, 1, 8, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (26, 1, 8, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (55, 1, 7, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (150, 1, 2, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (144, 1, 6, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (53, 1, 5, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (18, 1, 6, 5, '2025-10-27 09:44:49.261668', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (113, 1, 5, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (121, 1, 3, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (20, 1, 2, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (109, 1, 1, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (111, 1, 3, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (133, 1, 5, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (7, 1, 7, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (178, 1, 10, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (73, 1, 5, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (93, 1, 5, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (81, 1, 3, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (89, 1, 1, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (85, 1, 7, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (74, 1, 6, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (13, 1, 6, 2, '2025-10-27 09:44:49.228690', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (78, 1, 10, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (1, 1, 1, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (36, 1, 8, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (101, 1, 3, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (68, 1, 10, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (34, 1, 6, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (24, 1, 6, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (38, 1, 10, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (76, 1, 8, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (46, 1, 8, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (32, 1, 4, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (70, 1, 2, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (44, 1, 6, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (66, 1, 8, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (42, 1, 4, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (48, 1, 10, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (157, 1, 9, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (122, 1, 4, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (17, 1, 6, 4, '2025-10-27 09:44:49.252814', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (77, 1, 9, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (143, 1, 5, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (83, 1, 5, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (10, 1, 10, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (3, 1, 3, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (125, 1, 7, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (16, 1, 6, 3, '2025-10-27 09:44:49.245460', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (30, 1, 2, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (154, 1, 6, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (140, 1, 2, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (115, 1, 7, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (106, 1, 8, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (97, 1, 9, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (134, 1, 6, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (156, 1, 8, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (96, 1, 8, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (99, 1, 1, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (58, 1, 10, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (124, 1, 6, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (62, 1, 4, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (141, 1, 3, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (147, 1, 9, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (23, 1, 5, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (112, 1, 4, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (61, 1, 3, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (49, 1, 1, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (175, 1, 7, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (51, 1, 3, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (170, 1, 2, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (172, 1, 4, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (173, 1, 5, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (118, 1, 10, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (161, 1, 3, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (163, 1, 5, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (137, 1, 9, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (160, 1, 2, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (60, 1, 2, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (29, 1, 1, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (126, 1, 8, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (145, 1, 7, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (52, 1, 4, 9, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (21, 1, 3, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (153, 1, 5, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (14, 1, 8, 2, '2025-10-27 09:44:49.228690', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (100, 1, 2, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (37, 1, 9, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (65, 1, 7, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (171, 1, 3, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (128, 1, 10, 16, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (169, 1, 1, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (138, 1, 10, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (108, 1, 10, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (102, 1, 4, 14, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (6, 1, 6, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (130, 1, 2, 17, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (110, 1, 2, 15, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (4, 1, 4, 1, '2025-10-27 09:44:49.196471', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (31, 1, 3, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (159, 1, 1, 20, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (19, 1, 1, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (139, 1, 1, 18, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (151, 1, 3, 19, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (27, 1, 9, 6, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (79, 1, 1, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (12, 1, 4, 2, '2025-10-27 09:44:49.228690', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (98, 1, 10, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (67, 1, 9, 10, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (177, 1, 9, 21, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (39, 1, 1, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (47, 1, 9, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (92, 1, 4, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (90, 1, 2, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (72, 1, 4, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (94, 1, 6, 13, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (84, 1, 6, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (82, 1, 4, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (80, 1, 2, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (45, 1, 7, 8, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (35, 1, 7, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (69, 1, 1, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (71, 1, 3, 11, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (33, 1, 5, 7, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default) VALUES (86, 1, 8, 12, '2025-10-27 09:44:58.067134', 'system', null, null, true);
-
---VF5--
--- Xóa lịch bảo dưỡng cũ cho VF5 (car_model_id = 2)
-DELETE FROM public.maintenance_schedule
-WHERE car_model_id = 2;
-
-
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
--- Sử dụng MAX(id) + ROW_NUMBER() để đảm bảo ID không trùng lặp và tăng dần
+-- =================================================================================
+-- spare_part), phụ thuộc vào car_model
+-- =================================================================================
+INSERT INTO public.spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, created_by, updated_at, updated_by)
 SELECT
-    (SELECT COALESCE(MAX(id), 0) FROM public.maintenance_schedule) +
-    ROW_NUMBER() OVER (ORDER BY T.maintenance_milestone_id, T.service_id),
-    2 AS car_model_id_vf5, -- <<< car_model_id là 2 (VF5)
-    T.maintenance_milestone_id,
-    T.service_id,
-    '2025-11-03 00:52:00.000000', -- Thời gian tạo mới
-    'system',
-    NULL,
-    NULL,
-    TRUE
-FROM (
-         -- LỌC GIÓ ĐIỀU HÒA (1) & LƯỠI GẠT MƯA/ RỬA KÍNH (15): Mỗi 12k km
-         SELECT 2 AS car_model_id, id AS maintenance_milestone_id, service_id
-         FROM public.maintenance_milestone, (SELECT 1 AS service_id UNION ALL SELECT 15) AS S
-         WHERE car_model_id = 1 AND id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
-         UNION ALL
-         -- HỆ THỐNG ĐIỀU HÒA (3), DUNG DỊCH LÀM MÁT (5), DẦU PHANH (2): Mỗi 24k km
-         SELECT 2, id, service_id
-         FROM public.maintenance_milestone, (SELECT 3 AS service_id UNION ALL SELECT 5 UNION ALL SELECT 2) AS S
-         WHERE car_model_id = 1 AND id IN (2, 4, 6, 8, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
-         UNION ALL
-         -- PIN T-BOX (4): Mỗi 72k km
-         SELECT 2, id, 4 FROM public.maintenance_milestone WHERE car_model_id = 1 AND id IN (6) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
-         UNION ALL
-         -- HẠNG MỤC KIỂM TRA CHUNG (15 dịch vụ): Mỗi 12k km
-         SELECT 2 AS car_model_id, T_MILESTONE.id, S.service_id
-         FROM public.maintenance_milestone AS T_MILESTONE
-                  JOIN (
-             SELECT 6 AS service_id UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL
-             SELECT 11 UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 16 UNION ALL
-             SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20 UNION ALL SELECT 21
-         ) AS S ON TRUE
-         WHERE T_MILESTONE.car_model_id = 1 AND T_MILESTONE.id IN (1, 2, 3, 4, 5, 6, 7, 8, 9, 10) -- <<< TRUY VẤN MỐC CHUNG TỪ ID 1
-     ) AS T;
--- VF6--
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
-SELECT
-    (SELECT MAX(id) FROM public.maintenance_schedule) +
-    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
-    3,  -- car_model_id mới
-    maintenance_milestone_id,
-    service_id,
-    created_at,
-    created_by,
-    updated_at,
-    updated_by,
-    is_default
+    part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id,'2025-10-11 08:34:17.121222', 'system','2025-10-11 08:34:17.121222', 'system'
 FROM
-    public.maintenance_schedule
-WHERE
-    car_model_id = 1; -- Sao chép từ VF3
+    (VALUES
+         -- ================== VF3 Parts (car_model_id = 1) ==================
+         ('VF3-FLT-01', 'Cabin Air Filter', 'Filter', 180000, 50, 20, 1),
+         ('VF3-BRK-01', 'Front Brake Pads', 'Brake', 800000, 25, 10, 1),
+         ('VF3-BRK-02', 'Rear Brake Pads', 'Brake', 750000, 25, 10, 1),
+         ('VF3-BRK-03', 'Front Brake Disc', 'Brake', 1200000, 15, 8, 1),
+         ('VF3-WPR-01', 'Wiper Blade Kit', 'Wiper', 350000, 40, 15, 1),
+         ('VF3-BAT-01', '12V Auxiliary Battery', 'Battery', 2800000, 10, 5, 1),
+         ('VF3-TYR-01', 'Tire (1 piece)', 'Tire', 1500000, 20, 8, 1),
+         ('VF3-SUS-01', 'Front Shock Absorber', 'Suspension', 1800000, 10, 4, 1),
+         ('VF3-SUS-02', 'Rear Shock Absorber', 'Suspension', 1700000, 10, 4, 1),
+         ('VF3-LGT-01', 'Headlight Bulb (LED)', 'Lighting', 900000, 15, 5, 1),
+         ('VF3-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 850000, 20, 10, 1),
+         -- ================== VF5 Parts (car_model_id = 2) ==================
+         ('VF5-FLT-01', 'Cabin Air Filter', 'Filter', 220000, 45, 20, 2),
+         ('VF5-BRK-01', 'Front Brake Pads', 'Brake', 950000, 30, 12, 2),
+         ('VF5-BRK-02', 'Rear Brake Pads', 'Brake', 900000, 30, 12, 2),
+         ('VF5-BRK-03', 'Front Brake Disc', 'Brake', 1400000, 18, 8, 2),
+         ('VF5-WPR-01', 'Wiper Blade Kit', 'Wiper', 400000, 40, 15, 2),
+         ('VF5-BAT-01', '12V Auxiliary Battery', 'Battery', 3100000, 12, 5, 2),
+         ('VF5-TYR-01', 'Tire (1 piece)', 'Tire', 1800000, 25, 10, 2),
+         ('VF5-SUS-01', 'Front Shock Absorber', 'Suspension', 2100000, 12, 5, 2),
+         ('VF5-SUS-02', 'Rear Shock Absorber', 'Suspension', 2000000, 12, 5, 2),
+         ('VF5-LGT-01', 'Headlight Bulb (LED)', 'Lighting', 1100000, 15, 5, 2),
+         ('VF5-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 920000, 20, 10, 2),
+         -- ================== VF6 Parts (car_model_id = 3) ==================
+         ('VF6-FLT-01', 'Cabin Air Filter', 'Filter', 250000, 40, 15, 3),
+         ('VF6-BRK-01', 'Front Brake Pads', 'Brake', 1100000, 28, 10, 3),
+         ('VF6-BRK-02', 'Rear Brake Pads', 'Brake', 1050000, 28, 10, 3),
+         ('VF6-BRK-03', 'Front Brake Disc', 'Brake', 1650000, 15, 7, 3),
+         ('VF6-WPR-01', 'Wiper Blade Kit', 'Wiper', 450000, 35, 15, 3),
+         ('VF6-BAT-01', '12V Auxiliary Battery', 'Battery', 3400000, 10, 5, 3),
+         ('VF6-TYR-01', 'Tire (1 piece)', 'Tire', 2200000, 22, 8, 3),
+         ('VF6-SUS-01', 'Front Shock Absorber', 'Suspension', 2400000, 10, 4, 3),
+         ('VF6-SUS-02', 'Rear Shock Absorber', 'Suspension', 2300000, 10, 4, 3),
+         ('VF6-LGT-01', 'Headlight Assembly (LED)', 'Lighting', 1400000, 12, 5, 3),
+         ('VF6-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 980000, 18, 8, 3),
+         -- ================== VF7 Parts (car_model_id = 4) ==================
+         ('VF7-FLT-01', 'Cabin Air Filter', 'Filter', 280000, 35, 15, 4),
+         ('VF7-BRK-01', 'Front Brake Pads', 'Brake', 1300000, 25, 10, 4),
+         ('VF7-BRK-02', 'Rear Brake Pads', 'Brake', 1250000, 25, 10, 4),
+         ('VF7-BRK-03', 'Front Brake Disc', 'Brake', 1900000, 15, 6, 4),
+         ('VF7-WPR-01', 'Wiper Blade Kit', 'Wiper', 500000, 30, 10, 4),
+         ('VF7-BAT-01', '12V Auxiliary Battery', 'Battery', 3700000, 10, 4, 4),
+         ('VF7-TYR-01', 'Tire (1 piece)', 'Tire', 2600000, 20, 8, 4),
+         ('VF7-SUS-01', 'Front Shock Absorber', 'Suspension', 2800000, 8, 3, 4),
+         ('VF7-SUS-02', 'Rear Shock Absorber', 'Suspension', 2700000, 8, 3, 4),
+         ('VF7-LGT-01', 'Headlight Assembly (Matrix LED)', 'Lighting', 1800000, 10, 4, 4),
+         ('VF7-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 1050000, 15, 7, 4),
+         -- ================== VF8 Parts (car_model_id = 5) ==================
+         ('VF8-FLT-01', 'Cabin Air Filter with HEPA', 'Filter', 450000, 30, 10, 5),
+         ('VF8-BRK-01', 'Front Brake Pads (Performance)', 'Brake', 1800000, 20, 8, 5),
+         ('VF8-BRK-02', 'Rear Brake Pads (Performance)', 'Brake', 1700000, 20, 8, 5),
+         ('VF8-BRK-03', 'Front Brake Disc (Ventilated)', 'Brake', 2500000, 12, 5, 5),
+         ('VF8-WPR-01', 'Wiper Blade Kit (Aero)', 'Wiper', 600000, 25, 10, 5),
+         ('VF8-BAT-01', '12V Auxiliary Battery (AGM)', 'Battery', 4200000, 8, 3, 5),
+         ('VF8-TYR-01', 'Tire (1 piece, 19-inch)', 'Tire', 3500000, 16, 6, 5),
+         ('VF8-SUS-01', 'Front Air Suspension Strut', 'Suspension', 5500000, 6, 2, 5),
+         ('VF8-SUS-02', 'Rear Air Suspension Strut', 'Suspension', 5200000, 6, 2, 5),
+         ('VF8-LGT-01', 'Headlight Assembly (Laser)', 'Lighting', 2500000, 8, 3, 5),
+         ('VF8-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 1200000, 15, 5, 5),
+         -- ================== VF9 Parts (car_model_id = 6) ==================
+         ('VF9-FLT-01', 'Cabin Air Filter with HEPA', 'Filter', 500000, 25, 10, 6),
+         ('VF9-BRK-01', 'Front Brake Pads (High-Performance)', 'Brake', 2200000, 18, 7, 6),
+         ('VF9-BRK-02', 'Rear Brake Pads (High-Performance)', 'Brake', 2100000, 18, 7, 6),
+         ('VF9-BRK-03', 'Front Brake Disc (Ventilated)', 'Brake', 3000000, 10, 4, 6),
+         ('VF9-WPR-01', 'Wiper Blade Kit (Aero)', 'Wiper', 650000, 25, 10, 6),
+         ('VF9-BAT-01', '12V Auxiliary Battery (AGM)', 'Battery', 4500000, 8, 3, 6),
+         ('VF9-TYR-01', 'Tire (1 piece, 21-inch)', 'Tire', 4500000, 12, 4, 6),
+         ('VF9-SUS-01', 'Front Air Suspension Strut', 'Suspension', 6500000, 5, 2, 6),
+         ('VF9-SUS-02', 'Rear Air Suspension Strut', 'Suspension', 6200000, 5, 2, 6),
+         ('VF9-LGT-01', 'Headlight Assembly (Laser)', 'Lighting', 3200000, 7, 3, 6),
+         ('VF9-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 1350000, 12, 5, 6)
+    ) AS parts(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id);
 
---VF7--
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
+
+
+-- =================================================================================
+-- maintenance_schedule
+-- =================================================================================
+INSERT INTO public.maintenance_schedule (car_model_id, maintenance_milestone_id, service_id, is_default, created_by, created_at, updated_by, updated_at)
 SELECT
-    (SELECT MAX(id) FROM public.maintenance_schedule) +
-    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
-    4,  -- car_model_id mới
-    maintenance_milestone_id,
-    service_id,
-    created_at,
-    created_by,
-    updated_at,
-    updated_by,
-    is_default
+    mm.car_model_id,
+    mm.id,
+    s.id,
+    true AS is_default,
+    'system_logic' AS created_by,
+    NOW() AS created_at,
+    NULL AS updated_by,
+    NULL AS updated_at
 FROM
-    public.maintenance_schedule
+    public.maintenance_milestone mm
+        CROSS JOIN
+    public.service s
 WHERE
-    car_model_id = 1; -- Sao chép từ VF3
-
---Vf8--
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
-SELECT
-    (SELECT MAX(id) FROM public.maintenance_schedule) +
-    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
-    5,  -- car_model_id mới
-    maintenance_milestone_id,
-    service_id,
-    created_at,
-    created_by,
-    updated_at,
-    updated_by,
-    is_default
-FROM
-    public.maintenance_schedule
-WHERE
-    car_model_id = 1; -- Sao chép từ VF3
-
---Vf9--
-INSERT INTO public.maintenance_schedule (id, car_model_id, maintenance_milestone_id, service_id, created_at, created_by, updated_at, updated_by, is_default)
-SELECT
-    (SELECT MAX(id) FROM public.maintenance_schedule) +
-    ROW_NUMBER() OVER (ORDER BY maintenance_milestone_id, service_id),
-    6,  -- car_model_id mới
-    maintenance_milestone_id,
-    service_id,
-    created_at,
-    created_by,
-    updated_at,
-    updated_by,
-    is_default
-FROM
-    public.maintenance_schedule
-WHERE
-    car_model_id = 1; -- Sao chép từ VF3
-
-
-INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (4, 3, 'paypal', 'INIT', '2025-10-29 09:14:11.406716', 'dinhtul1911@gmail.com', null, null, 'PAYID-NEAXQWY79717451CM661680U', 1);
-INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (5, 3, 'paypal', 'INIT', '2025-10-29 09:14:27.268727', 'dinhtul1911@gmail.com', null, null, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1);
-INSERT INTO public.payment_history (id, subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years) VALUES (6, 3, 'paypal', 'APPROVED', '2025-10-29 09:18:05.660501', 'dinhtul1911@gmail.com', '2025-10-29 09:18:13.724706', 'dinhtul1911@gmail.com', 'PAYID-NEAXSRI0K2341200L885441K', 1);
-
-
-INSERT INTO public.vehicles (id, active, car_model_id, created_at, created_by, license_plate, updated_at, updated_by, vin_number, owner_id, next_km, next_date, old_km, old_date) VALUES (2, true, 2, '2025-10-27 14:36:45.000000', 'system', '11K-111.12', '2025-10-27 14:35:57.000000', 'system', '4Y1SL65848Z411440', 1, 23000, '2026-10-27 14:35:57.000000', 11000, '2025-10-27 14:35:57.000000');
-INSERT INTO public.vehicles (id, active, car_model_id, created_at, created_by, license_plate, updated_at, updated_by, vin_number, owner_id, next_km, next_date, old_km, old_date) VALUES (1, true, 1, '2025-10-27 14:35:47.000000', 'system', '11K-111.11', '2025-10-27 14:35:57.000000', 'system', '4Y1SL65848Z411439', 1, 23500, '2026-10-27 14:35:57.000000', 11500, '2025-10-27 14:35:57.000000');
-INSERT INTO public.vehicles (id, active, car_model_id, created_at, created_by, license_plate, updated_at, updated_by, vin_number, owner_id, next_km, next_date, old_km, old_date) VALUES (3, true, 3, '2025-10-28 17:28:58.575533', 'dinhtul1911@gmail.com', '51K-111.13', null, null, '12312312315234123', 1, null, null, null, null);
-INSERT INTO public.vehicles (id, active, car_model_id, created_at, created_by, license_plate, updated_at, updated_by, vin_number, owner_id, next_km, next_date, old_km, old_date) VALUES (4, true, 4, '2025-10-28 17:32:00.307545', 'dinhtul1911@gmail.com', '51K-111.14', null, null, '1231297923742', 1, null, null, null, null);
-
-INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (6, 2, 1, null, null, 20000, '2025-10-29 14:41:33.459745', null, null, 0, '2025-10-29 14:41:33.475289', 'dinhtul1911@gmail.com', null, null, true, true, 'abc', null, null, 1, '12:00:00', '2025-10-29');
-INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (7, 2, 1, null, null, 10000, '2025-10-29 14:44:43.233715', null, null, 0, '2025-10-29 14:44:43.245237', 'dinhtul1911@gmail.com', null, null, true, true, '1111', null, null, 2, '12:00:00', '2025-10-29');
-INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (8, 2, 1, null, null, 30000, '2025-10-30 10:36:21.956052', null, null, 0, '2025-10-30 10:36:21.969414', 'dinhtul1911@gmail.com', null, null, true, true, 'abc', null, null, 2, '12:00:00', '2025-10-30');
-INSERT INTO public.maintenance_history (id, vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, technician_receive_at, completed_at, status, created_at, created_by, updated_at, updated_by, is_maintenance, is_repair, remark, staff_receive_at, hand_over_at, center_id, schedule_time, schedule_date) VALUES (9, 1, 1, 1, 10, 10000, '2025-10-30 10:36:36.394660', '2025-10-30 16:22:22.216102', null, 1, '2025-10-30 10:36:36.395177', 'dinhtul1911@gmail.com', '2025-10-30 16:22:22.228382', 'dinhtul1911@gmail.com', true, true, 'avvc', null, null, 2, '12:00:00', '2025-10-30');
+    s.service_type = 'M'
+  AND (
+    -- Rule 1: "general" check-up services are required at EVERY milestone.
+    s.category = 'general'
+        -- Rule 2: "Cabin Air Filter" (id=1) is replaced at EVERY milestone.
+        OR s.id = 1
+        -- Rule 3: "Brake Fluid" (id=2) and "Coolant" (id=5) are replaced in EVEN years (2, 4, 6, 8, 10).
+        OR (s.id IN (2, 5) AND mm.year_at % 2 = 0)
+        -- Rule 4: "T-BOX Battery" (id=4) is replaced only at the 6-year milestone.
+        OR (s.id = 4 AND mm.year_at = 6)
+    );
 
 
 
--- VF3
--- Cập nhật sequence để tránh trùng id
--- Cập nhật sequence để tránh trùng id
--- Cập nhật sequence để tránh trùng id
-SELECT setval(
-               'spare_part_id_seq',
-               COALESCE((SELECT MAX(id) FROM spare_part), 1),
-               true  -- tham số "is_called": true nghĩa là nextval sẽ trả giá trị MAX(id)+1
+-- =================================================================================
+-- maintenance_history
+-- Status Enum: 0=CUSTOMER_SUBMITTED, 1=TECHNICIAN_RECEIVED, 2=TECHNICIAN_COMPLETED, 3=DONE
+-- =================================================================================
+-- Scenario 1: A NEW appointment, pending staff acceptance (status=0)
+INSERT INTO public.maintenance_history (vehicle_id, owner_id, num_of_km, submitted_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at)
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '51G-111.13'), (SELECT id FROM app_user WHERE email = 'customer01@example.com'), 5000, '2025-12-09 09:00:00', 0, true, false, 'First periodic maintenance check.', 1, '10:00:00', '2025-12-15'::DATE, 'customer01@example.com', '2025-12-09 09:00:00');
+
+-- Scenario 4: A fully completed record that will have a corresponding service_record
+INSERT INTO public.maintenance_history (vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at, updated_by, updated_at)
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), (SELECT id FROM app_user WHERE email = 'staff01@example.com'), (SELECT id FROM app_user WHERE email = 'tech01@example.com'), 10000, '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00', 3, true, true, 'General check-up and minor repairs.', 2, '12:00:00', '2025-10-30'::DATE, 'lengochan090105@gmail.com', '2025-10-30 10:36:36', 'staff01@example.com', '2025-10-30 17:15:00');
+
+-- A booking record that corresponds to the completed maintenance history
+INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
+VALUES((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '0373587006', '29A-111.11', 'VF3', 'VIN001', 'ECar Thu Duc', '2025-10-30 12:00:00', 'General check-up and minor repairs.', 'COMPLETED', 'lengochan090105@gmail.com', '2025-10-30 10:36:36');
+
+-- service_records: Links to the BOOKING, not the maintenance_history
+INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
+VALUES ((SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00'), '29A-111.11', 10000, '2025-10-30 17:00:00', 'staff01@example.com', '2025-10-30 17:00:00');
+
+-- service_record_details
+INSERT INTO public.service_record_details (service_record_id, item_name, action, notes) VALUES
+                                                                                            (1, 'Level 1 Periodic Maintenance (12,000 km)', 'INSPECT', 'Completed as scheduled.'),
+                                                                                            (1, 'ABS Sensor Replacement', 'REPLACE', 'Replaced front right wheel sensor.'),
+                                                                                            (1, 'Brake Caliper Inspection', 'INSPECT', 'Wear is within acceptable limits.'),
+                                                                                            (1, 'Electrical System Check', 'INSPECT', 'Minor fault detected and fixed.');
+
+
+-- =================================================================================
+-- maintenance_item
+-- =================================================================================
+INSERT INTO public.maintenance_item (maintenance_history_id, maintenance_milestone_id, service_id, created_by, created_at, updated_by, updated_at)
+VALUES
+    -- Link to the periodic maintenance milestone
+    (
+        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
+        (SELECT id FROM maintenance_milestone WHERE car_model_id = 1 AND year_at = 1),
+        NULL,
+        'tech01@example.com',
+        '2025-10-30 16:22:22',
+        NULL,
+        NULL
+    ),
+    -- Link to the repair service: ABS Sensor (id=27)
+    (
+        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
+        NULL,
+        27,
+        'tech01@example.com',
+        '2025-10-30 16:22:22',
+        NULL,
+        NULL
+    ),
+    -- Link to the repair service: Brake Caliper (id=30)
+    (
+        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
+        NULL,
+        30,
+        'tech01@example.com',
+        '2025-10-30 16:22:22',
+        NULL,
+        NULL
+    ),
+    -- Link to the repair service: Other (id=32)
+    (
+        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
+        NULL,
+        32,
+        'tech01@example.com',
+        '2025-10-30 16:22:22',
+        NULL,
+        NULL
+    );
+
+
+
+-- =================================================================================
+-- STEP 5: COMPLETE THE CYCLE (Create a Booking and its corresponding Service Record)
+-- =================================================================================
+-- 5.1: First, create a sample 'Booking' record that corresponds to our completed 'MaintenanceHistory' Scenario 4.
+INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
+VALUES(
+          (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
+          '0373587006',
+          '29A-111.11',
+          'VF3',
+          'VIN001',
+          'ECar Thu Duc',
+          '2025-10-30 12:00:00',
+          'General check-up and minor repairs.',
+          'COMPLETED',
+          'lengochan090105@gmail.com',
+          '2025-10-30 10:36:36'
+      );
+
+-- 5.2: Now, create the main service record, linking it to the 'Booking' we just created.
+INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
+VALUES (
+           (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1),
+           '29A-111.11',
+           10000,
+           '2025-10-30 17:00:00',
+           'staff01@example.com',
+           '2025-10-30 17:00:00'
        );
 
--- Sau đó INSERT bình thường mà không cần chỉ định id
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
+-- 5.3: Add the details for the service record created above.
+INSERT INTO public.service_record_details (service_record_id, item_name, action, notes)
 VALUES
-    ('VF3-FLT-01','Loc gio dong co','Filter',150000,10,15,1),
-    ('VF3-FLT-02','Loc gio dieu hoa AC','Filter',180000,8,12,1),
-    ('VF3-OIL-01','Dau dong co EV','Oil',250000,6,10,1),
-    ('VF3-CLT-01','Nuoc lam mat dong co','Coolant',200000,12,15,1),
-    ('VF3-BRK-01','Tam phanh truoc EV','Brake',800000,5,10,1),
-    ('VF3-BRK-02','Tam phanh sau EV','Brake',750000,7,10,1),
-    ('VF3-STR-01','Rotuyn truoc','Steering',600000,4,8,1),
-    ('VF3-STR-02','Rotuyn sau','Steering',580000,3,7,1),
-    ('VF3-SUS-01','Giam xoc truoc','Suspension',1500000,4,6,1),
-    ('VF3-SUS-02','Giam xoc sau','Suspension',1400000,3,5,1),
-    ('VF3-WPR-01','Can gat mua','Wiper',200000,10,12,1),
-    ('VF3-WPR-02','Nuoc rua kinh xe','Wiper',150000,20,25,1),
-    ('VF3-BAT-01','Acu quy 12V xe dien','Battery',3500000,2,5,1),
-    ('VF3-LGT-01','Bong den pha','Lighting',350000,6,8,1),
-    ('VF3-LGT-02','Bong den xi nhan','Lighting',120000,8,10,1),
-    ('VF3-TYR-01','Lop truoc','Tire',1800000,4,6,1),
-    ('VF3-TYR-02','Lop sau','Tire',1800000,4,6,1),
-    ('VF3-MTR-01','Dong co quat gio','Motor',900000,2,5,1),
-    ('VF3-SNS-01','Cam bien ABS','Sensor',850000,3,5,1),
-    ('VF3-SNS-02','Cam bien ap suat lop','Sensor',500000,5,8,1);
+    (
+        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
+        'Level 1 Periodic Maintenance (12,000 km)',
+        'INSPECT',
+        'Completed as scheduled.'
+    ),
+    (
+        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
+        'ABS Sensor Replacement',
+        'REPLACE',
+        'Replaced front right wheel sensor.'
+    ),
+    (
+        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
+        'Brake Caliper Inspection',
+        'INSPECT',
+        'Wear is within acceptable limits.'
+    ),
+    (
+        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
+        'Electrical System Check',
+        'INSPECT',
+        'Minor fault detected and fixed.'
+    );
 
 
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
-VALUES
-    ('VF5-FLT-01','Loc gio dong co VF5','Filter',160000,12,15,2),
-    ('VF5-FLT-02','Loc gio dieu hoa AC VF5','Filter',190000,10,12,2),
-    ('VF5-OIL-01','Dau dong co VF5','Oil',270000,8,10,2),
-    ('VF5-BRK-01','Tam phanh truoc VF5','Brake',820000,6,10,2),
-    ('VF5-BRK-02','Tam phanh sau VF5','Brake',800000,7,10,2),
-    ('VF5-STR-01','Rotuyn truoc VF5','Steering',620000,5,8,2),
-    ('VF5-SUS-01','Giam xoc truoc VF5','Suspension',1550000,4,6,2),
-    ('VF5-WPR-01','Can gat mua VF5','Wiper',210000,11,12,2),
-    ('VF5-LGT-01','Bong den pha VF5','Lighting',370000,7,8,2),
-    ('VF5-TYR-01','Lop truoc VF5','Tire',1900000,5,6,2),
-    ('VF5-SNS-01','Cam bien ABS VF5','Sensor',870000,4,5,2);
-
-
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
-VALUES
-    ('VF6-FLT-01','Loc gio dong co VF6','Filter',170000,14,16,3),
-    ('VF6-FLT-02','Loc gio dieu hoa AC VF6','Filter',200000,12,14,3),
-    ('VF6-OIL-01','Dau dong co VF6','Oil',280000,9,11,3),
-    ('VF6-BRK-01','Tam phanh truoc VF6','Brake',830000,6,10,3),
-    ('VF6-BRK-02','Tam phanh sau VF6','Brake',810000,8,10,3),
-    ('VF6-STR-01','Rotuyn truoc VF6','Steering',630000,5,8,3),
-    ('VF6-SUS-01','Giam xoc truoc VF6','Suspension',1560000,4,6,3),
-    ('VF6-WPR-01','Can gat mua VF6','Wiper',220000,10,13,3),
-    ('VF6-LGT-01','Bong den pha VF6','Lighting',380000,7,9,3),
-    ('VF6-TYR-01','Lop truoc VF6','Tire',1950000,5,6,3),
-    ('VF6-SNS-01','Cam bien ABS VF6','Sensor',880000,4,5,3);
-
-
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
-VALUES
-    ('VF7-FLT-01','Loc gio dong co VF7','Filter',180000,11,15,4),
-    ('VF7-FLT-02','Loc gio dieu hoa AC VF7','Filter',210000,10,13,4),
-    ('VF7-OIL-01','Dau dong co VF7','Oil',290000,7,10,4),
-    ('VF7-BRK-01','Tam phanh truoc VF7','Brake',840000,6,10,4),
-    ('VF7-BRK-02','Tam phanh sau VF7','Brake',820000,9,10,4),
-    ('VF7-STR-01','Rotuyn truoc VF7','Steering',640000,5,8,4),
-    ('VF7-BAT-01','Acu quy 12V VF7','Battery',3600000,2,5,4),
-    ('VF7-LGT-01','Bong den pha VF7','Lighting',390000,8,9,4),
-    ('VF7-TYR-01','Lop truoc VF7','Tire',2000000,5,6,4),
-    ('VF7-SNS-01','Cam bien ABS VF7','Sensor',900000,4,5,4);
-
-
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
-VALUES
-    ('VF8-FLT-01','Loc gio dong co VF8','Filter',190000,12,16,5),
-    ('VF8-FLT-02','Loc gio dieu hoa AC VF8','Filter',220000,11,14,5),
-    ('VF8-OIL-01','Dau dong co VF8','Oil',300000,8,10,5),
-    ('VF8-BRK-01','Tam phanh truoc VF8','Brake',850000,6,10,5),
-    ('VF8-BRK-02','Tam phanh sau VF8','Brake',830000,10,10,5),
-    ('VF8-STR-01','Rotuyn sau VF8','Steering',650000,4,7,5),
-    ('VF8-SUS-01','Giam xoc sau VF8','Suspension',1570000,4,6,5),
-    ('VF8-LGT-01','Bong den pha VF8','Lighting',400000,8,9,5),
-    ('VF8-TYR-01','Lop truoc VF8','Tire',2050000,5,6,5),
-    ('VF8-SNS-01','Cam bien ABS VF8','Sensor',920000,4,5,5);
-
-
-INSERT INTO spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id)
-VALUES
-    ('VF9-FLT-01','Loc gio dong co VF9','Filter',200000,13,17,6),
-    ('VF9-FLT-02','Loc gio dieu hoa AC VF9','Filter',230000,12,15,6),
-    ('VF9-OIL-01','Dau dong co VF9','Oil',310000,9,11,6),
-    ('VF9-BRK-01','Tam phanh truoc VF9','Brake',860000,6,10,6),
-    ('VF9-BRK-02','Tam phanh sau VF9','Brake',840000,11,10,6),
-    ('VF9-STR-01','Rotuyn truoc VF9','Steering',660000,5,8,6),
-    ('VF9-BAT-01','Acu quy 12V VF9','Battery',3650000,2,5,6),
-    ('VF9-LGT-01','Bong den pha VF9','Lighting',410000,8,9,6),
-    ('VF9-TYR-01','Lop truoc VF9','Tire',2100000,5,6,6),
-    ('VF9-SNS-01','Cam bien ABS VF9','Sensor',940000,4,5,6);
+-- =================================================================================
+-- STEP 4: UPDATE ALL SEQUENCES TO ENSURE INTEGRITY
+-- =================================================================================
+SELECT setval(pg_get_serial_sequence('public.app_user', 'id'), COALESCE(MAX(id), 1)) FROM public.app_user;
+SELECT setval(pg_get_serial_sequence('public.car_model', 'id'), COALESCE(MAX(id), 1)) FROM public.car_model;
+SELECT setval(pg_get_serial_sequence('public.center', 'id'), COALESCE(MAX(id), 1)) FROM public.center;
+SELECT setval(pg_get_serial_sequence('public.service', 'id'), COALESCE(MAX(id), 1)) FROM public.service;
+SELECT setval(pg_get_serial_sequence('public.maintenance_milestone', 'id'), COALESCE(MAX(id), 1)) FROM public.maintenance_milestone;
+SELECT setval(pg_get_serial_sequence('public.vehicles', 'id'), COALESCE(MAX(id), 1)) FROM public.vehicles;
+SELECT setval(pg_get_serial_sequence('public.subscription_info', 'id'), COALESCE(MAX(id), 1)) FROM public.subscription_info;
+SELECT setval(pg_get_serial_sequence('public.payment_history', 'id'), COALESCE(MAX(id), 1)) FROM public.payment_history;
+SELECT setval(pg_get_serial_sequence('public.maintenance_history', 'id'), COALESCE(MAX(id), 1)) FROM public.maintenance_history;
+SELECT setval(pg_get_serial_sequence('public.maintenance_item', 'id'), COALESCE(MAX(id), 1)) FROM public.maintenance_item;
+SELECT setval(pg_get_serial_sequence('public.maintenance_schedule', 'id'), COALESCE(MAX(id), 1)) FROM public.maintenance_schedule;
+SELECT setval(pg_get_serial_sequence('public.spare_part', 'id'), COALESCE(MAX(id), 1)) FROM public.spare_part;
+SELECT setval(pg_get_serial_sequence('public.service_records', 'id'), COALESCE(MAX(id), 1)) FROM public.service_records;
+SELECT setval(pg_get_serial_sequence('public.service_record_details', 'id'), COALESCE(MAX(id), 1)) FROM public.service_record_details;
