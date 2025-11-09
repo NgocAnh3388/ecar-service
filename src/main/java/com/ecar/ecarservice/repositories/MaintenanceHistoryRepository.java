@@ -1,6 +1,6 @@
 package com.ecar.ecarservice.repositories;
 
-import com.ecar.ecarservice.enitiies.MaintenanceHistory;
+import com.ecar.ecarservice.entities.MaintenanceHistory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
