@@ -16,14 +16,9 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.HashSet;
-
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -33,12 +28,15 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(AppUserRepository appUserRepository) {
         this.appUserRepository = appUserRepository;
     }
+
+    // ===================== THEM MOI (giữ tu file 2) =====================
     @Override
     public AppUser getCurrentUserById(Long id) {
         return appUserRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
+    // ===================== LAY TAT CA NGUOI DUNG =====================
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
@@ -47,6 +45,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    // ===================== LAY USER THEO ID =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
@@ -55,6 +54,7 @@ public class UserServiceImpl implements UserService {
         return convertToDto(user);
     }
 
+    // ===================== CAP NHAT THONG TIN USER =====================
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserCreateDTO userUpdateDTO) {
@@ -88,11 +88,12 @@ public class UserServiceImpl implements UserService {
             AppUser updatedUser = appUserRepository.save(user);
             return convertToDto(updatedUser);
         } catch (Exception e) {
-            e.printStackTrace(); // In stacktrace thật ra console
+            e.printStackTrace();
             throw e;
         }
     }
 
+    // ===================== XOA USER =====================
     @Override
     @Transactional
     public void deleteUser(Long id) {
@@ -102,35 +103,31 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-
+    // ===================== CHUYEN TRANG THAI ACTIVE =====================
     @Override
     @Transactional
     public void toggleActiveUser(Long id) {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        user.setActive(!user.isActive()); // đảo trạng thái
+        user.setActive(!user.isActive());
         appUserRepository.save(user);
     }
 
+    // ===================== TIM KIEM USER =====================
     @Override
     @Transactional(readOnly = true)
     public Page<AppUser> searchUsers(UserSearchRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
 
-        // Bước 1: Chỉ lấy về ID và thông tin phân trang
         Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
-
         if (!idsPage.hasContent()) {
             return new PageImpl<>(Collections.emptyList(), pageRequest, 0);
         }
 
         List<Long> userIds = idsPage.getContent();
-
-        // Bước 2: Lấy đầy đủ thông tin cho các ID đã tìm thấy trong 1 query duy nhất
         List<AppUser> usersWithDetails = this.appUserRepository.findAllWithDetailsByIds(userIds);
 
-        // Sắp xếp lại danh sách usersWithDetails theo thứ tự của userIds để đảm bảo phân trang đúng
         Map<Long, AppUser> userMap = usersWithDetails.stream()
                 .collect(Collectors.toMap(AppUser::getId, Function.identity()));
 
@@ -138,10 +135,10 @@ public class UserServiceImpl implements UserService {
                 .map(userMap::get)
                 .collect(Collectors.toList());
 
-        // Trả về một Page mới với dữ liệu đã được tải đầy đủ
         return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
     }
 
+    // ===================== CHUYEN ENTITY -> DTO =====================
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -163,40 +160,45 @@ public class UserServiceImpl implements UserService {
                 vd.setOldDate(v.getOldDate());
                 return vd;
             }).collect(Collectors.toList());
-
             dto.setVehicles(vehicleDtos);
         }
-
         return dto;
     }
 
+    // ===================== TAO USER MOI =====================
     @Override
     @Transactional
     public void createUser(UserCreateDTO userCreateDTO) {
         appUserRepository.findByEmail(userCreateDTO.getEmail()).ifPresent(u -> {
             throw new IllegalStateException("Email already exists");
         });
+
         AppUser appUser = new AppUser();
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
         appUser.setPhoneNo(userCreateDTO.getPhoneNo());
+
         Set<AppRole> roles = new HashSet<>();
         roles.add(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
         appUser.setRoles(roles);
+
         this.appUserRepository.save(appUser);
     }
 
+    // ===================== LAY USER HIEN TAI (OIDC) =====================
     @Override
     public AppUser getCurrentUser(OidcUser oidcUser) {
         return this.appUserRepository.findBySub(oidcUser.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
+    // ===================== LAY DANH SACH USER THEO ROLE =====================
     @Override
     public List<AppUser> getUserListByRole(String role) {
         return this.appUserRepository.findByRoles(AppRole.valueOf(role.toUpperCase()));
     }
 
+    // ===================== LAY USER THEO EMAIL =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserByEmail(String email) {
@@ -204,5 +206,4 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
         return convertToDto(user);
     }
-
 }

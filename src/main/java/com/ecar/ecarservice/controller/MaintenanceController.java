@@ -35,7 +35,7 @@ public class MaintenanceController {
     public ResponseEntity<Page<MaintenanceHistoryDTO>> getMaintenanceHistory(
             @AuthenticationPrincipal OidcUser oidcUser,
             @RequestBody MaintenanceHistorySearchRequest request
-            ) {
+    ) {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceHistory(oidcUser, request));
     }
 
@@ -51,7 +51,7 @@ public class MaintenanceController {
     }
 
     @RequestMapping("/all")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN','TECHNICIAN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getTickets(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTickets(user));
     }
@@ -73,7 +73,7 @@ public class MaintenanceController {
     }
 
     @PostMapping("/service-create")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN','TECHNICIAN')")
     public ResponseEntity<Void> createService(@AuthenticationPrincipal OidcUser oidcUser, @RequestBody ServiceCreateRequest request) {
         this.maintenanceService.createService(request, oidcUser);
         return ResponseEntity.ok().build();
