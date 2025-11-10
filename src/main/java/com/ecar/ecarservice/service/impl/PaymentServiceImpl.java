@@ -9,6 +9,7 @@ import com.ecar.ecarservice.payload.responses.PaymentHistoryResponse;
 import com.ecar.ecarservice.payload.responses.PaymentResponse;
 import com.ecar.ecarservice.repositories.PaymentHistoryRepository;
 import com.ecar.ecarservice.repositories.SubscriptionInfoRepository;
+import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.PaymentService;
 import com.ecar.ecarservice.service.UserService;
 import com.paypal.api.payments.*;
@@ -33,6 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final SubscriptionInfoRepository subscriptionInfoRepository;
     private final UserService userService;
+    private final EmailService emailService;
 
     @Value("${paypal.successUrl}")
     private String successUrl;
@@ -43,11 +45,13 @@ public class PaymentServiceImpl implements PaymentService {
     public PaymentServiceImpl(APIContext apiContext,
                               PaymentHistoryRepository paymentHistoryRepository,
                               SubscriptionInfoRepository subscriptionInfoRepository,
-                              UserService userService) {
+                              UserService userService,
+                              EmailService emailService) {
         this.apiContext = apiContext;
         this.paymentHistoryRepository = paymentHistoryRepository;
         this.subscriptionInfoRepository = subscriptionInfoRepository;
         this.userService = userService;
+        this.emailService = emailService;
     }
 
     @Override
@@ -129,16 +133,28 @@ public class PaymentServiceImpl implements PaymentService {
             Payment executedPayment = payment.execute(apiContext, paymentExecution);
 
             if (executedPayment.getState().equalsIgnoreCase(PaymentStatus.APPROVED.name())) {
+
+                // === Cập nhật lịch sử thanh toán ===
                 PaymentHistory history = paymentHistoryRepository.findFirstByPaymentId(executedPayment.getId());
                 history.setPaymentStatus(PaymentStatus.APPROVED.name());
                 paymentHistoryRepository.save(history);
 
+                // === Cập nhật thông tin subscription ===
                 SubscriptionInfo info = subscriptionInfoRepository.findFirstById(history.getSubscriptionId());
                 LocalDateTime now = LocalDateTime.now();
                 info.setStartDate(now);
                 info.setEndDate(now.plusYears(history.getNumOfYears()));
                 info.setPaymentDate(now);
                 subscriptionInfoRepository.save(info);
+
+                // === Gửi email xác nhận thanh toán ===
+                AppUser appUser = userService.getCurrentUserById(info.getOwnerId());
+                emailService.sendPaymentConfirmationEmail(
+                        appUser,
+                        String.format("%.2f USD", history.getAmount()),
+                        executedPayment.getId(),
+                        "Ecar Service Package Renewal"
+                );
             }
 
             return executedPayment;

@@ -18,7 +18,6 @@ public record MaintenanceTicketResponse(
         Long staffId,
         LocalDateTime staffReceivedAt,
         String technicianName,
-        
         Long technicianId,
         LocalDateTime technicianReceivedAt,
         LocalDateTime completedAt,

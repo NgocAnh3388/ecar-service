@@ -3,40 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Payment Confirmation</title>
-    <style>
-        body { font-family: Arial, sans-serif; line-height: 1.6; }
-        .container { width: 90%; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px; }
-        .header { font-size: 24px; color: #4CAF50; }
-        .content { margin-top: 20px; }
-        .footer { margin-top: 30px; font-size: 12px; color: #888; }
-        .details { background-color: #f9f9f9; padding: 15px; border-radius: 4px; }
-        .details p { margin: 5px 0; }
-    </style>
 </head>
-<body>
-<div class="container">
-    <div class="header">
-        Payment Successful!
-    </div>
-
-    <div class="content">
-        <p>Dear <strong th:text="${customerName}">Customer</strong>,</p>
-
-        <p>Ecar Service Center confirms that you have successfully paid for our service.</p>
-
-        <div class="details">
-            <p><strong>Service:</strong> <span th:text="${description}">[Service Content]</span></p>
-            <p><strong>Amount:</strong> <span th:text="${paymentAmount}">[Amount]</span></p>
-            <p><strong>Transaction ID:</strong> <span th:text="${paymentId}">[Transaction ID]</span></p>
-            <p><strong>Time:</strong> <span th:text="${paymentDate}">[Time]</span></p>
-        </div>
-
-        <p>Thank you for trusting and using Ecar's services.</p>
-    </div>
-
-    <div class="footer">
-        <p>&copy; 2025 Ecar Service Center. All rights reserved.</p>
-    </div>
+<body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #198754;">Ecar Service Center - Payment Confirmation</h2>
+    <p>Hello <strong th:text="${customerName}">Customer Name</strong>,</p>
+    <p>Your payment has been successfully received with the following details:</p>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Payment Amount:</td>
+            <td style="padding: 8px;" th:text="${paymentAmount}">$1000.00</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Payment ID:</td>
+            <td style="padding: 8px;" th:text="${paymentId}">PAY12345</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Description:</td>
+            <td style="padding: 8px;" th:text="${description}">Service Package Renewal</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Payment Date:</td>
+            <td style="padding: 8px;" th:text="${paymentDate}">10:00 AM, Nov 10, 2025</td>
+        </tr>
+    </table>
+    <p style="margin-top: 20px;">Thank you for using our services!</p>
+    <p>Best regards,<br/>Ecar Service Center Team</p>
 </div>
 </body>
 </html>

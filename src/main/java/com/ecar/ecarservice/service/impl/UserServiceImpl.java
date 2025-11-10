@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
     public UserServiceImpl(AppUserRepository appUserRepository) {
         this.appUserRepository = appUserRepository;
     }
+    @Override
+    public AppUser getCurrentUserById(Long id) {
+        return appUserRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
 
     @Override
     @Transactional(readOnly = true)
