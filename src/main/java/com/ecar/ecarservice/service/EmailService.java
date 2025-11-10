@@ -27,7 +27,7 @@ public class EmailService {
         this.templateEngine = templateEngine;
     }
 
-    /** ------------------- BOOKING CONFIRMATION ------------------- */
+    /** ------------------- BOOKING CONFIRMATION (using BookingRequest) ------------------- */
     @Async
     public void sendBookingConfirmationEmail(BookingRequest request) {
         try {
@@ -36,11 +36,11 @@ public class EmailService {
             context.setVariable("licensePlate", request.licensePlate());
             context.setVariable("carModel", request.carModelName());
             context.setVariable("serviceCenter", request.centerName());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy");
             context.setVariable("appointmentTime", request.scheduledAt().format(formatter));
 
             String htmlContent = templateEngine.process("booking-confirmation-email", context);
-            sendHtmlEmail(request.email(), "Ecar Service Center - Booking Confirmation", htmlContent);
+            sendHtmlEmail(request.email(), "Ecar Service Center - Xac nhan dat lich", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send booking confirmation email: " + e.getMessage());
         }
@@ -51,7 +51,8 @@ public class EmailService {
     public void sendPaymentConfirmationEmail(AppUser user, String paymentAmount, String paymentId, String description) {
         try {
             String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
-                    ? user.getFullName() : user.getEmail();
+                    ? user.getFullName()
+                    : user.getEmail();
 
             Context context = new Context();
             context.setVariable("customerName", customerName);
@@ -59,10 +60,10 @@ public class EmailService {
             context.setVariable("paymentId", paymentId);
             context.setVariable("description", description);
             context.setVariable("paymentDate",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("payment-confirmation-email", context);
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Payment Confirmation", htmlContent);
+            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Xac nhan thanh toan", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send payment confirmation email: " + e.getMessage());
         }
@@ -78,17 +79,16 @@ public class EmailService {
             context.setVariable("licensePlate", vehicle.getLicensePlate());
             context.setVariable("carModel", vehicle.getCarModel().getCarName());
             context.setVariable("receivedAt",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a, MMM dd, yyyy")));
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("technician-received-email", context);
-            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Vehicle Received by Technician", htmlContent);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Technician da tiep nhan xe", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send technician received email: " + e.getMessage());
         }
     }
 
-
-    // ------------------- MAINTENANCE REMINDER ------------------- */
+    /** ------------------- MAINTENANCE REMINDER ------------------- */
     @Async
     public void sendMaintenanceReminderEmail(AppUser owner, Vehicle vehicle, LocalDate nextDate) {
         try {
@@ -99,15 +99,13 @@ public class EmailService {
             context.setVariable("nextDate", nextDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("maintenance-reminder-email", context);
-            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Maintenance Reminder", htmlContent);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Nhac nho bao duong", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send reminder email: " + e.getMessage());
         }
     }
 
-
-
-    /** ------------------- SEND HTML EMAIL ------------------- */
+    /** ------------------- SEND HTML EMAIL (shared) ------------------- */
     private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -117,5 +115,4 @@ public class EmailService {
         mailSender.send(message);
         System.out.println("Email sent to: " + to);
     }
-
 }
