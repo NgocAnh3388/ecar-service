@@ -1,10 +1,11 @@
 package com.ecar.ecarservice.scheduler;
 
 import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.ServiceRecord;
-import com.ecar.ecarservice.repositories.ServiceRecordRepository;
+import com.ecar.ecarservice.entities.Vehicle;
+import com.ecar.ecarservice.repositories.VehicleRepository;
 import com.ecar.ecarservice.service.EmailService;
-import com.ecar.ecarservice.service.MaintenanceService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,59 +16,49 @@ import java.util.List;
 @Component
 public class MaintenanceReminderScheduler {
 
-    private final ServiceRecordRepository serviceRecordRepository;
+    private static final Logger logger = LoggerFactory.getLogger(MaintenanceReminderScheduler.class);
+
+    private final VehicleRepository vehicleRepository;
     private final EmailService emailService;
-    private final MaintenanceService maintenanceService; // <-- INJECT SERVICE MỚI
 
-    // Bảo dưỡng định kỳ là 12 tháng
-    private static final int MAINTENANCE_INTERVAL_MONTHS = 12;
-    // Nhắc nhở trước 15 ngày
-    private static final int REMINDER_DAYS_BEFORE = 15;
+    // Nhac truoc 10 ngay
+    private static final int REMINDER_DAYS_BEFORE = 10;
 
-    public MaintenanceReminderScheduler(ServiceRecordRepository serviceRecordRepository, EmailService emailService, MaintenanceService maintenanceService) {
-        this.serviceRecordRepository = serviceRecordRepository;
+    public MaintenanceReminderScheduler(VehicleRepository vehicleRepository, EmailService emailService) {
+        this.vehicleRepository = vehicleRepository;
         this.emailService = emailService;
-        this.maintenanceService = maintenanceService;
     }
 
+    /**
+     * Chạy vào 8h sáng hàng ngày để nhắc bảo dưỡng cho các xe sắp tới hạn.
+     */
+    @Scheduled(cron = "0 0 8 * * *")
+    @Transactional(readOnly = true)
+    public void sendUpcomingMaintenanceReminders() {
+        LocalDate today = LocalDate.now();
+        LocalDate reminderDate = today.plusDays(REMINDER_DAYS_BEFORE);
 
-//    @Scheduled(fixedRate = 30000) // Chạy mỗi 30 giây
-//    @Scheduled(cron = "0 0 8 * * ?") // Chạy vào 8h sáng hàng ngày
-//    @Transactional(readOnly = true)
-//    public void checkAndSendDateBasedReminders() {
-//        System.out.println("Running date-based maintenance reminder job...");
-//
-//        // Xác định ngày mục tiêu để gửi nhắc nhở
-//        LocalDate today = LocalDate.now();
-//        LocalDate reminderTargetDate = today.plusDays(REMINDER_DAYS_BEFORE);
-//
-//        // Lấy tất cả các bản ghi lịch sử dịch vụ
-//        List<ServiceRecord> allRecords = serviceRecordRepository.findAll();
-//
-//        allRecords.forEach(lastRecord -> {
-//            LocalDate lastServiceDate = lastRecord.getServiceDate().toLocalDate();
-//
-//            // Tính ngày bảo dưỡng tiếp theo dự kiến
-//            LocalDate nextDueDate = lastServiceDate.plusMonths(MAINTENANCE_INTERVAL_MONTHS);
-//
-//            // Kiểm tra ngày đáo hạn
-//            if (nextDueDate.isEqual(reminderTargetDate)) {
-//                System.out.println("Found a vehicle due for maintenance: License Plate " + lastRecord.getLicensePlate());
-//
-//                AppUser user = lastRecord.getBooking().getUser();
-//                String licensePlate = lastRecord.getLicensePlate();
-//
-//                // Ước tính số km hiện tại. Giả sử xe đi trung bình 1000 km/tháng
-//                int estimatedCurrentKm = lastRecord.getKilometerReading() + (MAINTENANCE_INTERVAL_MONTHS * 1000);
-//
-//                // Lấy danh sách hạng mục dưới dạng List<MaintenanceScheduleDto>
-//                List<MaintenanceScheduleDto> scheduleItems = maintenanceService.getScheduleByKilometers(estimatedCurrentKm);
-//
-//                // Truyền cả đối tượng `user` và `scheduleItems` vào hàm gửi email
-//                emailService.sendDateBasedMaintenanceReminderEmail(user, licensePlate, nextDueDate, scheduleItems);
-//
-//            }
-//        });
-//        System.out.println("Date-based reminder job finished.");
-//    }
+        List<Vehicle> upcomingVehicles = vehicleRepository.findAll().stream()
+                .filter(v -> v.getNextDate() != null && v.getNextDate().toLocalDate().equals(reminderDate))
+                .toList();
+
+        if (upcomingVehicles.isEmpty()) {
+            logger.info("No vehicles require maintenance reminders for date: {}", reminderDate);
+            return;
+        }
+
+        for (Vehicle vehicle : upcomingVehicles) {
+            AppUser owner = vehicle.getOwner();
+            if (owner != null) {
+                try {
+                    emailService.sendMaintenanceReminderEmail(owner, vehicle, vehicle.getNextDate().toLocalDate());
+                    logger.info("Sent maintenance reminder to {} for vehicle {}", owner.getEmail(), vehicle.getLicensePlate());
+                } catch (Exception e) {
+                    logger.error("Failed to send reminder to {}: {}", owner.getEmail(), e.getMessage());
+                }
+            }
+        }
+
+        logger.info("Maintenance reminder job completed for vehicles due on: {}", reminderDate);
+    }
 }

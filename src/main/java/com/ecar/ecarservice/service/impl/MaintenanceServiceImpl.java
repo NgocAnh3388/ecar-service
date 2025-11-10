@@ -214,28 +214,44 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
     // ====================== TAO SERVICE ======================
     @Override
+    @Transactional
     public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
+        // Lấy thông tin staff hiện tại
         AppUser currentUser = userService.getCurrentUser(oidcUser);
-        MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(request.ticketId())
-                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with ID: " + request.ticketId()));
-        AppUser assignedTechnician = appUserRepository.findById(request.technicianId())
-                .orElseThrow(() -> new EntityNotFoundException("Technician not found with ID: " + request.technicianId()));
 
+        // Lấy thông tin MaintenanceHistory theo ticketId
+        MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(request.ticketId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Service ticket not found with ID: " + request.ticketId()));
+
+        // Lấy thông tin kỹ thuật viên được giao
+        AppUser assignedTechnician = appUserRepository.findById(request.technicianId())
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Technician not found with ID: " + request.technicianId()));
+
+        // Cập nhật số km, staff và technician
         maintenanceHistory.setNumOfKm(request.numOfKm());
         maintenanceHistory.setStaff(currentUser);
         maintenanceHistory.setTechnician(assignedTechnician);
         maintenanceHistory.setStaffReceiveAt(LocalDateTime.now());
         maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now());
+
+        // Cập nhật trạng thái đã được technician nhận
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
 
+        // Lưu thông tin maintenanceHistory
         MaintenanceHistory saved = maintenanceHistoryRepository.save(maintenanceHistory);
 
+        // ======================= LƯU CÁC SERVICE =======================
         List<MaintenanceItem> items = new ArrayList<>();
+
+        // Lưu milestone
         MaintenanceItem milestone = new MaintenanceItem();
         milestone.setMaintenanceHistoryId(saved.getId());
         milestone.setMaintenanceMilestoneId(request.scheduleId());
         items.add(milestone);
 
+        // Lưu các service được chọn
         for (Long id : request.checkedServiceIds()) {
             MaintenanceItem s = new MaintenanceItem();
             s.setMaintenanceHistoryId(saved.getId());
@@ -243,6 +259,16 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             items.add(s);
         }
         maintenanceItemRepository.saveAll(items);
+
+        // ======================= GỬI MAIL NGAY KHI TECHNICIAN NHẬN XE =======================
+        AppUser owner = saved.getOwner();
+        Vehicle vehicle = saved.getVehicle();
+        if (owner != null && assignedTechnician != null && vehicle != null && vehicle.getCarModel() != null) {
+            // @Async sẽ chạy background thread, không cần executorService
+            emailService.sendTechnicianReceivedEmail(owner, assignedTechnician, vehicle);
+        } else {
+            System.err.println("Cannot send technician received email: missing owner, technician, or vehicle data.");
+        }
     }
 
     // ====================== LAY PHIEU KY THUAT VIEN ======================
@@ -304,30 +330,5 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
 
         return convertToDTO(savedTicket);
-    }
-
-    // ====================== NHAC BAO DUONG TRUOC 10 NGAY ======================
-    @Transactional
-    @Scheduled(cron = "0 0 8 * * *")
-    public void sendUpcomingMaintenanceReminders() {
-        LocalDate today = LocalDate.now();
-        LocalDate reminderDate = today.plusDays(10);
-
-        List<Vehicle> upcomingVehicles = vehicleRepository.findAll().stream()
-                .filter(v -> v.getNextDate() != null && v.getNextDate().toLocalDate().equals(reminderDate))
-                .toList();
-
-        for (Vehicle vehicle : upcomingVehicles) {
-            AppUser owner = vehicle.getOwner();
-            if (owner != null) {
-                try {
-                    emailService.sendMaintenanceReminderEmail(owner, vehicle, vehicle.getNextDate().toLocalDate());
-                } catch (Exception e) {
-                    System.err.println("Failed to send reminder to " + owner.getEmail() + ": " + e.getMessage());
-                }
-            }
-        }
-
-        System.out.println("Maintenance reminder emails sent for vehicles due on: " + reminderDate);
     }
 }
