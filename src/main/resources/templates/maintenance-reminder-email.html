@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Maintenance Reminder</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 25px 30px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #007bff;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .highlight {
+            background: #eaf3ff;
+            border-left: 4px solid #007bff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .details {
+            margin-top: 15px;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .details p {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            background-color: #f1f5f9;
+            padding: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white !important;
+            text-decoration: none;
+            padding: 12px 22px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Ecar Service Center</h1>
+    </div>
+
+    <div class="content">
+        <h2>Maintenance Reminder</h2>
+
+        <p>Dear <strong th:text="${customerName}">Customer</strong>,</p>
+
+        <p>We hope you are enjoying your driving experience with your vehicle.
+            This is a friendly reminder that your car is scheduled for maintenance in
+            <strong>10 days</strong>.</p>
+
+        <div class="highlight">
+            <p><strong>Car Model:</strong> <span th:text="${carModel}">Toyota Corolla</span></p>
+            <p><strong>License Plate:</strong> <span th:text="${licensePlate}">51A-12345</span></p>
+            <p><strong>Next Maintenance Date:</strong>
+                <span th:text="${nextDate}">20-11-2025</span>
+            </p>
+        </div>
+
+        <p>To ensure your vehicle remains in optimal condition and safety,
+            please confirm your maintenance appointment as soon as possible.</p>
+
+        <p style="text-align:center;">
+            <a href="#" class="button">View My Schedule</a>
+        </p>
+
+        <div class="details">
+            <p>If you have any questions or need to reschedule,
+                please contact our service center support team.</p>
+            <p>Email: <a href="mailto:support@ecarservice.com">support@ecarservice.com</a></p>
+            <p>Phone: +84 123 456 789</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Ecar Service Center. All rights reserved.</p>
+        <p>
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Terms of Service</a>
+        </p>
+    </div>
+</div>
+</body>
+</html>

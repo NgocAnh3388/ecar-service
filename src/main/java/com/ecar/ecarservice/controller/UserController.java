@@ -89,4 +89,12 @@ public class UserController {
         UserDto userDto = userService.getUserByEmail(oidcUser.getEmail());
         return ResponseEntity.ok(userDto);
     }
+
+    @PutMapping("/{id}/toggle-active")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> toggleActive(@PathVariable Long id) {
+        userService.toggleActiveUser(id);
+        return ResponseEntity.ok().build();
+    }
+
 }

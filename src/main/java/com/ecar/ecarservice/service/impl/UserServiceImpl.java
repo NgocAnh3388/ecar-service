@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.HashSet;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -30,6 +32,11 @@ public class UserServiceImpl implements UserService {
 
     public UserServiceImpl(AppUserRepository appUserRepository) {
         this.appUserRepository = appUserRepository;
+    }
+    @Override
+    public AppUser getCurrentUserById(Long id) {
+        return appUserRepository.findByIdAndActiveTrue(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     // GHI CHÚ: Phương thức searchUsers giờ sẽ trả về Page<UserDto>
@@ -114,11 +121,14 @@ public class UserServiceImpl implements UserService {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        if (!user.getEmail().equalsIgnoreCase(userUpdateDTO.getEmail())) {
-            appUserRepository.findByEmail(userUpdateDTO.getEmail()).ifPresent(existingUser -> {
-                throw new IllegalStateException("Email " + userUpdateDTO.getEmail() + " is already in use.");
+        String currentEmail = user.getEmail();
+        String newEmail = userUpdateDTO.getEmail();
+
+        if (currentEmail != null && !currentEmail.equalsIgnoreCase(newEmail)) {
+            appUserRepository.findByEmail(newEmail).ifPresent(existingUser -> {
+                throw new IllegalStateException("Email " + newEmail + " is already in use.");
             });
-            user.setEmail(userUpdateDTO.getEmail());
+            user.setEmail(newEmail);
         }
 
         user.setFullName(userUpdateDTO.getFullName());
@@ -126,15 +136,21 @@ public class UserServiceImpl implements UserService {
 
         if (userUpdateDTO.getRole() != null) {
             try {
-                Set<AppRole> roles = Set.of(AppRole.valueOf(userUpdateDTO.getRole().toUpperCase()));
+                Set<AppRole> roles = new HashSet<>();
+                roles.add(AppRole.valueOf(userUpdateDTO.getRole().toUpperCase()));
                 user.setRoles(roles);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid role specified: " + userUpdateDTO.getRole());
             }
         }
 
-        AppUser updatedUser = appUserRepository.save(user);
-        return convertToDto(updatedUser);
+        try {
+            AppUser updatedUser = appUserRepository.save(user);
+            return convertToDto(updatedUser);
+        } catch (Exception e) {
+            e.printStackTrace(); // In stacktrace thật ra console
+            throw e;
+        }
     }
 
     @Override
@@ -147,6 +163,54 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @Override
+    @Transactional
+    public void toggleActiveUser(Long id) {
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        user.setActive(!user.isActive()); // đảo trạng thái
+        appUserRepository.save(user);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<AppUser> searchUsers(UserSearchRequest request) {
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+
+        // Bước 1: Chỉ lấy về ID và thông tin phân trang
+        Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
+
+        if (!idsPage.hasContent()) {
+            return new PageImpl<>(Collections.emptyList(), pageRequest, 0);
+        }
+
+        List<Long> userIds = idsPage.getContent();
+
+        // Bước 2: Lấy đầy đủ thông tin cho các ID đã tìm thấy trong 1 query duy nhất
+        List<AppUser> usersWithDetails = this.appUserRepository.findAllWithDetailsByIds(userIds);
+
+        // Sắp xếp lại danh sách usersWithDetails theo thứ tự của userIds để đảm bảo phân trang đúng
+        Map<Long, AppUser> userMap = usersWithDetails.stream()
+                .collect(Collectors.toMap(AppUser::getId, Function.identity()));
+
+        List<AppUser> sortedUsers = userIds.stream()
+                .map(userMap::get)
+                .collect(Collectors.toList());
+
+        // Trả về một Page mới với dữ liệu đã được tải đầy đủ
+        return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
+    }
+
+    private UserDto convertToDto(AppUser user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPhoneNo(user.getPhoneNo());
+        dto.setRoles(user.getRoles());
+        dto.setActive(user.isActive());
+
 
     @Override
     @Transactional
@@ -158,7 +222,8 @@ public class UserServiceImpl implements UserService {
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
         appUser.setPhoneNo(userCreateDTO.getPhoneNo());
-        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
+        Set<AppRole> roles = new HashSet<>();
+        roles.add(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
         appUser.setRoles(roles);
         this.appUserRepository.save(appUser);
     }
@@ -181,4 +246,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
         return convertToDto(user);
     }
+
 }

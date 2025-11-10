@@ -39,6 +39,9 @@ public class MaintenanceHistory {
     @JoinColumn(name = "staff_id")
     private AppUser staff;
 
+    @Column(name = "maintenance_schedule_id")
+    private Long maintenanceScheduleId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "technician_id")
     private AppUser technician;
