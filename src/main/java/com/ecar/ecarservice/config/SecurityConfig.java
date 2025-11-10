@@ -1,15 +1,18 @@
 package com.ecar.ecarservice.config;
 
-import com.ecar.ecarservice.enitiies.AppUser;
+import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.repositories.AppUserRepository;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
 import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -29,25 +32,28 @@ import java.util.stream.Stream;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        //PUBLIC
-                        .requestMatchers("/api/maintenance/**", "/", "/login**", "/oauth2/**", "/logout").permitAll()
-
-                        // SPECIFIC RULES FOR ROLES
-                        .requestMatchers(HttpMethod.POST, "/api/admin/service-records").hasAnyRole("ADMIN", "STAFF", "TECHNICIAN")
-                        .requestMatchers("/api/admin/bookings/**").hasAnyRole("ADMIN", "STAFF")
-                        .requestMatchers("/api/technician/**").hasAnyRole("TECHNICIAN", "ADMIN")
-
-                        //ADMIN /api/admin/users, APIs /api/admin/
+                        .requestMatchers("/api/ping/**").permitAll()
+                        .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
+                        .requestMatchers("/api/me").authenticated()
+                        .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
-
-                        // AUTHENTICATED USERS /api/me, /api/me/vehicles, /api/bookings, /api/service-records
+                        .requestMatchers("/api/bookings/**").authenticated()
+                        .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
                         .anyRequest().authenticated()
+                )
+                .exceptionHandling(e -> e
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"error\": \"Unauthorized: Please log in.\"}");
+                        })
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(endpoint -> endpoint.oidcUserService(oidcUserService))
@@ -55,6 +61,10 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Bean
@@ -71,25 +81,29 @@ public class SecurityConfig {
     public OidcUser processOidcUser(AppUserRepository appUserRepository, OidcUser oidcUser) {
         String sub = oidcUser.getSubject();
         String email = oidcUser.getEmail();
-        String name = oidcUser.getFullName();
+        String name = oidcUser.getFullName(); // Lấy tên từ Google
 
         AppUser appUser = appUserRepository.findBySub(sub)
                 .map(existingUser -> {
+                    // Nếu user đã tồn tại, cập nhật lại tên (phòng trường hợp họ đổi tên)
                     existingUser.setFullName(name);
                     return appUserRepository.save(existingUser);
                 })
                 .orElseGet(() -> {
+                    // Nếu không có user theo 'sub', thử tìm theo email
                     return appUserRepository.findByEmail(email)
                             .map(existingUser -> {
+                                // User đã tồn tại (có thể tạo thủ công), cập nhật 'sub' và 'name' cho họ
                                 existingUser.setSub(sub);
                                 existingUser.setFullName(name);
                                 return appUserRepository.save(existingUser);
                             })
                             .orElseGet(() -> {
+                                // User hoàn toàn mới, tạo mới với đầy đủ thông tin
                                 AppUser newUser = new AppUser();
                                 newUser.setSub(sub);
                                 newUser.setEmail(email);
-                                newUser.setFullName(name);
+                                newUser.setFullName(name); // Lưu tên
                                 newUser.getRoles().add(AppRole.CUSTOMER);
                                 return appUserRepository.save(newUser);
                             });
@@ -118,5 +132,17 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(passwordEncoder()); // dùng BCryptPasswordEncoder đã khai báo
+        return provider;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(DaoAuthenticationProvider authProvider) {
+        return authentication -> authProvider.authenticate(authentication);
     }
 }

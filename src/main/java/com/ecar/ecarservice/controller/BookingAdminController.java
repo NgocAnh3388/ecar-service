@@ -1,7 +1,6 @@
 package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.BookingResponseDto;
-import com.ecar.ecarservice.enums.BookingStatus;
 import com.ecar.ecarservice.service.BookingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,34 +19,16 @@ public class BookingAdminController {
         this.bookingService = bookingService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<BookingResponseDto>> getAllBookings(
-            @RequestParam(required = false) BookingStatus status) {
-        return ResponseEntity.ok(bookingService.getAllBookings(status));
+    // API 1: Lấy tất cả booking
+    @GetMapping("/all")
+    public ResponseEntity<List<BookingResponseDto>> getAllBookings() {
+        return ResponseEntity.ok(bookingService.getAllBookings());
     }
 
-    @PutMapping("/{id}/cancel")
+    // API 2: Xóa một booking theo ID
+    @PutMapping("/{id}/cancel") // Dùng PUT và đường dẫn rõ nghĩa hơn
     public ResponseEntity<BookingResponseDto> cancelBooking(@PathVariable Long id) {
         BookingResponseDto cancelledBooking = bookingService.cancelBookingByAdmin(id);
         return ResponseEntity.ok(cancelledBooking);
-    }
-
-    @PutMapping("/{id}/confirm")
-    public ResponseEntity<BookingResponseDto> confirmBooking(@PathVariable Long id) {
-        BookingResponseDto confirmedBooking = bookingService.confirmBooking(id);
-        return ResponseEntity.ok(confirmedBooking);
-    }
-
-    @PutMapping("/{id}/status")
-    public ResponseEntity<BookingResponseDto> updateStatus(@PathVariable Long id, @RequestBody BookingStatus status) {
-        BookingResponseDto updatedBooking = bookingService.updateBookingStatus(id, status);
-        return ResponseEntity.ok(updatedBooking);
-    }
-
-    @PutMapping("/{bookingId}/assign")
-    public ResponseEntity<BookingResponseDto> assignTechnician(
-            @PathVariable Long bookingId,
-            @RequestParam Long technicianId) {
-        return ResponseEntity.ok(bookingService.assignTechnician(bookingId, technicianId));
     }
 }

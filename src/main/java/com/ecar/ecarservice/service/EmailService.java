@@ -1,11 +1,10 @@
 package com.ecar.ecarservice.service;
 
-import com.ecar.ecarservice.dto.MaintenanceScheduleDto;
-import com.ecar.ecarservice.enitiies.AppUser;
-import com.ecar.ecarservice.enitiies.Booking;
+import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.Vehicle;
+import com.ecar.ecarservice.payload.requests.BookingRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -13,10 +12,9 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class EmailService {
@@ -24,108 +22,95 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    @Value("${spring.mail.username}")
-    private String emailFrom;
-
-    @Value("${app.support.email}")
-    private String supportEmail;
-
-    @Value("${app.support.phone}")
-    private String supportPhone;
-
-    @Value("${app.frontend.url}")
-    private String frontendUrl;
-
     public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
+    /** ------------------- BOOKING CONFIRMATION ------------------- */
     @Async
-    public void sendBookingConfirmationEmail(Booking booking) {
+    public void sendBookingConfirmationEmail(BookingRequest request) {
         try {
-            AppUser user = booking.getUser();
-            String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
-                    ? user.getFullName()
-                    : user.getEmail();
-
             Context context = new Context();
-            context.setVariable("customerName", customerName);
-            context.setVariable("licensePlate", booking.getLicensePlate());
-            context.setVariable("carModel", booking.getCarModel());
-            context.setVariable("serviceCenter", booking.getServiceCenter());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'ngày' dd-MM-yyyy");
-            context.setVariable("appointmentTime", booking.getAppointmentDateTime().format(formatter));
+            context.setVariable("customerName", request.customerName());
+            context.setVariable("licensePlate", request.licensePlate());
+            context.setVariable("carModel", request.carModelName());
+            context.setVariable("serviceCenter", request.centerName());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy");
+            context.setVariable("appointmentTime", request.scheduledAt().format(formatter));
 
             String htmlContent = templateEngine.process("booking-confirmation-email", context);
-
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Appointment Request Received", htmlContent);
+            sendHtmlEmail(request.email(), "Ecar Service Center - Booking Confirmation", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send booking confirmation email: " + e.getMessage());
         }
     }
 
+    /** ------------------- PAYMENT CONFIRMATION ------------------- */
     @Async
-    public void sendDateBasedMaintenanceReminderEmail(AppUser user, String licensePlate, LocalDate nextDueDate, List<MaintenanceScheduleDto> maintenanceItems) {
+    public void sendPaymentConfirmationEmail(AppUser user, String paymentAmount, String paymentId, String description) {
         try {
             String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
-                    ? user.getFullName()
-                    : user.getEmail();
-
-            Context context = new Context();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-            context.setVariable("customerName", customerName);
-            context.setVariable("licensePlate", licensePlate);
-            context.setVariable("nextDueDate", nextDueDate.format(formatter));
-            context.setVariable("lastServiceDate", nextDueDate.minusMonths(12).format(formatter));
-            context.setVariable("maintenanceItems", maintenanceItems);
-
-            String htmlContent = templateEngine.process("date-reminder-email", context);
-
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Scheduled Maintenance Reminder", htmlContent);
-        } catch (Exception e) {
-            System.err.println("Failed to send date-based maintenance reminder email: " + e.getMessage());
-        }
-    }
-
-    @Async
-    public void sendBookingStatusUpdateEmail(Booking booking, String subject, String templateName) {
-        try {
-            AppUser user = booking.getUser();
-            String customerName = user.getFullName() != null ? user.getFullName() : user.getEmail();
+                    ? user.getFullName() : user.getEmail();
 
             Context context = new Context();
             context.setVariable("customerName", customerName);
-            context.setVariable("booking", booking);
+            context.setVariable("paymentAmount", paymentAmount);
+            context.setVariable("paymentId", paymentId);
+            context.setVariable("description", description);
+            context.setVariable("paymentDate",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
 
-            String htmlContent = templateEngine.process(templateName, context);
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - " + subject, htmlContent);
+            String htmlContent = templateEngine.process("payment-confirmation-email", context);
+            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Payment Confirmation", htmlContent);
         } catch (Exception e) {
-            System.err.println("Failed to send status update email: " + e.getMessage());
+            System.err.println("Failed to send payment confirmation email: " + e.getMessage());
         }
     }
 
+    /** ------------------- TECHNICIAN RECEIVED ------------------- */
     @Async
-    public void sendNewTaskNotificationEmail(AppUser technician, Booking booking) {
+    public void sendTechnicianReceivedEmail(AppUser owner, AppUser technician, Vehicle vehicle) {
         try {
             Context context = new Context();
-            context.setVariable("technicianName", technician.getFullName() != null ? technician.getFullName() : technician.getEmail());
-            context.setVariable("booking", booking);
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("technicianName", technician.getFullName());
+            context.setVariable("licensePlate", vehicle.getLicensePlate());
+            context.setVariable("carModel", vehicle.getCarModel().getCarName());
+            context.setVariable("receivedAt",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("hh:mm a, MMM dd, yyyy")));
 
-            String htmlContent = templateEngine.process("new-task-notification-email", context);
-            sendHtmlEmail(technician.getEmail(), "Ecar Service Center - New Task Assigned", htmlContent);
+            String htmlContent = templateEngine.process("technician-received-email", context);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Vehicle Received by Technician", htmlContent);
         } catch (Exception e) {
-            System.err.println("Failed to send new task notification email: " + e.getMessage());
+            System.err.println("Failed to send technician received email: " + e.getMessage());
         }
     }
 
-    private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException, UnsupportedEncodingException {
+
+    // ------------------- MAINTENANCE REMINDER ------------------- */
+    @Async
+    public void sendMaintenanceReminderEmail(AppUser owner, Vehicle vehicle, LocalDate nextDate) {
+        try {
+            Context context = new Context();
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("carModel", vehicle.getCarModel().getCarName());
+            context.setVariable("licensePlate", vehicle.getLicensePlate());
+            context.setVariable("nextDate", nextDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+
+            String htmlContent = templateEngine.process("maintenance-reminder-email", context);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Maintenance Reminder", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send reminder email: " + e.getMessage());
+        }
+    }
+
+
+
+    /** ------------------- SEND HTML EMAIL ------------------- */
+    private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-        helper.setFrom(emailFrom, "Ecar Service Center");
-
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);

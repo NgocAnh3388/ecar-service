@@ -25,13 +25,11 @@ public class BookingResponseDto {
     private String updatedBy;
 
     private UserInBookingDto user;
-    private UserInBookingDto technician;
 
     @Getter
     @Setter
     public static class UserInBookingDto {
         private Long id;
         private String email;
-        private String fullName;
     }
 }

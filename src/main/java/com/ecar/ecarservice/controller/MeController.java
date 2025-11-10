@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class MeController {
 
     @GetMapping("/me")
-    public Map<String, Object> me(@AuthenticationPrincipal OidcUser user) {
+    public Map<String,Object> me(@AuthenticationPrincipal OidcUser user) {
         var roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .filter(a -> a != null && a.startsWith("ROLE_"))

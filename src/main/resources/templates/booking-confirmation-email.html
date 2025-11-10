@@ -1,46 +1,34 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Service Appointment Confirmation</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { padding: 20px; }
-        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .table th { background-color: #f2f2f2; }
-    </style>
+    <meta charset="UTF-8">
+    <title>Booking Confirmation</title>
 </head>
-<body>
-<div class="container">
-    <p class="header">Your appointment has been received!</p>
-    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
-    <p>Thank you for booking a service appointment at Ecar Service Center. We have received your request with the following details:</p>
-
-    <table class="table">
+<body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #0D6EFD;">Ecar Service Center - Booking Confirmation</h2>
+    <p>Hello <strong th:text="${customerName}">Customer Name</strong>,</p>
+    <p>We have received your service booking request with the following details:</p>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
         <tr>
-            <th style="width: 200px;">License Plate:</th>
-            <td th:text="${licensePlate}"></td>
+            <td style="padding: 8px; font-weight: bold;">License Plate:</td>
+            <td style="padding: 8px;" th:text="${licensePlate}">ABC-123</td>
         </tr>
         <tr>
-            <th>Car Model:</th>
-            <td th:text="${carModel}"></td>
+            <td style="padding: 8px; font-weight: bold;">Car Model:</td>
+            <td style="padding: 8px;" th:text="${carModel}">VF8</td>
         </tr>
         <tr>
-            <th>Service Center:</th>
-            <td th:text="${serviceCenter}"></td>
+            <td style="padding: 8px; font-weight: bold;">Service Center:</td>
+            <td style="padding: 8px;" th:text="${serviceCenter}">Ecar Center</td>
         </tr>
         <tr>
-            <th>Appointment Time:</th>
-            <td th:text="${appointmentTime}"></td>
+            <td style="padding: 8px; font-weight: bold;">Appointment Time:</td>
+            <td style="padding: 8px;" th:text="${appointmentTime}">10:00 AM, Nov 10, 2025</td>
         </tr>
     </table>
-
-    <p>Your appointment status is currently <b>PENDING</b>. We will contact you shortly to confirm.</p>
-    <p>
-        Best regards,<br/>
-        <b>EV Service Management System</b><br/>
-    </p>
+    <p style="margin-top: 20px;">Please arrive on time to ensure the best service experience.</p>
+    <p>Best regards,<br/>Ecar Service Center Team</p>
 </div>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Technician Received Vehicle</title>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #FFC107;">Ecar Service Center - Vehicle Received by Technician</h2>
+    <p>Hello <strong th:text="${customerName}">Customer Name</strong>,</p>
+    <p>Your vehicle has been received by technician <strong th:text="${technicianName}">Technician Name</strong> with the following details:</p>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">License Plate:</td>
+            <td style="padding: 8px;" th:text="${licensePlate}">ABC-123</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Car Model:</td>
+            <td style="padding: 8px;" th:text="${carModel}">VF8</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; font-weight: bold;">Received At:</td>
+            <td style="padding: 8px;" th:text="${receivedAt}">10:00 AM, Nov 10, 2025</td>
+        </tr>
+    </table>
+    <p style="margin-top: 20px;">We will notify you once the maintenance/repair is completed.</p>
+    <p>Best regards,<br/>Ecar Service Center Team</p>
+</div>
+</body>
+</html>

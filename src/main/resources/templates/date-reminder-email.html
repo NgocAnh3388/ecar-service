@@ -1,52 +1,52 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Scheduled Maintenance Reminder</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .container { padding: 20px; }
-        .header { font-size: 24px; font-weight: bold; color: #0056b3; }
-        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        .table th { background-color: #f2f2f2; }
-        .category-header { font-weight: bold; background-color: #e9ecef; }
-    </style>
-</head>
-<body>
-<div class="container">
-    <p class="header">It's time for your vehicle's scheduled maintenance!</p>
-    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
-    <p>
-        The Ecar Service Center system notes that the last maintenance for your vehicle
-        <b><span th:text="${licensePlate}"></span></b> was on
-        <b th:text="${lastServiceDate}"></b>.
-    </p>
-    <p>
-        Your next scheduled maintenance is due on
-        <b><span th:text="${nextDueDate}"></span></b>, which is just 15 days away.
-    </p>
-    <p>Below are the recommended service items for this interval:</p>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Scheduled Maintenance Reminder</title>-->
+<!--    <style>-->
+<!--        body { font-family: Arial, sans-serif; }-->
+<!--        .container { padding: 20px; }-->
+<!--        .header { font-size: 24px; font-weight: bold; color: #0056b3; }-->
+<!--        .table { width: 100%; border-collapse: collapse; margin-top: 20px; }-->
+<!--        .table th, .table td { border: 1px solid #ddd; padding: 8px; text-align: left; }-->
+<!--        .table th { background-color: #f2f2f2; }-->
+<!--        .category-header { font-weight: bold; background-color: #e9ecef; }-->
+<!--    </style>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <p class="header">It's time for your vehicle's scheduled maintenance!</p>-->
+<!--    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>-->
+<!--    <p>-->
+<!--        The Ecar Service Center system notes that the last maintenance for your vehicle-->
+<!--        <b><span th:text="${licensePlate}"></span></b> was on-->
+<!--        <b th:text="${lastServiceDate}"></b>.-->
+<!--    </p>-->
+<!--    <p>-->
+<!--        Your next scheduled maintenance is due on-->
+<!--        <b><span th:text="${nextDueDate}"></span></b>, which is just 15 days away.-->
+<!--    </p>-->
+<!--    <p>Below are the recommended service items for this interval:</p>-->
 
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Item</th>
-            <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="item : ${maintenanceItems}">
-            <td th:text="${item.itemName}">Tire (pressure, wear, rotation, and balancing)</td>
-            <td th:text="${item.action == T(com.ecar.ecarservice.enums.MaintenanceAction).REPLACE ? 'Replace' : 'Inspect'}">Inspect</td>
-        </tr>
-        </tbody>
-    </table>
+<!--    <table class="table">-->
+<!--        <thead>-->
+<!--        <tr>-->
+<!--            <th>Item</th>-->
+<!--            <th>Action</th>-->
+<!--        </tr>-->
+<!--        </thead>-->
+<!--        <tbody>-->
+<!--        <tr th:each="item : ${maintenanceItems}">-->
+<!--            <td th:text="${item.itemName}">Tire (pressure, wear, rotation, and balancing)</td>-->
+<!--            <td th:text="${item.action == T(com.ecar.ecarservice.enums.MaintenanceAction).REPLACE ? 'Replace' : 'Inspect'}">Inspect</td>-->
+<!--        </tr>-->
+<!--        </tbody>-->
+<!--    </table>-->
 
-    <p>Please book an appointment with us to ensure your vehicle remains in top condition.</p>
-    <p>
-        Best regards,<br/>
-        The Ecar Service Center Team
-    </p>
-</div>
-</body>
-</html>
+<!--    <p>Please book an appointment with us to ensure your vehicle remains in top condition.</p>-->
+<!--    <p>-->
+<!--        Best regards,<br/>-->
+<!--        The Ecar Service Center Team-->
+<!--    </p>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->
