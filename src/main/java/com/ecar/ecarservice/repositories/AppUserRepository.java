@@ -22,7 +22,10 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
 
     Optional<AppUser> findByIdAndActiveTrue(Long id);
 
-    @Query("SELECT au FROM AppUser au LEFT JOIN FETCH au.vehicles v LEFT JOIN FETCH v.carModel WHERE au.id = :id AND au.active = true")
+    @Query("SELECT au FROM AppUser au " +
+            "LEFT JOIN FETCH au.vehicles v " +
+            "LEFT JOIN FETCH v.carModel cm " +  // thêm alias cm để Hibernate chắc chắn nhận dạng đúng
+            "WHERE au.id = :id AND au.active = true")
     Optional<AppUser> findByIdWithVehicles(@Param("id") Long id);
 
     @Query("SELECT u FROM AppUser u LEFT JOIN FETCH u.vehicles v LEFT JOIN FETCH v.carModel WHERE u.email = :email")
