@@ -18,7 +18,10 @@ public interface UserService {
     UserDto updateUser(Long id, UserCreateDTO userUpdateDTO);
     void createUser(UserCreateDTO userCreateDTO);
     void deleteUser(Long id);
-    Page<AppUser> searchUsers(UserSearchRequest request);
+
+    // GHI CHÚ: Sửa kiểu trả về từ Page<AppUser> thành Page<UserDto>
+    Page<UserDto> searchUsers(UserSearchRequest request);
+
     AppUser getCurrentUser(OidcUser oidcUser);
     List<AppUser> getUserListByRole(String role);
 

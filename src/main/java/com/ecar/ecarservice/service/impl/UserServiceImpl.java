@@ -32,10 +32,70 @@ public class UserServiceImpl implements UserService {
         this.appUserRepository = appUserRepository;
     }
 
+    // GHI CHÚ: Phương thức searchUsers giờ sẽ trả về Page<UserDto>
+    @Override
+    @Transactional(readOnly = true) // Đảm bảo transaction bao trùm toàn bộ quá trình
+    public Page<UserDto> searchUsers(UserSearchRequest request) {
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+
+        Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
+
+        if (!idsPage.hasContent()) {
+            return Page.empty(pageRequest);
+        }
+
+        List<Long> userIds = idsPage.getContent();
+        List<AppUser> usersWithDetails = this.appUserRepository.findAllWithDetailsByIds(userIds);
+
+        Map<Long, AppUser> userMap = usersWithDetails.stream()
+                .collect(Collectors.toMap(AppUser::getId, Function.identity()));
+
+        List<AppUser> sortedUsers = userIds.stream()
+                .map(userMap::get)
+                .collect(Collectors.toList());
+
+        // GHI CHÚ: Sử dụng .map() của Page để chuyển đổi AppUser sang UserDto
+        // Thao tác này diễn ra bên trong transaction, nên không bị LazyInitializationException
+        Page<AppUser> appUserPage = new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
+        return appUserPage.map(this::convertToDto);
+    }
+
+    // GHI CHÚ: Phương thức helper để chuyển đổi Entity sang DTO.
+    // Phương thức này sẽ được gọi bên trong một transaction.
+    private UserDto convertToDto(AppUser user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPhoneNo(user.getPhoneNo());
+        dto.setRoles(user.getRoles());
+        dto.setActive(user.isActive());
+
+        // GHI CHÚ: Tải dữ liệu vehicles một cách an toàn ở đây
+        if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
+            List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
+                VehicleDto vd = new VehicleDto();
+                vd.setLicensePlate(v.getLicensePlate());
+                vd.setCarModel(v.getCarModel());
+                vd.setVinNumber(v.getVinNumber());
+                vd.setNextKm(v.getNextKm());
+                vd.setNextDate(v.getNextDate());
+                vd.setOldKm(v.getOldKm());
+                vd.setOldDate(v.getOldDate());
+                return vd;
+            }).collect(Collectors.toList());
+            dto.setVehicles(vehicleDtos);
+        } else {
+            dto.setVehicles(Collections.emptyList()); // Tránh trả về null
+        }
+
+        return dto;
+    }
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return appUserRepository.findAllByActiveTrueOrderByCreatedAtDesc().stream()
+//        return appUserRepository.findAllByActiveTrueOrderByCreatedAtDesc().stream()
+        return appUserRepository.findAllByActiveTrue().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -86,62 +146,7 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Page<AppUser> searchUsers(UserSearchRequest request) {
-        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
 
-        // Bước 1: Chỉ lấy về ID và thông tin phân trang
-        Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
-
-        if (!idsPage.hasContent()) {
-            return new PageImpl<>(Collections.emptyList(), pageRequest, 0);
-        }
-
-        List<Long> userIds = idsPage.getContent();
-
-        // Bước 2: Lấy đầy đủ thông tin cho các ID đã tìm thấy trong 1 query duy nhất
-        List<AppUser> usersWithDetails = this.appUserRepository.findAllWithDetailsByIds(userIds);
-
-        // Sắp xếp lại danh sách usersWithDetails theo thứ tự của userIds để đảm bảo phân trang đúng
-        Map<Long, AppUser> userMap = usersWithDetails.stream()
-                .collect(Collectors.toMap(AppUser::getId, Function.identity()));
-
-        List<AppUser> sortedUsers = userIds.stream()
-                .map(userMap::get)
-                .collect(Collectors.toList());
-
-        // Trả về một Page mới với dữ liệu đã được tải đầy đủ
-        return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
-    }
-
-    private UserDto convertToDto(AppUser user) {
-        UserDto dto = new UserDto();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setFullName(user.getFullName());
-        dto.setPhoneNo(user.getPhoneNo());
-        dto.setRoles(user.getRoles());
-        dto.setActive(user.isActive());
-
-        if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
-            List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
-                VehicleDto vd = new VehicleDto();
-                vd.setLicensePlate(v.getLicensePlate());
-                vd.setCarModel(v.getCarModel());
-                vd.setVinNumber(v.getVinNumber());
-                vd.setNextKm(v.getNextKm());
-                vd.setNextDate(v.getNextDate());
-                vd.setOldKm(v.getOldKm());
-                vd.setOldDate(v.getOldDate());
-                return vd;
-            }).collect(Collectors.toList());
-
-            dto.setVehicles(vehicleDtos);
-        }
-
-        return dto;
-    }
 
     @Override
     @Transactional

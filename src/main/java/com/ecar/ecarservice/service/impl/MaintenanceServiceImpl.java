@@ -11,6 +11,7 @@ import com.ecar.ecarservice.payload.responses.MilestoneResponse;
 import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.payload.responses.ServiceItem;
 import com.ecar.ecarservice.repositories.*;
+import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;
 import com.ecar.ecarservice.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,7 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +41,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceScheduleRepository maintenanceScheduleRepository;
     private final ServiceRepository serviceRepository;
     private final MaintenanceItemRepository maintenanceItemRepository;
+    private final EmailService emailService;
 
     public MaintenanceServiceImpl(MaintenanceHistoryRepository maintenanceHistoryRepository,
                                   UserService userService,
@@ -46,7 +51,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                                   MaintenanceMileStoneRepository maintenanceMileStoneRepository,
                                   MaintenanceScheduleRepository maintenanceScheduleRepository,
                                   ServiceRepository serviceRepository,
-                                  MaintenanceItemRepository maintenanceItemRepository) {
+                                  MaintenanceItemRepository maintenanceItemRepository,
+                                  EmailService emailService) {
         this.maintenanceHistoryRepository = maintenanceHistoryRepository;
         this.userService = userService;
         this.vehicleRepository = vehicleRepository;
@@ -56,190 +62,52 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         this.maintenanceScheduleRepository = maintenanceScheduleRepository;
         this.serviceRepository = serviceRepository;
         this.maintenanceItemRepository = maintenanceItemRepository;
-    }
-
-    @Override
-    public Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request) {
-        AppUser currentUser = userService.getCurrentUser(oidcUser);
-        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
-//        return this.maintenanceHistoryRepository.search(
-        return this.maintenanceHistoryRepository.searchByOwner(
-                        currentUser.getId(),
-                        request.getSearchValue(),
-                        pageRequest)
-                .map(this::convertToDTO);
+        this.emailService = emailService;
     }
 
     @Override
     @Transactional
     public MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser) {
         AppUser currentUser = userService.getCurrentUser(oidcUser);
-
         MaintenanceHistory history = new MaintenanceHistory();
-        history.setVehicle(this.vehicleRepository.getReferenceById(request.vehicleId()));
-        history.setOwner(this.appUserRepository.getReferenceById(currentUser.getId()));
+        history.setVehicle(this.vehicleRepository.findById(request.vehicleId())
+                .orElseThrow(() -> new EntityNotFoundException("Vehicle not found with ID: " + request.vehicleId())));
+        history.setOwner(currentUser);
         history.setNumOfKm(request.numOfKm());
         history.setSubmittedAt(LocalDateTime.now());
         history.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
         history.setIsMaintenance(request.isMaintenance());
         history.setIsRepair(request.isRepair());
         history.setRemark(request.remark());
-        history.setCenter(this.centerRepository.getReferenceById(request.centerId()));
+        history.setCenter(this.centerRepository.findById(request.centerId())
+                .orElseThrow(() -> new EntityNotFoundException("Center not found with ID: " + request.centerId())));
         history.setScheduleTime(request.scheduleTime());
         history.setScheduleDate(request.scheduleDate());
 
-        //TODO: gửi mail xác nhận đã nhận được yêu cầu
+        MaintenanceHistory savedHistory = this.maintenanceHistoryRepository.save(history);
 
-        return this.maintenanceHistoryRepository.save(history);
+        if (savedHistory != null) {
+            // GHI CHÚ: Dòng này bây giờ đã hợp lệ và không còn báo lỗi.
+            emailService.sendScheduleConfirmationEmail(savedHistory);
+        }
+
+        return savedHistory;
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<MaintenanceTicketResponse> getTickets(OidcUser user) {
-//        LocalDate today = LocalDate.now();
-//        LocalDateTime start = today.atStartOfDay();
-//        LocalDateTime end   = today.plusDays(1).atStartOfDay();
-//        return this.maintenanceHistoryRepository.findAllWithinToday()
-        return this.maintenanceHistoryRepository.findAllAndSortForManagement()
-                .stream()
-                .map(this::fromMaintenanceHistory)
-                .toList();
-    }
-
-    private MaintenanceTicketResponse fromMaintenanceHistory(MaintenanceHistory history) {
-        // Lấy thông tin một cách an toàn, nếu null thì trả về null
-        String ownerFullName = (history.getOwner() != null) ? history.getOwner().getFullName() : null;
-        String staffFullName = (history.getStaff() != null) ? history.getStaff().getFullName() : null;
-        Long staffId = (history.getStaff() != null) ? history.getStaff().getId() : null;
-        String technicianFullName = (history.getTechnician() != null) ? history.getTechnician().getFullName() : null;
-        Long technicianId = (history.getTechnician() != null) ? history.getTechnician().getId() : null;
-
-        // Vehicle và CarModel gần như chắc chắn không null, nhưng vẫn có thể kiểm tra nếu cần
-        Long carModelId = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getId() : null;
-        String carName = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getCarName() : null;
-        String licensePlate = (history.getVehicle() != null) ? history.getVehicle().getLicensePlate() : "N/A";
-
-        return new MaintenanceTicketResponse(
-                history.getId(),
-                ownerFullName,
-                carModelId,
-                carName,
-                licensePlate,
-                history.getNumOfKm(),
-                history.getSubmittedAt(),
-                staffFullName,
-                staffId,
-                history.getStaffReceiveAt(),
-                technicianFullName,
-                technicianId,
-                history.getTechnicianReceivedAt(),
-                history.getCompletedAt(),
-                history.getStatus(),
-                history.getIsMaintenance(),
-                history.getIsRepair(),
-                history.getCenter().getCenterName(),
-                history.getScheduleDate(),
-                history.getScheduleTime()
-        );
-    }
-
-
-    private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
-        return MaintenanceHistoryDTO.builder()
-                .carType(maintenanceHistory.getVehicle().getCarModel().getCarType())
-                .carName(maintenanceHistory.getVehicle().getCarModel().getCarName())
-                .licensePlate(maintenanceHistory.getVehicle().getLicensePlate())
-                .submittedAt(maintenanceHistory.getSubmittedAt())
-                .completedAt(maintenanceHistory.getCompletedAt())
-                .status(maintenanceHistory.getStatus())
-                .build();
-    }
-
-    @Override
-    public List<MilestoneResponse> getMilestone(Long carModelId) {
-        return this.maintenanceMileStoneRepository.findALlByCarModelIdOrderByYearAt(carModelId)
-                .stream()
-                .map(this::fromMaintenanceMilestone)
-                .toList();
-    }
-
-    private MilestoneResponse fromMaintenanceMilestone(MaintenanceMileStone maintenanceMileStone) {
-        return new MilestoneResponse(
-                maintenanceMileStone.getId(),
-                maintenanceMileStone.getKilometerAt(),
-                maintenanceMileStone.getYearAt()
-        );
-    }
-
-    @Override
-    public List<ServiceGroup> getMaintenanceServiceGroup(Long carModelId, Long maintenanceMilestoneId) {
-        List<MaintenanceSchedule> schedules = this.maintenanceScheduleRepository
-                .findAllScheduleByCarModelIdAndMilestoneId(
-                        carModelId,
-                        maintenanceMilestoneId
-                );
-
-        Map<String, List<ServiceItem>> rs = schedules
-                .stream()
-                .collect(Collectors
-                        .groupingBy(schedule -> schedule.getService().getCategory(),
-                                Collectors.mapping(schedule ->
-                                        new ServiceItem(
-                                                schedule.getId(),
-                                                schedule.getService().getServiceName(),
-                                                schedule.getIsDefault()
-                                        ), Collectors.toList()
-                                )));
-        return rs.entrySet()
-                .stream()
-                .map(entry -> {
-                    List<ServiceItem> sortedItems = entry.getValue()
-                            .stream()
-                            .sorted(Comparator.comparing(ServiceItem::serviceName))
-                            .toList();
-                    return new ServiceGroup(entry.getKey(), sortedItems);
-                })
-                .toList();
-    }
-
-    @Override
-    public List<ServiceGroup> getServiceGroup(Long ticketId) {
-        String SERVICE_TYPE_FIX = "F";
-        List<Long> selectedIds = this.maintenanceItemRepository.findAllServiceIds(ticketId);
-        Map<String, List<ServiceItem>> rs = this.serviceRepository.findAllByServiceType(SERVICE_TYPE_FIX)
-                .stream()
-                .collect(Collectors
-                        .groupingBy(com.ecar.ecarservice.entities.Service::getCategory,
-                                Collectors.mapping(s ->
-                                        new ServiceItem(
-                                                s.getId(),
-                                                s.getServiceName(),
-                                                selectedIds.contains(s.getId())
-                                        ), Collectors.toList()
-                                )));
-        return rs.entrySet()
-                .stream()
-                .map(entry -> {
-                    List<ServiceItem> sortedItems = entry.getValue()
-                            .stream()
-                            .sorted(Comparator.comparing(ServiceItem::serviceName))
-                            .toList();
-                    return new ServiceGroup(entry.getKey(), sortedItems);
-                })
-                .toList().stream().sorted(Comparator.comparing(ServiceGroup::category)).toList();
-    }
-
-    @Override
-    public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
+    @Transactional
+    public void assignTaskToTechnician(ServiceCreateRequest request, OidcUser oidcUser) {
         AppUser currentUser = this.userService.getCurrentUser(oidcUser);
-        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId()).orElseThrow(() -> new EntityNotFoundException("Service ticket not found with ID: " + request.ticketId()));
-        AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId()).orElseThrow(() -> new EntityNotFoundException("Technician not found with ID: " + request.technicianId()));
-        maintenanceHistory.setNumOfKm(request.numOfKm());
+        MaintenanceHistory maintenanceHistory = this.maintenanceHistoryRepository.findById(request.ticketId())
+                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with ID: " + request.ticketId()));
+        AppUser assignedTechnician = this.appUserRepository.findById(request.technicianId())
+                .orElseThrow(() -> new EntityNotFoundException("Technician not found with ID: " + request.technicianId()));
 
+        maintenanceHistory.setNumOfKm(request.numOfKm());
         maintenanceHistory.setStaff(currentUser);
         maintenanceHistory.setTechnician(assignedTechnician);
-        maintenanceHistory.setStaffReceiveAt(LocalDateTime.now()); // Thời điểm nhân viên tiếp nhận
-        maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now()); // Thời điểm KTV nhận việc
+        maintenanceHistory.setStaffReceiveAt(LocalDateTime.now());
+        maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now());
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
         MaintenanceHistory savedMH = this.maintenanceHistoryRepository.save(maintenanceHistory);
 
@@ -255,102 +123,30 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             service.setServiceId(i);
             items.add(service);
         }
-
         this.maintenanceItemRepository.saveAll(items);
     }
 
     @Override
-    @Transactional(readOnly = true)
-    public List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user) {
-        AppUser currentUser = userService.getCurrentUser(user);
-
-//        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatus(currentUser.getId())
-        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatusAscTechnicianReceivedAtDesc(currentUser.getId())
-                .stream()
-                .map(this::fromMaintenanceHistory)
-                .toList();
-    }
-
-    @Override
     @Transactional
-    public void completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
-        // 1. Lấy thông tin KTV đang đăng nhập
+    public MaintenanceHistoryDTO completeTechnicianTask(Long ticketId, OidcUser oidcUser) {
         AppUser currentTechnician = userService.getCurrentUser(oidcUser);
-
-        // 2. Tìm phiếu yêu cầu (ticket) trong DB
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
-                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found: " + ticketId));
 
-        // 3. Kiểm tra quyền sở hữu (Security Check)
-        // Dòng này rất quan trọng để tránh NullPointerException
-        if (ticket.getTechnician() == null) {
-            throw new AccessDeniedException("This service ticket has not been assigned to any technician yet.");
-        }
         if (ticket.getTechnician() == null || !ticket.getTechnician().getId().equals(currentTechnician.getId())) {
             throw new AccessDeniedException("You are not assigned to this service ticket.");
         }
 
-        // 4. Kiểm tra trạng thái hợp lệ (Business Logic Check)
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
-            throw new IllegalStateException("Ticket is not in the correct state to be completed. Current state: " + ticket.getStatus());
+            throw new IllegalStateException("Ticket cannot be completed. Current state: " + ticket.getStatus());
         }
 
-        // 5. Cập nhật trạng thái và thời gian hoàn thành
         ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
         ticket.setCompletedAt(LocalDateTime.now());
-
-        // 6. Lưu lại thay đổi
-        maintenanceHistoryRepository.save(ticket);
-
-        System.out.println("Successfully completed service ticket with ID: " + ticketId); // Thêm log để debug
-    }
-
-//    @Override
-//    @Transactional
-//    public MaintenanceHistoryDTO completeTechnicianTask(Long ticketId) {
-//        // 1. Tìm phiếu yêu cầu (ticket) trong DB
-//        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
-//                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
-//
-//        // 2. Kiểm tra trạng thái hợp lệ
-//        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
-//            throw new IllegalStateException("Ticket is not in the correct state to be completed by a technician. Current state: " + ticket.getStatus());
-//        }
-//
-//        // 3. Cập nhật trạng thái và thời gian hoàn thành
-//        ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
-//        ticket.setCompletedAt(LocalDateTime.now());
-//
-//        // 4. Lưu lại thay đổi
-//        MaintenanceHistory updatedTicket = maintenanceHistoryRepository.save(ticket);
-//
-//        // 5. Chuyển đổi sang DTO để trả về
-//        return convertToDTO(updatedTicket);
-//    }
-
-    @Override
-    @Transactional // THÊM: Triển khai phương thức mới
-    public MaintenanceHistoryDTO completeTechnicianTask(Long id) {
-        // 1. Tìm phiếu yêu cầu (ticket) trong DB
-        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + id));
-
-        // 2. Kiểm tra trạng thái hợp lệ
-        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
-            throw new IllegalStateException("Ticket is not in the correct state to be completed. Current state: " + ticket.getStatus());
-        }
-
-        // 3. Cập nhật trạng thái và thời gian hoàn thành
-        ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
-        ticket.setCompletedAt(LocalDateTime.now());
-
-        // 4. Lưu lại và chuyển đổi sang DTO để trả về
         MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
 
-        // Cập nhật lại thông tin next_km, next_date cho xe
         Vehicle vehicle = savedTicket.getVehicle();
-        if (vehicle != null) {
-            // Logic giả định: mốc bảo dưỡng tiếp theo là sau 12000km hoặc 1 năm
+        if (vehicle != null && savedTicket.getNumOfKm() != null) {
             long nextKm = (savedTicket.getNumOfKm() / 12000 + 1) * 12000;
             LocalDateTime nextDate = savedTicket.getCompletedAt().plusYears(1);
 
@@ -362,5 +158,118 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
 
         return convertToDTO(savedTicket);
+    }
+
+    @Override
+    @Transactional
+    public void finalizeAndHandOver(Long ticketId) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found: " + ticketId));
+
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_COMPLETED) {
+            throw new IllegalStateException("Ticket must be completed by technician before finalizing. Current state: " + ticket.getStatus());
+        }
+
+        ticket.setStatus(MaintenanceStatus.DONE);
+        ticket.setHandOverAt(LocalDateTime.now());
+        maintenanceHistoryRepository.save(ticket);
+    }
+
+    // GHI CHÚ: Các phương thức GET và helper khác không thay đổi.
+    @Override
+    public Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request) {
+        AppUser currentUser = userService.getCurrentUser(oidcUser);
+        PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
+        return this.maintenanceHistoryRepository.searchByOwner(currentUser.getId(), request.getSearchValue(), pageRequest)
+                .map(this::convertToDTO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MaintenanceTicketResponse> getTickets(OidcUser user) {
+        return this.maintenanceHistoryRepository.findAllAndSortForManagement()
+                .stream()
+                .map(this::fromMaintenanceHistory)
+                .toList();
+    }
+
+    @Override
+    public List<MilestoneResponse> getMilestone(Long carModelId) {
+        return this.maintenanceMileStoneRepository.findALlByCarModelIdOrderByYearAt(carModelId)
+                .stream()
+                .map(this::fromMaintenanceMilestone)
+                .toList();
+    }
+
+    @Override
+    public List<ServiceGroup> getMaintenanceServiceGroup(Long carModelId, Long maintenanceMilestoneId) {
+        List<MaintenanceSchedule> schedules = this.maintenanceScheduleRepository
+                .findAllScheduleByCarModelIdAndMilestoneId(carModelId, maintenanceMilestoneId);
+
+        Map<String, List<ServiceItem>> rs = schedules.stream()
+                .collect(Collectors.groupingBy(schedule -> schedule.getService().getCategory(),
+                        Collectors.mapping(schedule -> new ServiceItem(schedule.getId(), schedule.getService().getServiceName(), schedule.getIsDefault()),
+                                Collectors.toList())));
+        return rs.entrySet().stream()
+                .map(entry -> {
+                    List<ServiceItem> sortedItems = entry.getValue().stream().sorted(Comparator.comparing(ServiceItem::serviceName)).toList();
+                    return new ServiceGroup(entry.getKey(), sortedItems);
+                })
+                .toList();
+    }
+
+    @Override
+    public List<ServiceGroup> getServiceGroup(Long ticketId) {
+        String SERVICE_TYPE_FIX = "F";
+        List<Long> selectedIds = this.maintenanceItemRepository.findAllServiceIds(ticketId);
+        Map<String, List<ServiceItem>> rs = this.serviceRepository.findAllByServiceType(SERVICE_TYPE_FIX).stream()
+                .collect(Collectors.groupingBy(com.ecar.ecarservice.entities.Service::getCategory,
+                        Collectors.mapping(s -> new ServiceItem(s.getId(), s.getServiceName(), selectedIds.contains(s.getId())),
+                                Collectors.toList())));
+        return rs.entrySet().stream()
+                .map(entry -> {
+                    List<ServiceItem> sortedItems = entry.getValue().stream().sorted(Comparator.comparing(ServiceItem::serviceName)).toList();
+                    return new ServiceGroup(entry.getKey(), sortedItems);
+                })
+                .sorted(Comparator.comparing(ServiceGroup::category))
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user) {
+        AppUser currentUser = userService.getCurrentUser(user);
+        return this.maintenanceHistoryRepository.findByTechnicianIdOrderByStatusAscTechnicianReceivedAtDesc(currentUser.getId())
+                .stream()
+                .map(this::fromMaintenanceHistory)
+                .toList();
+    }
+
+    private MaintenanceTicketResponse fromMaintenanceHistory(MaintenanceHistory history) {
+        String ownerFullName = (history.getOwner() != null) ? history.getOwner().getFullName() : null;
+        String staffFullName = (history.getStaff() != null) ? history.getStaff().getFullName() : null;
+        Long staffId = (history.getStaff() != null) ? history.getStaff().getId() : null;
+        String technicianFullName = (history.getTechnician() != null) ? history.getTechnician().getFullName() : null;
+        Long technicianId = (history.getTechnician() != null) ? history.getTechnician().getId() : null;
+        Long carModelId = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getId() : null;
+        String carName = (history.getVehicle() != null && history.getVehicle().getCarModel() != null) ? history.getVehicle().getCarModel().getCarName() : null;
+        String licensePlate = (history.getVehicle() != null) ? history.getVehicle().getLicensePlate() : "N/A";
+
+        return new MaintenanceTicketResponse(history.getId(), ownerFullName, carModelId, carName, licensePlate, history.getNumOfKm(), history.getSubmittedAt(), staffFullName, staffId, history.getStaffReceiveAt(), technicianFullName, technicianId, history.getTechnicianReceivedAt(), history.getCompletedAt(), history.getStatus(), history.getIsMaintenance(), history.getIsRepair(), history.getCenter().getCenterName(), history.getScheduleDate(), history.getScheduleTime());
+    }
+
+    private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
+        return MaintenanceHistoryDTO.builder()
+                .carType(maintenanceHistory.getVehicle().getCarModel().getCarType())
+                .carName(maintenanceHistory.getVehicle().getCarModel().getCarName())
+                .licensePlate(maintenanceHistory.getVehicle().getLicensePlate())
+                .submittedAt(maintenanceHistory.getSubmittedAt())
+                .completedAt(maintenanceHistory.getCompletedAt())
+                .status(maintenanceHistory.getStatus())
+                .build();
+    }
+
+    private MilestoneResponse fromMaintenanceMilestone(MaintenanceMileStone maintenanceMileStone) {
+        return new MilestoneResponse(maintenanceMileStone.getId(), maintenanceMileStone.getKilometerAt(), maintenanceMileStone.getYearAt());
     }
 }

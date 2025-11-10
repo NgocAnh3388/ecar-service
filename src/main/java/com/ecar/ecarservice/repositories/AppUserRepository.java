@@ -19,6 +19,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     Optional<AppUser> findByEmail(String email);
 
     List<AppUser> findAllByActiveTrueOrderByCreatedAtDesc();
+    List<AppUser> findAllByActiveTrue();
 
     Optional<AppUser> findByIdAndActiveTrue(Long id);
 

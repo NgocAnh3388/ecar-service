@@ -12,106 +12,97 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-// Annotation này sẽ quét tất cả các @RestController để bắt exception
+/**
+ * Class này hoạt động như một "lưới an toàn" tập trung,
+ * bắt tất cả các Exception được ném ra từ các Controller
+ * và chuyển đổi chúng thành các response lỗi JSON đẹp đẽ cho client.
+ */
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Hàm này sẽ được gọi khi có EntityNotFoundException bị ném ra
-    // Ví dụ: repository.findById(...).orElseThrow(...)
+    /**
+     * Xử lý các lỗi "Không tìm thấy tài nguyên".
+     * Ví dụ: repository.findById(...).orElseThrow(EntityNotFoundException::new)
+     * @return 404 Not Found
+     */
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Map<String, Object>> handleEntityNotFoundException(EntityNotFoundException ex) {
-        // Tạo một đối tượng JSON để trả về cho client
         Map<String, Object> body = Map.of(
                 "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.NOT_FOUND.value(), // 404
+                "status", HttpStatus.NOT_FOUND.value(),
                 "error", "Not Found",
-                "message", ex.getMessage() // Lấy message từ exception
+                "message", ex.getMessage()
         );
         return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
     }
 
-    // Hàm này sẽ được gọi khi có IllegalStateException hoặc IllegalArgumentException
-    // Ví dụ: đặt lịch trong quá khứ, hủy booking đã hoàn thành
+    /**
+     * Xử lý các lỗi logic nghiệp vụ hoặc tham số không hợp lệ.
+     * Ví dụ: Đặt lịch trong quá khứ, hủy booking đã hoàn thành, tạo phụ tùng với carModelId không tồn tại.
+     * @return 400 Bad Request
+     */
     @ExceptionHandler({IllegalStateException.class, IllegalArgumentException.class})
-    public ResponseEntity<Map<String, Object>> handleIllegalStateException(RuntimeException ex) {
+    public ResponseEntity<Map<String, Object>> handleBusinessLogicException(RuntimeException ex) {
         Map<String, Object> body = Map.of(
                 "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(), // 400
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "error", "Bad Request",
                 "message", ex.getMessage()
         );
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    // Hàm này sẽ được gọi khi có AccessDeniedException (lỗi phân quyền)
-    // Ví dụ: Customer cố gắng truy cập API của Admin
-    @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
-        Map<String, Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.FORBIDDEN.value(), // 403
-                "error", "Forbidden",
-                "message", "You do not have permission to access this resource." // Message chung để bảo mật
-        );
-        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
-    }
-
-    // (Tùy chọn) Bắt tất cả các lỗi khác và trả về 500
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
-        // Log lỗi này ra để debug
-        ex.printStackTrace();
-
-        Map<String, Object> body = Map.of(
-                "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.INTERNAL_SERVER_ERROR.value(), // 500
-                "error", "Internal Server Error",
-                "message", "An unexpected error occurred. Please contact support."
-        );
-        return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
+    /**
+     * Xử lý các lỗi validation từ annotation @Valid trên @RequestBody.
+     * @return 400 Bad Request
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        // Lấy tất cả các lỗi validation và gộp chúng thành một chuỗi
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
 
         Map<String, Object> body = Map.of(
                 "timestamp", LocalDateTime.now(),
-                "status", HttpStatus.BAD_REQUEST.value(), // 400
+                "status", HttpStatus.BAD_REQUEST.value(),
                 "error", "Validation Failed",
                 "message", errorMessage
         );
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handleRuntimeException(RuntimeException ex) {
-        // Log lỗi này ra để xem nó là gì
-        System.err.println("Caught a RuntimeException: " + ex.getMessage());
+    /**
+     * Xử lý các lỗi phân quyền (khi user đã đăng nhập nhưng không có vai trò phù hợp).
+     * Được kích hoạt bởi @PreAuthorize.
+     * @return 403 Forbidden
+     */
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDeniedException(AccessDeniedException ex) {
+        Map<String, Object> body = Map.of(
+                "timestamp", LocalDateTime.now(),
+                "status", HttpStatus.FORBIDDEN.value(),
+                "error", "Forbidden",
+                "message", "You do not have permission to access this resource."
+        );
+        return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
+    }
 
-        // Kiểm tra xem có phải lỗi "Car model not found" không
-        if (ex.getMessage() != null && ex.getMessage().contains("Car model not found")) {
-            Map<String, Object> body = Map.of(
-                    "timestamp", LocalDateTime.now(),
-                    "status", HttpStatus.NOT_FOUND.value(), // Trả về 404 thì hợp lý hơn
-                    "error", "Not Found",
-                    "message", ex.getMessage()
-            );
-            return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-        }
+    /**
+     * "Lưới an toàn cuối cùng": Bắt tất cả các lỗi không lường trước khác.
+     * Luôn được đặt ở cuối cùng.
+     * @return 500 Internal Server Error
+     */
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        // In ra stack trace đầy đủ trong log của server để dev có thể debug
+        ex.printStackTrace();
 
-        // Nếu là một RuntimeException khác, trả về 500
         Map<String, Object> body = Map.of(
                 "timestamp", LocalDateTime.now(),
                 "status", HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "error", "Internal Server Error",
-                "message", "An unexpected error occurred."
+                "message", "An unexpected error occurred. Please contact support." // Che giấu chi tiết lỗi với client
         );
         return new ResponseEntity<>(body, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-
 }

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Service Schedule Confirmation</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { padding: 20px; border: 1px solid #ddd; border-radius: 5px; max-width: 600px; margin: 20px auto; }
+        .header { font-size: 24px; font-weight: bold; color: #0056b3; margin-bottom: 20px; text-align: center; }
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
+        .table th, .table td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        .table th { background-color: #f2f2f2; width: 180px; }
+        .footer { margin-top: 20px; font-size: 12px; color: #777; text-align: center; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p class="header">Your Request has been Received!</p>
+    <p>Dear <b th:text="${customerName}">Customer Name</b>,</p>
+    <p>Thank you for scheduling a service appointment at Ecar Service Center. We have received your request with the following details:</p>
+
+    <table class="table">
+        <tr>
+            <th>License Plate:</th>
+            <td th:text="${licensePlate}"></td>
+        </tr>
+        <tr>
+            <th>Car Model:</th>
+            <td th:text="${carModel}"></td>
+        </tr>
+        <tr>
+            <th>Service Center:</th>
+            <td th:text="${serviceCenter}"></td>
+        </tr>
+        <tr>
+            <th>Appointment Time:</th>
+            <td th:text="${appointmentTime}"></td>
+        </tr>
+    </table>
+
+    <p>Your appointment status is currently <b>PENDING CONFIRMATION</b>. Our staff will contact you shortly to confirm your schedule.</p>
+    <p>
+        Best regards,<br/>
+        <b>The Ecar Service Management Team</b>
+    </p>
+</div>
+<div class="footer">
+    <p>This is an automated email. Please do not reply.</p>
+</div>
+</body>
+</html>

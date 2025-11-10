@@ -67,11 +67,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
+    @PostMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
-    public ResponseEntity<Page<AppUser>> searchUsers(@RequestBody UserSearchRequest request) {
-        Page<AppUser> searchResult = userService.searchUsers(request);
-        return new  ResponseEntity<>(searchResult, HttpStatus.OK);
+    // GHI CHÚ: Sửa kiểu trả về thành Page<UserDto>
+    public ResponseEntity<Page<UserDto>> searchUsers(@RequestBody UserSearchRequest request) {
+        Page<UserDto> searchResult = userService.searchUsers(request);
+        return new ResponseEntity<>(searchResult, HttpStatus.OK);
     }
 
     @RequestMapping(value = "get-by-role/{roleName}", method = RequestMethod.GET)

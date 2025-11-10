@@ -16,20 +16,14 @@ import java.util.List;
 
 public interface MaintenanceService {
     Page<MaintenanceHistoryDTO> getMaintenanceHistory(OidcUser oidcUser, MaintenanceHistorySearchRequest request);
-    MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser);    List<MaintenanceTicketResponse> getTickets(OidcUser user);
+    MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser);
+    List<MaintenanceTicketResponse> getTickets(OidcUser user);
     List<MilestoneResponse> getMilestone(Long carModelId);
-
-    List<ServiceGroup> getMaintenanceServiceGroup(Long modelId,Long maintenanceScheduleId);
-
+    List<ServiceGroup> getMaintenanceServiceGroup(Long modelId, Long maintenanceScheduleId);
     List<ServiceGroup> getServiceGroup(Long ticketId);
-
-    void createService(ServiceCreateRequest request, OidcUser oidcUser);
-
     List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user);
-
-    void completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
-
-//    MaintenanceHistoryDTO completeTechnicianTask(Long ticketId);
-    MaintenanceHistoryDTO completeTechnicianTask(Long id);
+    void assignTaskToTechnician(ServiceCreateRequest request, OidcUser oidcUser);
+    MaintenanceHistoryDTO completeTechnicianTask(Long ticketId, OidcUser oidcUser);
+    void finalizeAndHandOver(Long ticketId);
 
 }

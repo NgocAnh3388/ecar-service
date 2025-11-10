@@ -2,6 +2,7 @@ package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.entities.Booking;
+import com.ecar.ecarservice.entities.MaintenanceHistory; // <<-- THÊM IMPORT
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,47 +12,89 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @Service
 public class EmailService {
 
     private final JavaMailSender mailSender;
-    private final TemplateEngine templateEngine; // Để xử lý template Thymeleaf
+    private final TemplateEngine templateEngine;
 
     public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
     }
 
-    @Async // Gửi mail bất đồng bộ để không làm chậm request chính
+    /**
+     * Ghi chú: Giữ lại phương thức gốc của bạn để gửi email xác nhận cho Booking.
+     */
+    @Async
     public void sendBookingConfirmationEmail(Booking booking) {
         try {
             AppUser user = booking.getUser();
-            // --- LOGIC LẤY TÊN ---
             String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
                     ? user.getFullName()
                     : user.getEmail();
 
             Context context = new Context();
-            context.setVariable("customerName", customerName); // Hoặc lấy tên nếu có
+            context.setVariable("customerName", customerName);
             context.setVariable("licensePlate", booking.getLicensePlate());
             context.setVariable("carModel", booking.getCarModel());
             context.setVariable("serviceCenter", booking.getServiceCenter());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'ngày' dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy");
             context.setVariable("appointmentTime", booking.getAppointmentDateTime().format(formatter));
 
             String htmlContent = templateEngine.process("booking-confirmation-email", context);
 
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Xác nhận yêu cầu đặt lịch", htmlContent);
+            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Appointment Request Received", htmlContent);
         } catch (Exception e) {
-            // Log lỗi ở đây
             System.err.println("Failed to send booking confirmation email: " + e.getMessage());
         }
     }
 
+    // =================================================================================
+    // GHI CHÚ: BỔ SUNG PHƯƠNG THỨC CÒN THIẾU ĐỂ SỬA LỖI
+    // Phương thức này được gọi khi khách hàng tạo một yêu cầu bảo dưỡng/sửa chữa (MaintenanceHistory).
+    // =================================================================================
+    @Async
+    public void sendScheduleConfirmationEmail(MaintenanceHistory history) {
+        try {
+            AppUser user = history.getOwner();
+            if (user == null || user.getEmail() == null) {
+                System.err.println("Cannot send email: User info is missing in MaintenanceHistory ID: " + history.getId());
+                return;
+            }
+
+            // Ghi chú: Lấy tên khách hàng, nếu không có thì dùng email.
+            String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
+                    ? user.getFullName()
+                    : user.getEmail();
+
+            // Ghi chú: Chuẩn bị dữ liệu để đưa vào template.
+            Context context = new Context();
+            context.setVariable("customerName", customerName);
+            context.setVariable("licensePlate", history.getVehicle().getLicensePlate());
+            context.setVariable("carModel", history.getVehicle().getCarModel().getCarName());
+            context.setVariable("serviceCenter", history.getCenter().getCenterName());
+
+            // Ghi chú: Định dạng ngày giờ cho dễ đọc.
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy");
+            String appointmentTime = history.getScheduleDate().atTime(history.getScheduleTime()).format(formatter);
+            context.setVariable("appointmentTime", appointmentTime);
+
+            String htmlContent = templateEngine.process("schedule-confirmation-email", context);
+
+            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Service Schedule Request Received", htmlContent);
+
+        } catch (Exception e) {
+            System.err.println("Error sending schedule confirmation email: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Ghi chú: Phương thức helper để gửi email HTML.
+     */
     private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -61,32 +104,4 @@ public class EmailService {
         mailSender.send(message);
         System.out.println("Email sent to: " + to);
     }
-
-//    @Async
-//    public void sendDateBasedMaintenanceReminderEmail(AppUser user, String licensePlate, LocalDate nextDueDate, List<MaintenanceScheduleDto> maintenanceItems) {
-//        try {
-//            // --- LOGIC LẤY TÊN ---
-//            String customerName = (user.getFullName() != null && !user.getFullName().isEmpty())
-//                    ? user.getFullName()
-//                    : user.getEmail();
-//
-//            Context context = new Context();
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//
-//            // Truyền tên đã xử lý vào template
-//            context.setVariable("customerName", customerName);
-//            context.setVariable("licensePlate", licensePlate);
-//            context.setVariable("nextDueDate", nextDueDate.format(formatter));
-//            // Tính ngày bảo dưỡng cuối từ ngày đáo hạn
-//            context.setVariable("lastServiceDate", nextDueDate.minusMonths(12).format(formatter));
-//            context.setVariable("maintenanceItems", maintenanceItems); // Truyền nguyên list DTO vào
-//
-//            String htmlContent = templateEngine.process("date-reminder-email", context);
-//
-//            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Nhắc nhở bảo dưỡng", htmlContent);
-//        } catch (Exception e) {
-//            System.err.println("Failed to send date-based maintenance reminder email: " + e.getMessage());
-//        }
-//    }
-
 }

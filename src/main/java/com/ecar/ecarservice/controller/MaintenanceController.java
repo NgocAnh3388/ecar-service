@@ -9,7 +9,6 @@ import com.ecar.ecarservice.payload.responses.MaintenanceTicketResponse;
 import com.ecar.ecarservice.payload.responses.MilestoneResponse;
 import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.service.MaintenanceService;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,26 +30,22 @@ public class MaintenanceController {
         this.maintenanceService = maintenanceService;
     }
 
+    // GHI CHÚ: Các endpoint GET và CREATE không có lỗi, giữ nguyên.
     @PostMapping("/history")
     public ResponseEntity<Page<MaintenanceHistoryDTO>> getMaintenanceHistory(
             @AuthenticationPrincipal OidcUser oidcUser,
-            @RequestBody MaintenanceHistorySearchRequest request
-            ) {
+            @RequestBody MaintenanceHistorySearchRequest request) {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceHistory(oidcUser, request));
     }
 
-    @PostMapping("/create") // Dùng @PostMapping cho gọn
+    @PostMapping("/create")
     public ResponseEntity<Map<String, Long>> createSchedule(@RequestBody MaintenanceScheduleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
         MaintenanceHistory newTicket = this.maintenanceService.createSchedule(request, oidcUser);
-
-        // Trả về một đối tượng JSON chứa ID
         Map<String, Long> response = Map.of("ticketId", newTicket.getId());
-
-        // Trả về status 201 Created cùng với ID
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @RequestMapping("/all")
+    @GetMapping("/all")
     @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getTickets(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTickets(user));
@@ -72,38 +67,37 @@ public class MaintenanceController {
         return ResponseEntity.ok(this.maintenanceService.getServiceGroup(ticketId));
     }
 
-    @PostMapping("/service-create")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public ResponseEntity<Void> createService(@AuthenticationPrincipal OidcUser oidcUser, @RequestBody ServiceCreateRequest request) {
-        this.maintenanceService.createService(request, oidcUser);
-        return ResponseEntity.ok().build();
-    }
-
     @GetMapping("/technician/my-tasks")
     @PreAuthorize("hasRole('TECHNICIAN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
     }
 
-    @PutMapping("/technician/tasks/{ticketId}/complete")
-    @PreAuthorize("hasRole('TECHNICIAN')")
-    public ResponseEntity<Void> completeService(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
-        maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
+
+    // =================================================================================
+    // GHI CHÚ: SỬA LỖI - HỢP NHẤT ENDPOINT
+    // Endpoint này là duy nhất cho Staff/Admin để giao việc cho Technician.
+    // Tên cũ '/service-create' sẽ bị loại bỏ. Hãy đảm bảo frontend của bạn gọi đến '/assign-task'.
+    // =================================================================================
+    @PostMapping("/assign-task")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public ResponseEntity<Void> assignTaskToTechnician(@RequestBody ServiceCreateRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
+        this.maintenanceService.assignTaskToTechnician(request, oidcUser);
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/technician-complete") // Dùng @PutMapping sẽ đúng ngữ nghĩa hơn là @PostMapping
-    // Sửa thành hasAnyRole và bỏ tiền tố 'ROLE_'
-    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN', 'STAFF')")
-    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(@PathVariable Long id) { // Đổi tên để tránh trùng lặp
-        try {
-            // Gọi phương thức trong service mà chúng ta vừa implement
-            MaintenanceHistoryDTO updatedDto = maintenanceService.completeTechnicianTask(id);
-            // Nếu thành công, trả về 200 OK cùng với dữ liệu đã được cập nhật
-            return ResponseEntity.ok(updatedDto);
-        } catch (EntityNotFoundException e) {
-            // Nếu service ném ra lỗi không tìm thấy, trả về 404 Not Found
-            return ResponseEntity.notFound().build();
-        }
+    // =================================================================================
+    // GHI CHÚ: SỬA LỖI - HỢP NHẤT ENDPOINT
+    // Endpoint này là duy nhất cho Technician bấm nút "Hoàn thành công việc".
+    // Nó sẽ gọi đến phương thức service đã được chuẩn hóa, bao gồm cả việc cập nhật lịch bảo dưỡng cho xe.
+    // =================================================================================
+    @PutMapping("/technician/tasks/{ticketId}/complete")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
+        MaintenanceHistoryDTO updatedDto = maintenanceService.completeTechnicianTask(ticketId, oidcUser);
+        return ResponseEntity.ok(updatedDto);
     }
 }
+    // Ghi chú: Loại bỏ các endpoint thừa và gây nhầm lẫn như:
+    // - /service-create (đã được thay bằng /assign-task)
+    // - /{id}/technician-complete (đã được thay bằng /technician/tasks/{ticketId}/complete)
