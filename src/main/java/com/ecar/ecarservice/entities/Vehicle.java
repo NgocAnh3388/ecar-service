@@ -31,7 +31,7 @@ public class Vehicle {
     private String licensePlate;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "car_model_id", nullable = false)
+    @JoinColumn(name = "car_model_id", nullable = true) // ⚠ cho phép null
     private CarModel carModel;
 
     @Column(name = "vin_number")

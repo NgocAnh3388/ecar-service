@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.HashSet;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -59,11 +61,14 @@ public class UserServiceImpl implements UserService {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
 
-        if (!user.getEmail().equalsIgnoreCase(userUpdateDTO.getEmail())) {
-            appUserRepository.findByEmail(userUpdateDTO.getEmail()).ifPresent(existingUser -> {
-                throw new IllegalStateException("Email " + userUpdateDTO.getEmail() + " is already in use.");
+        String currentEmail = user.getEmail();
+        String newEmail = userUpdateDTO.getEmail();
+
+        if (currentEmail != null && !currentEmail.equalsIgnoreCase(newEmail)) {
+            appUserRepository.findByEmail(newEmail).ifPresent(existingUser -> {
+                throw new IllegalStateException("Email " + newEmail + " is already in use.");
             });
-            user.setEmail(userUpdateDTO.getEmail());
+            user.setEmail(newEmail);
         }
 
         user.setFullName(userUpdateDTO.getFullName());
@@ -71,15 +76,21 @@ public class UserServiceImpl implements UserService {
 
         if (userUpdateDTO.getRole() != null) {
             try {
-                Set<AppRole> roles = Set.of(AppRole.valueOf(userUpdateDTO.getRole().toUpperCase()));
+                Set<AppRole> roles = new HashSet<>();
+                roles.add(AppRole.valueOf(userUpdateDTO.getRole().toUpperCase()));
                 user.setRoles(roles);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Invalid role specified: " + userUpdateDTO.getRole());
             }
         }
 
-        AppUser updatedUser = appUserRepository.save(user);
-        return convertToDto(updatedUser);
+        try {
+            AppUser updatedUser = appUserRepository.save(user);
+            return convertToDto(updatedUser);
+        } catch (Exception e) {
+            e.printStackTrace(); // In stacktrace thật ra console
+            throw e;
+        }
     }
 
     @Override
@@ -88,6 +99,17 @@ public class UserServiceImpl implements UserService {
         AppUser user = appUserRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
         user.setActive(false);
+        appUserRepository.save(user);
+    }
+
+
+    @Override
+    @Transactional
+    public void toggleActiveUser(Long id) {
+        AppUser user = appUserRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+
+        user.setActive(!user.isActive()); // đảo trạng thái
         appUserRepository.save(user);
     }
 
@@ -158,7 +180,8 @@ public class UserServiceImpl implements UserService {
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
         appUser.setPhoneNo(userCreateDTO.getPhoneNo());
-        Set<AppRole> roles = Set.of(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
+        Set<AppRole> roles = new HashSet<>();
+        roles.add(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
         appUser.setRoles(roles);
         this.appUserRepository.save(appUser);
     }
@@ -181,4 +204,5 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
         return convertToDto(user);
     }
+
 }

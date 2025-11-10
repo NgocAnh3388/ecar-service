@@ -22,5 +22,7 @@ public interface UserService {
     AppUser getCurrentUser(OidcUser oidcUser);
     List<AppUser> getUserListByRole(String role);
     AppUser getCurrentUserById(Long id);
+    void toggleActiveUser(Long id);
+
 
 }
