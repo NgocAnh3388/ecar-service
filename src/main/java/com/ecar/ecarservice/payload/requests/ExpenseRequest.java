@@ -9,17 +9,17 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record ExpenseRequest(
-        @NotBlank(message = "Mô tả không được để trống")
+        @NotBlank(message = "Description cannot be blank")
         String description,
 
-        @NotNull(message = "Số tiền không được để trống")
-        @DecimalMin(value = "0.0", inclusive = false, message = "Số tiền phải lớn hơn 0")
+        @NotNull(message = "Amount cannot be blank")
+        @DecimalMin(value = "0.0", inclusive = false, message = "Amount must be greater than 0")
         BigDecimal amount,
 
-        @NotNull(message = "Phân loại không được để trống")
+        @NotNull(message = "Category cannot be blank")
         ExpenseCategory category,
 
-        @NotNull(message = "Ngày chi không được để trống")
+        @NotNull(message = "Expense date cannot be blank")
         LocalDate expenseDate
 ) {
 }

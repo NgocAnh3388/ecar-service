@@ -196,23 +196,20 @@ FROM public.car_model cm, (VALUES (12000, 1), (24000, 2), (36000, 3), (48000, 4)
 -- vehicles. app_user (qua owner_id), car_model (qua car_model_id)
 -- =================================================================================
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, next_km, next_date, old_km, old_date, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF3'), '29A-111.11', 'VIN001', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 24000, '2026-10-30 17:00:00', 10000, '2025-10-30 17:00:00', 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF3'), '29A-111.11', 'VIN00000000000001', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 24000, '2026-10-30 17:00:00', 10000, '2025-10-30 17:00:00', 'system', NOW(), NOW(), 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF5'), '30A-222.22', 'VIN002', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF5'), '30A-222.22', 'VIN00000000000002', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 'system', NOW(), NOW(), 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF6'), '51G-111.13', 'VIN003', (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF6'), '51G-111.13', 'VIN00000000000003', (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 'system', NOW(), NOW(), 'system');
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF7'), '51H-111.14', 'VIN004', (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
-INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, created_by, created_at, updated_at, updated_by)
-VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF8'), '60B-222.15', 'VIN005', (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system');
-
+VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF9'), '51A-CUS-159', 'VIN00000000000004', (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com'), 'system', NOW(), NOW(), 'system');
 
 -- =================================================================================
 -- subscription_info (Bảng gói dịch vụ). phụ thuộc vào app_user
 -- =================================================================================
 INSERT INTO public.subscription_info (owner_id, start_date, end_date, payment_date, created_by, created_at, updated_by, updated_at)
 VALUES
-    -- Scenario 1: Active subscription for user 'customerrole01@gmai.com'
+    -- Scenario 1: Active subscription for user 'customerrole01@gmail.com'
     (
         (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'),
         '2025-01-15 10:00:00',
@@ -251,7 +248,7 @@ VALUES
 -- =================================================================================
 INSERT INTO public.payment_history (subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years, amount)
 VALUES
-    -- Payment history for Subscription belonging to 'customerrole01@gmai.com'
+    -- Payment history for Subscription belonging to 'customerrole01@gmail.com'
     ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
     -- Payment history for Subscription belonging to 'customer030@example.com'
     ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
@@ -264,7 +261,7 @@ VALUES
 
 
 -- =================================================================================
--- spare_part), phụ thuộc vào car_model
+-- spare_part, phụ thuộc vào car_model
 -- =================================================================================
 INSERT INTO public.spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, created_by, updated_at, updated_by)
 SELECT
@@ -393,7 +390,7 @@ VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id
 
 -- A booking record that corresponds to the completed maintenance history
 INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
-VALUES((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '0373587006', '29A-111.11', 'VF3', 'VIN001', 'ECar Thu Duc', '2025-10-30 12:00:00', 'General check-up and minor repairs.', 'COMPLETED', 'lengochan090105@gmail.com', '2025-10-30 10:36:36');
+VALUES((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '0373587006', '29A-111.11', 'VF3', 'VIN00000000000001', 'ECar Thu Duc', '2025-10-30 12:00:00', 'General check-up and minor repairs.', 'COMPLETED', 'lengochan090105@gmail.com', '2025-10-30 10:36:36');
 
 -- service_records: Links to the BOOKING, not the maintenance_history
 INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
@@ -465,7 +462,7 @@ VALUES(
           '0373587006',
           '29A-111.11',
           'VF3',
-          'VIN001',
+          'VIN00000000000001',
           'ECar Thu Duc',
           '2025-10-30 12:00:00',
           'General check-up and minor repairs.',

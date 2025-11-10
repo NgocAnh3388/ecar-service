@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedBy;
@@ -34,7 +35,8 @@ public class Vehicle {
     @JoinColumn(name = "car_model_id", nullable = true) // ⚠ cho phép null
     private CarModel carModel;
 
-    @Column(name = "vin_number")
+    @Column(name = "vin_number", length = 17, unique = true, nullable = false)
+    @Size(min = 17, max = 17, message = "VIN must be exactly 17 characters")
     private String vinNumber;
 
     @Column(name = "next_km")
