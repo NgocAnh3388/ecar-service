@@ -3,6 +3,7 @@ package com.ecar.ecarservice.service.impl;
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
 import com.ecar.ecarservice.entities.*;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
+import com.ecar.ecarservice.payload.requests.BookingRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
 import com.ecar.ecarservice.payload.requests.ServiceCreateRequest;
@@ -11,8 +12,10 @@ import com.ecar.ecarservice.payload.responses.MilestoneResponse;
 import com.ecar.ecarservice.payload.responses.ServiceGroup;
 import com.ecar.ecarservice.payload.responses.ServiceItem;
 import com.ecar.ecarservice.repositories.*;
+import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;
 import com.ecar.ecarservice.service.UserService;
+import com.ecar.ecarservice.threads.EmailThread;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +42,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceScheduleRepository maintenanceScheduleRepository;
     private final ServiceRepository serviceRepository;
     private final MaintenanceItemRepository maintenanceItemRepository;
+    private final EmailService emailService;
+    private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+
 
     public MaintenanceServiceImpl(MaintenanceHistoryRepository maintenanceHistoryRepository,
                                   UserService userService,
@@ -46,7 +54,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                                   MaintenanceMileStoneRepository maintenanceMileStoneRepository,
                                   MaintenanceScheduleRepository maintenanceScheduleRepository,
                                   ServiceRepository serviceRepository,
-                                  MaintenanceItemRepository maintenanceItemRepository) {
+                                  MaintenanceItemRepository maintenanceItemRepository,
+                                  EmailService emailService) {
         this.maintenanceHistoryRepository = maintenanceHistoryRepository;
         this.userService = userService;
         this.vehicleRepository = vehicleRepository;
@@ -56,6 +65,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         this.maintenanceScheduleRepository = maintenanceScheduleRepository;
         this.serviceRepository = serviceRepository;
         this.maintenanceItemRepository = maintenanceItemRepository;
+        this.emailService = emailService;
     }
 
     @Override
@@ -74,9 +84,11 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Transactional
     public MaintenanceHistory createSchedule(MaintenanceScheduleRequest request, OidcUser oidcUser) {
         AppUser currentUser = userService.getCurrentUser(oidcUser);
-
+        Vehicle vehicle = this.vehicleRepository.findById(request.vehicleId()).orElseThrow();
+        Center center = this.centerRepository.findById(request.centerId()).orElseThrow();
+        LocalDateTime dateTime = LocalDateTime.of(request.scheduleDate(), request.scheduleTime());
         MaintenanceHistory history = new MaintenanceHistory();
-        history.setVehicle(this.vehicleRepository.getReferenceById(request.vehicleId()));
+        history.setVehicle(vehicle);
         history.setOwner(this.appUserRepository.getReferenceById(currentUser.getId()));
         history.setNumOfKm(request.numOfKm());
         history.setSubmittedAt(LocalDateTime.now());
@@ -84,11 +96,22 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         history.setIsMaintenance(request.isMaintenance());
         history.setIsRepair(request.isRepair());
         history.setRemark(request.remark());
-        history.setCenter(this.centerRepository.getReferenceById(request.centerId()));
+        history.setCenter(center);
         history.setScheduleTime(request.scheduleTime());
         history.setScheduleDate(request.scheduleDate());
 
         //TODO: gửi mail xác nhận đã nhận được yêu cầu
+        BookingRequest bookingRequest = new BookingRequest(
+                currentUser.getFullName(),
+                vehicle.getLicensePlate(),
+                vehicle.getCarModel().getCarName(),
+                center.getCenterName(),
+                dateTime,
+                currentUser.getEmail()
+        );
+
+        EmailThread emailThread = new EmailThread(bookingRequest, emailService);
+        this.executorService.submit(emailThread);
 
         return this.maintenanceHistoryRepository.save(history);
     }
@@ -139,7 +162,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 history.getIsRepair(),
                 history.getCenter().getCenterName(),
                 history.getScheduleDate(),
-                history.getScheduleTime()
+                history.getScheduleTime(),
+                history.getMaintenanceScheduleId()
         );
     }
 
@@ -271,8 +295,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .toList();
     }
 
-    @Override
     @Transactional
+    @Override
     public void completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
         // 1. Lấy thông tin KTV đang đăng nhập
         AppUser currentTechnician = userService.getCurrentUser(oidcUser);

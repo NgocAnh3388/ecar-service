@@ -18,6 +18,7 @@ public record MaintenanceTicketResponse(
         Long staffId,
         LocalDateTime staffReceivedAt,
         String technicianName,
+        
         Long technicianId,
         LocalDateTime technicianReceivedAt,
         LocalDateTime completedAt,
@@ -26,6 +27,7 @@ public record MaintenanceTicketResponse(
         Boolean isRepair,
         String centerName,
         LocalDate scheduleDate,
-        LocalTime scheduleTime
+        LocalTime scheduleTime,
+        Long scheduleId
 ) {
 }
