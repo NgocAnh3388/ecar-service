@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.MaintenanceHistory;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
@@ -36,5 +37,18 @@ public interface MaintenanceService {
     void cancelMaintenance(Long id);
 
     void reopenMaintenance(Long id);
+    /**
+     * Cập nhật danh sách phụ tùng dự kiến sử dụng cho một phiếu dịch vụ (task).
+     * @param ticketId ID của phiếu dịch vụ (MaintenanceHistory).
+     * @param usedParts Danh sách các phụ tùng và số lượng.
+     */
+    void updateUsedParts(Long ticketId, List<UsedPartDto> usedParts);
+
+    /**
+     * Lấy danh sách phụ tùng dự kiến đã được lưu cho một phiếu dịch vụ.
+     * @param ticketId ID của phiếu dịch vụ.
+     * @return Danh sách các phụ tùng và số lượng.
+     */
+    List<UsedPartDto> getUsedParts(Long ticketId);
 
 }

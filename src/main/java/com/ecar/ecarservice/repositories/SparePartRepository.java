@@ -10,6 +10,6 @@ public interface SparePartRepository extends JpaRepository<SparePart, Long> {
 
     List<SparePart> findByCarModel_Id(Long carModelId);
 
-    @Query("SELECT p FROM SparePart p WHERE p.stockQuantity < p.minStockLevel")
-    List<SparePart> findLowStockParts();
+//    @Query("SELECT p FROM SparePart p WHERE p.stockQuantity < p.minStockLevel")
+//    List<SparePart> findLowStockParts();
 }

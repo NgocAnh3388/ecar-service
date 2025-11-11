@@ -12,6 +12,7 @@ spring:
       minimum-idle: 25
   # jpa config
   jpa:
+#    defer-datasource-initialization: true
     open-in-view: true
     properties:
       hibernate:
@@ -22,6 +23,11 @@ spring:
     show-sql: true # show sql
     hibernate:
       ddl-auto: update
+#  # Cấu hình SQL initialization
+#  sql:
+#    init:
+#      mode: always
+
   security:
     oauth2:
       client:

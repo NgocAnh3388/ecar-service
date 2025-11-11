@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.*;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import com.ecar.ecarservice.payload.requests.*;
@@ -43,6 +44,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceItemRepository maintenanceItemRepository;
     private final EmailService emailService;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final MaintenanceItemPartRepository maintenanceItemPartRepository;
+    private final SparePartRepository sparePartRepository;
 
     // ====================== LICH SU BAO DUONG ======================
     @Override
@@ -261,16 +264,19 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
         maintenanceItemRepository.saveAll(items);
 
+        // ======================= GỬI MAIL THÔNG BÁO PHÂN CÔNG TECHNICIAN =======================
+        emailService.sendTechnicianAssignedEmail(assignedTechnician, saved);
+
         // ======================= GỬI MAIL NGAY KHI TECHNICIAN NHẬN XE =======================
         AppUser owner = saved.getOwner();
         Vehicle vehicle = saved.getVehicle();
         if (owner != null && assignedTechnician != null && vehicle != null && vehicle.getCarModel() != null) {
-            // @Async sẽ chạy background thread, không cần executorService
             emailService.sendTechnicianReceivedEmail(owner, assignedTechnician, vehicle);
         } else {
             System.err.println("Cannot send technician received email: missing owner, technician, or vehicle data.");
         }
     }
+
 
     // ====================== LAY PHIEU KY THUAT VIEN ======================
     @Override
@@ -373,6 +379,66 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setUpdatedAt(LocalDateTime.now());
 
         maintenanceHistoryRepository.save(ticket);
+    // ====================== NHAC BAO DUONG TRUOC 10 NGAY ======================
+    @Transactional
+    @Scheduled(cron = "0 0 8 * * *")
+    public void sendUpcomingMaintenanceReminders() {
+        LocalDate today = LocalDate.now();
+        LocalDate reminderDate = today.plusDays(10);
+
+        List<Vehicle> upcomingVehicles = vehicleRepository.findAll().stream()
+                .filter(v -> v.getNextDate() != null && v.getNextDate().toLocalDate().equals(reminderDate))
+                .toList();
+
+        for (Vehicle vehicle : upcomingVehicles) {
+            AppUser owner = vehicle.getOwner();
+            if (owner != null) {
+                try {
+                    emailService.sendMaintenanceReminderEmail(owner, vehicle, vehicle.getNextDate().toLocalDate());
+                } catch (Exception e) {
+                    System.err.println("Failed to send reminder to " + owner.getEmail() + ": " + e.getMessage());
+                }
+            }
+        }
+
+        System.out.println("Maintenance reminder emails sent for vehicles due on: " + reminderDate);
+    }
+
+
+    @Override
+    @Transactional
+    public void updateUsedParts(Long ticketId, List<UsedPartDto> usedParts) {
+        // Tìm phiếu dịch vụ gốc
+        MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
+
+        // 1. Xóa tất cả các bản ghi phụ tùng cũ của ticket này để đảm bảo dữ liệu mới là duy nhất
+        maintenanceItemPartRepository.deleteByMaintenanceHistoryId(ticketId);
+
+        // 2. Tạo các bản ghi mới từ request
+        if (usedParts != null && !usedParts.isEmpty()) {
+            List<MaintenanceItemPart> newItemParts = usedParts.stream().map(partDto -> {
+                SparePart sparePart = sparePartRepository.findById(partDto.partId())
+                        .orElseThrow(() -> new EntityNotFoundException("Spare part not found with id: " + partDto.partId()));
+
+                MaintenanceItemPart itemPart = new MaintenanceItemPart();
+                itemPart.setMaintenanceHistory(maintenanceHistory);
+                itemPart.setSparePart(sparePart);
+                itemPart.setQuantity(partDto.quantity());
+                return itemPart;
+            }).collect(Collectors.toList());
+
+            maintenanceItemPartRepository.saveAll(newItemParts);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsedPartDto> getUsedParts(Long ticketId) {
+        return maintenanceItemPartRepository.findByMaintenanceHistoryId(ticketId)
+                .stream()
+                .map(item -> new UsedPartDto(item.getSparePart().getId(), item.getQuantity()))
+                .collect(Collectors.toList());
     }
 
 }

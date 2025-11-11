@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Daily Low Stock Report</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .alert { color: #dc3545; font-weight: bold; }
+    </style>
+</head>
+<body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
+<div style="max-width: 800px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
+    <h2 style="color: #0056b3;">Ecar Service Center - Báo cáo Tồn kho Thấp Hàng ngày</h2>
+    <p>Xin chào <strong th:text="${recipientName}">Admin/Staff Name</strong>,</p>
+    <p>Dưới đây là danh sách các phụ tùng đang ở dưới mức tồn kho tối thiểu tại trung tâm <strong th:text="${centerName}">Center Name</strong>. Vui lòng xem xét và nhập hàng.</p>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Mã Phụ tùng</th>
+            <th>Tên Phụ tùng</th>
+            <th>Tồn kho Hiện tại</th>
+            <th>Tồn kho Tối thiểu</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${lowStockItems}">
+            <td th:text="${item.sparePart.partNumber}">VF3-BRK-01</td>
+            <td th:text="${item.sparePart.partName}">Front Brake Pads</td>
+            <td class="alert" th:text="${item.stockQuantity}">9</td>
+            <td th:text="${item.minStockLevel}">10</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p style="margin-top: 20px;">Trân trọng,<br/>Hệ thống Ecar Service</p>
+</div>
+</body>
+</html>
