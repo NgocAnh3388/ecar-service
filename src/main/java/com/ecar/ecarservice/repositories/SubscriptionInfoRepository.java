@@ -6,10 +6,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.List;
 
 @Repository
 public interface SubscriptionInfoRepository extends JpaRepository<SubscriptionInfo, Long> {
     Optional<SubscriptionInfo> findFirstByOwnerId(@Param("ownerId") Long ownerId);
 
     SubscriptionInfo findFirstById(Long id);
+
+    List<SubscriptionInfo> findByOwnerId(Long ownerId);
 }
