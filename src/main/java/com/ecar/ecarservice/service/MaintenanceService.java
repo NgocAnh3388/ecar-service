@@ -32,4 +32,9 @@ public interface MaintenanceService {
     void completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
 
     MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId);
+
+    void cancelMaintenance(Long id);
+
+    void reopenMaintenance(Long id);
+
 }

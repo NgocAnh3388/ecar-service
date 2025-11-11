@@ -106,4 +106,21 @@ public class MaintenanceController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    // ====================== HỦY PHIẾU ======================
+    @PutMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<Void> cancelMaintenance(@PathVariable Long id) {
+        maintenanceService.cancelMaintenance(id);
+        return ResponseEntity.ok().build();
+    }
+
+    // ====================== KÍCH HOẠT LẠI PHIẾU ======================
+    @PutMapping("/{id}/reopen")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<Void> reopenMaintenance(@PathVariable Long id) {
+        maintenanceService.reopenMaintenance(id);
+        return ResponseEntity.ok().build();
+    }
+
 }
