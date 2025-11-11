@@ -15,6 +15,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.ecar.ecarservice.repositories.SubscriptionInfoRepository;
+import com.ecar.ecarservice.repositories.MaintenanceHistoryRepository;
+import com.ecar.ecarservice.dto.SubscriptionInfoDto;
+import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.repositories.PaymentHistoryRepository;
 
 import java.util.*;
 import java.util.function.Function;
@@ -24,9 +29,18 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final AppUserRepository appUserRepository;
+    private final MaintenanceHistoryRepository maintenanceHistoryRepository;
+    private final SubscriptionInfoRepository subscriptionInfoRepository;
+    private final PaymentHistoryRepository paymentHistoryRepository;
 
-    public UserServiceImpl(AppUserRepository appUserRepository) {
+    public UserServiceImpl(AppUserRepository appUserRepository,
+                           MaintenanceHistoryRepository maintenanceHistoryRepository,
+                           SubscriptionInfoRepository subscriptionInfoRepository,
+                           PaymentHistoryRepository paymentHistoryRepository) {
         this.appUserRepository = appUserRepository;
+        this.maintenanceHistoryRepository = maintenanceHistoryRepository;
+        this.subscriptionInfoRepository = subscriptionInfoRepository;
+        this.paymentHistoryRepository = paymentHistoryRepository;
     }
 
     // ===================== THEM MOI (giữ tu file 2) =====================
@@ -51,8 +65,43 @@ public class UserServiceImpl implements UserService {
     public UserDto getUserById(Long id) {
         AppUser user = appUserRepository.findByIdWithVehicles(id)
                 .orElseThrow(() -> new EntityNotFoundException("Active user not found with id: " + id));
-        return convertToDto(user);
+
+        UserDto dto = convertToDto(user);
+
+        // 🔹 Lấy lịch sử bảo dưỡng (chuyển sang DTO)
+        List<MaintenanceHistoryDTO> histories = maintenanceHistoryRepository
+                .searchByOwner(id, "", PageRequest.of(0, 100))
+                .getContent()
+                .stream()
+                .map(mh -> MaintenanceHistoryDTO.builder()
+                        .carName(mh.getVehicle() != null && mh.getVehicle().getCarModel() != null
+                                ? mh.getVehicle().getCarModel().getCarName() : null)
+                        .carType(mh.getVehicle() != null && mh.getVehicle().getCarModel() != null
+                                ? mh.getVehicle().getCarModel().getCarType() : null)
+                        .licensePlate(mh.getVehicle() != null ? mh.getVehicle().getLicensePlate() : null)
+                        .submittedAt(mh.getSubmittedAt())
+                        .completedAt(mh.getCompletedAt())
+                        .status(mh.getStatus())
+                        .build()
+                ).toList();
+        dto.setMaintenanceHistories(histories);
+
+        // 🔹 Lấy gói dịch vụ (chuyển sang DTO)
+        List<SubscriptionInfoDto> subscriptions = subscriptionInfoRepository.findByOwnerId(id)
+                .stream()
+                .map(sub -> {
+                    SubscriptionInfoDto sid = new SubscriptionInfoDto();
+                    sid.setId(sub.getId());
+                    sid.setStartDate(sub.getStartDate());
+                    sid.setEndDate(sub.getEndDate());
+                    sid.setPaymentDate(sub.getPaymentDate());
+                    return sid;
+                }).toList();
+        dto.setSubscriptionInfos(subscriptions);
+
+        return dto;
     }
+
 
     // ===================== CAP NHAT THONG TIN USER =====================
     @Override
