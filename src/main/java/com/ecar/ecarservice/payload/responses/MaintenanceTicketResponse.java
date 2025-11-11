@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.payload.responses;
 
 import com.ecar.ecarservice.enums.MaintenanceStatus;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,11 +23,15 @@ public record MaintenanceTicketResponse(
         LocalDateTime technicianReceivedAt,
         LocalDateTime completedAt,
         MaintenanceStatus status,
-        Boolean isMaintenance,
-        Boolean isRepair,
         String centerName,
         LocalDate scheduleDate,
         LocalTime scheduleTime,
-        Long scheduleId
-) {
-}
+        Long scheduleId,
+
+        // Đặt annotation trực tiếp, không có private, không có dấu chấm phẩy
+        @JsonProperty("isMaintenance")
+        Boolean isMaintenance,
+
+        @JsonProperty("isRepair")
+        Boolean isRepair
+) { }

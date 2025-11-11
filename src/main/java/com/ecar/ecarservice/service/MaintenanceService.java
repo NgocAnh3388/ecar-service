@@ -34,6 +34,9 @@ public interface MaintenanceService {
 
     MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId);
 
+    void cancelMaintenance(Long id);
+
+    void reopenMaintenance(Long id);
     /**
      * Cập nhật danh sách phụ tùng dự kiến sử dụng cho một phiếu dịch vụ (task).
      * @param ticketId ID của phiếu dịch vụ (MaintenanceHistory).

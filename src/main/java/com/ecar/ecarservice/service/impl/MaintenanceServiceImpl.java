@@ -134,14 +134,15 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 history.getTechnicianReceivedAt(),
                 history.getCompletedAt(),
                 history.getStatus(),
-                history.getIsMaintenance(),
-                history.getIsRepair(),
-                history.getCenter().getCenterName(),
+                history.getCenter() != null ? history.getCenter().getCenterName() : null,
                 history.getScheduleDate(),
                 history.getScheduleTime(),
-                history.getMaintenanceScheduleId()
+                history.getMaintenanceScheduleId(),
+                history.getIsMaintenance(),
+                history.getIsRepair()
         );
     }
+
 
     private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
         return MaintenanceHistoryDTO.builder()
@@ -338,6 +339,46 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         return convertToDTO(savedTicket);
     }
 
+    // ====================== HỦY PHIẾU ======================
+    @Override
+    @Transactional
+    public void cancelMaintenance(Long id) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance record not found with id: " + id));
+
+        // Không cho hủy nếu phiếu đã hoàn thành
+        if (ticket.getStatus() == MaintenanceStatus.DONE
+                || ticket.getStatus() == MaintenanceStatus.TECHNICIAN_COMPLETED) {
+            throw new IllegalStateException("Cannot cancel a completed order.");
+        }
+
+        // Đánh dấu phiếu này không còn là bảo dưỡng
+        ticket.setIsMaintenance(false);
+        ticket.setRemark("Cancelled by staff/user");
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        maintenanceHistoryRepository.save(ticket);
+    }
+
+
+    // ====================== KÍCH HOẠT LẠI PHIẾU (REOPEN) ======================
+    @Override
+    @Transactional
+    public void reopenMaintenance(Long id) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance record not found with id: " + id));
+
+        // Chỉ mở lại nếu phiếu đang bị hủy
+        if (Boolean.TRUE.equals(ticket.getIsMaintenance())) {
+            throw new IllegalStateException("Only cancelled tickets can be reopened.");
+        }
+
+        // Kích hoạt lại
+        ticket.setIsMaintenance(true);
+        ticket.setRemark("Reopened by staff/admin");
+        ticket.setUpdatedAt(LocalDateTime.now());
+
+        maintenanceHistoryRepository.save(ticket);
     // ====================== NHAC BAO DUONG TRUOC 10 NGAY ======================
     @Transactional
     @Scheduled(cron = "0 0 8 * * *")
