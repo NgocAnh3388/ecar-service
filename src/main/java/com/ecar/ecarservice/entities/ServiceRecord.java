@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +41,27 @@ public class ServiceRecord {
     // Danh sách các hạng mục chi tiết đã thực hiện
     @OneToMany(mappedBy = "serviceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ServiceRecordDetail> details = new ArrayList<>();
+
+    // Thay thế List<ServiceRecordDetail> cũ bằng mối quan hệ này
+    @OneToMany(mappedBy = "serviceRecord", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private List<UsedSparePart> usedParts = new ArrayList<>();
+    private List<ServicePartUsage> usedParts = new ArrayList<>();
+
+    // ---  CÁC TRƯỜNG TÀI CHÍNH để lưu tổng chi phí phụ tùng ---
+    @Column(precision = 19, scale = 2)
+    private BigDecimal totalPartsCost;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal laborCost;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal totalActualCost;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal coveredByPackage;
+
+    @Column(precision = 19, scale = 2)
+    private BigDecimal additionalCost;
 
     // Các trường Auditing
     @CreatedDate

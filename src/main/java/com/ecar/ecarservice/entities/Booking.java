@@ -58,6 +58,10 @@ public class Booking {
     @Column(nullable = false)
     private BookingStatus status;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "center_id") // Tên cột khóa ngoại trong bảng bookings
+    private Center center;
+
     // --- 4 Fields Auditing ---
     @CreatedDate
     @Column(nullable = false, updatable = false)

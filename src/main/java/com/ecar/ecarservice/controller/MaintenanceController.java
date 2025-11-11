@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.MaintenanceHistory;
 import com.ecar.ecarservice.payload.requests.MaintenanceHistorySearchRequest;
 import com.ecar.ecarservice.payload.requests.MaintenanceScheduleRequest;
@@ -106,4 +107,23 @@ public class MaintenanceController {
             return ResponseEntity.notFound().build();
         }
     }
+
+
+
+    public record UpdateUsedPartsRequest(List<UsedPartDto> usedParts) {}
+
+    @PutMapping("/tasks/{ticketId}/used-parts")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
+    public ResponseEntity<Void> updateUsedPartsForTask(
+            @PathVariable Long ticketId,
+            @RequestBody UpdateUsedPartsRequest request) {
+        maintenanceService.updateUsedParts(ticketId, request.usedParts());
+        return ResponseEntity.ok().build();
+    }
+    @GetMapping("/tasks/{ticketId}/used-parts")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
+    public ResponseEntity<List<UsedPartDto>> getUsedPartsForTask(@PathVariable Long ticketId) {
+        return ResponseEntity.ok(maintenanceService.getUsedParts(ticketId));
+    }
+
 }

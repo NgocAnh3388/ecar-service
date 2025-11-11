@@ -3,6 +3,7 @@ package com.ecar.ecarservice.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,5 +17,11 @@ public class ServiceRecordResponseDto {
     private LocalDateTime serviceDate;
     private String createdBy;
     private List<ServiceDetailDto> details;
+
+    private BigDecimal totalPartsCost;
+    private BigDecimal laborCost;
+    private BigDecimal totalActualCost;
+    private BigDecimal coveredByPackage;
+    private BigDecimal additionalCost;
 }
 
