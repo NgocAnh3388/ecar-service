@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.MaintenanceHistory;
 import com.ecar.ecarservice.entities.Vehicle;
 import com.ecar.ecarservice.payload.requests.BookingRequest;
 import jakarta.mail.MessagingException;
@@ -104,6 +105,39 @@ public class EmailService {
             System.err.println("Failed to send reminder email: " + e.getMessage());
         }
     }
+    /** ------------------- ASSIGN TECHNICIAN ------------------- */
+    @Async
+    public void sendTechnicianAssignedEmail(AppUser technician, MaintenanceHistory maintenanceHistory) {
+        try {
+            AppUser owner = maintenanceHistory.getOwner();
+            Vehicle vehicle = maintenanceHistory.getVehicle();
+
+            if (technician == null || owner == null || vehicle == null || vehicle.getCarModel() == null) {
+                System.err.println("Cannot send technician assigned email: missing data.");
+                return;
+            }
+
+            Context context = new Context();
+            context.setVariable("technicianName", technician.getFullName());
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("licensePlate", vehicle.getLicensePlate());
+            context.setVariable("carModel", vehicle.getCarModel().getCarName());
+            context.setVariable("centerName", maintenanceHistory.getCenter().getCenterName());
+            context.setVariable("appointmentTime",
+                    LocalDateTime.of(maintenanceHistory.getScheduleDate(), maintenanceHistory.getScheduleTime())
+                            .format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+            context.setVariable("assignedAt",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+
+            String htmlContent = templateEngine.process("technician-assigned-email", context);
+            sendHtmlEmail(technician.getEmail(), "Ecar Service Center - Ban da duoc phan cong", htmlContent);
+
+        } catch (Exception e) {
+            System.err.println("Failed to send technician assigned email: " + e.getMessage());
+        }
+    }
+
+
 
     /** ------------------- SEND HTML EMAIL (shared) ------------------- */
     private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
@@ -115,4 +149,6 @@ public class EmailService {
         mailSender.send(message);
         System.out.println("Email sent to: " + to);
     }
+
+
 }
