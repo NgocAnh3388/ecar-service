@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.service.impl;
 
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.*;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import com.ecar.ecarservice.payload.requests.*;
@@ -43,6 +44,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceItemRepository maintenanceItemRepository;
     private final EmailService emailService;
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
+    private final MaintenanceItemPartRepository maintenanceItemPartRepository;
+    private final SparePartRepository sparePartRepository;
 
     // ====================== LICH SU BAO DUONG ======================
     @Override
@@ -330,4 +333,42 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
         System.out.println("Maintenance reminder emails sent for vehicles due on: " + reminderDate);
     }
+
+
+    @Override
+    @Transactional
+    public void updateUsedParts(Long ticketId, List<UsedPartDto> usedParts) {
+        // Tìm phiếu dịch vụ gốc
+        MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
+
+        // 1. Xóa tất cả các bản ghi phụ tùng cũ của ticket này để đảm bảo dữ liệu mới là duy nhất
+        maintenanceItemPartRepository.deleteByMaintenanceHistoryId(ticketId);
+
+        // 2. Tạo các bản ghi mới từ request
+        if (usedParts != null && !usedParts.isEmpty()) {
+            List<MaintenanceItemPart> newItemParts = usedParts.stream().map(partDto -> {
+                SparePart sparePart = sparePartRepository.findById(partDto.partId())
+                        .orElseThrow(() -> new EntityNotFoundException("Spare part not found with id: " + partDto.partId()));
+
+                MaintenanceItemPart itemPart = new MaintenanceItemPart();
+                itemPart.setMaintenanceHistory(maintenanceHistory);
+                itemPart.setSparePart(sparePart);
+                itemPart.setQuantity(partDto.quantity());
+                return itemPart;
+            }).collect(Collectors.toList());
+
+            maintenanceItemPartRepository.saveAll(newItemParts);
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsedPartDto> getUsedParts(Long ticketId) {
+        return maintenanceItemPartRepository.findByMaintenanceHistoryId(ticketId)
+                .stream()
+                .map(item -> new UsedPartDto(item.getSparePart().getId(), item.getQuantity()))
+                .collect(Collectors.toList());
+    }
+
 }

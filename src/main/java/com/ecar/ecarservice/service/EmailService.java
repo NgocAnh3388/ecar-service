@@ -1,6 +1,8 @@
 package com.ecar.ecarservice.service;
 
 import com.ecar.ecarservice.entities.AppUser;
+import com.ecar.ecarservice.entities.Center;
+import com.ecar.ecarservice.entities.Inventory;
 import com.ecar.ecarservice.entities.Vehicle;
 import com.ecar.ecarservice.payload.requests.BookingRequest;
 import jakarta.mail.MessagingException;
@@ -15,6 +17,7 @@ import org.thymeleaf.context.Context;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -104,6 +107,45 @@ public class EmailService {
             System.err.println("Failed to send reminder email: " + e.getMessage());
         }
     }
+
+    /** ------------------- LOW STOCK ALERT (Phương thức mới) ------------------- */
+    @Async // Chạy bất đồng bộ để không làm chậm luồng xử lý chính
+    public void sendLowStockAlertEmail(AppUser recipient, Inventory inventoryItem) {
+        try {
+            Context context = new Context();
+            context.setVariable("recipientName", recipient.getFullName());
+            context.setVariable("centerName", inventoryItem.getCenter().getCenterName());
+            context.setVariable("partName", inventoryItem.getSparePart().getPartName());
+            context.setVariable("partNumber", inventoryItem.getSparePart().getPartNumber());
+            context.setVariable("currentStock", inventoryItem.getStockQuantity());
+            context.setVariable("minStock", inventoryItem.getMinStockLevel());
+
+            String htmlContent = templateEngine.process("low-stock-alert-email", context);
+            sendHtmlEmail(recipient.getEmail(), "[Ecar Service] Low Stock Alert for " + inventoryItem.getSparePart().getPartName(), htmlContent);
+        } catch (Exception e) {
+            // Ghi log lỗi thay vì để nó làm crash ứng dụng
+            System.err.println("Failed to send low stock alert email to " + recipient.getEmail() + ": " + e.getMessage());
+        }
+    }
+
+    /** ------------------- DAILY LOW STOCK REPORT (Phương thức mới) ------------------- */
+    @Async
+    public void sendLowStockReportEmail(AppUser recipient, Center center, List<Inventory> lowStockItems) {
+        try {
+            Context context = new Context();
+            context.setVariable("recipientName", recipient.getFullName());
+            context.setVariable("centerName", center.getCenterName());
+            context.setVariable("lowStockItems", lowStockItems);
+
+            String htmlContent = templateEngine.process("low-stock-report-email", context);
+            String subject = String.format("[Ecar Service] Daily Low Stock Report for %s", center.getCenterName());
+
+            sendHtmlEmail(recipient.getEmail(), subject, htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send daily low stock report to " + recipient.getEmail() + ": " + e.getMessage());
+        }
+    }
+
 
     /** ------------------- SEND HTML EMAIL (shared) ------------------- */
     private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {

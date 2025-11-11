@@ -1,3 +1,5 @@
+CREATE EXTENSION unaccent;
+
 -- RUN THIS COMMAND FIRST TO CLEAR OLD DATA IF NEEDED
 TRUNCATE TABLE
     public.app_user,
@@ -16,12 +18,14 @@ TRUNCATE TABLE
     public.service_records,
     public.service_record_details,
     public.bookings,
-    public.expense
+    public.expense,
+    public.service_part_usage
     RESTART IDENTITY CASCADE;
 
 
+
 -- =================================================================================
--- STEP 1: INSERT DATA FOR BASE TABLES
+-- STEP 1: INSERT DATA FOR BASE TABLES (KHÔNG CÓ KHÓA NGOẠI)
 -- =================================================================================
 
 -- =================================================================================
@@ -39,7 +43,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at
                                                                                                                           (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                           -- Sample Staff Accounts (user01x)
                                                                                                                           (true, 'staff010@example.com', 'sub-010', 'Võ Đức Anh', '0912345010','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -52,7 +55,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at
                                                                                                                           (true, 'staff017@example.com', 'sub-017', 'Nguyễn Thị Thanh Hân', '0912345017','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'staff018@example.com', 'sub-018', 'Trần Công Hiệp', '0912345018','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'staff019@example.com', 'sub-019', 'Phan Sơn Hoàng', '0912345019','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                           -- Sample Technician Accounts (user02x)
                                                                                                                           (true, 'tech020@example.com', 'sub-020', 'Đặng Nguyễn Trung Huy', '0912345020','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -65,7 +67,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at
                                                                                                                           (true, 'tech027@example.com', 'sub-027', 'Phan Cao Trọng Nghĩa', '0912345027','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'tech028@example.com', 'sub-028', 'Trần Thúy Ngọc', '0912345028','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'tech029@example.com', 'sub-029', 'Lê Hoàng Uyển Nhi', '0912345029','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                           -- Sample Customer Accounts (user03x, user04x)
                                                                                                                           (true, 'customer030@example.com', 'sub-030', 'Châu Hiệp Phát', '0912345030','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -77,7 +78,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at
                                                                                                                           (true, 'customer036@example.com', 'sub-036', 'Ngô Thị Mỹ Quỳnh', '0912345036','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'customer037@example.com', 'sub-037', 'Huỳnh Trúc Tâm', '0912345037','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'customer038@example.com', 'sub-038', 'Trần Hưng Thịnh', '0912345038','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                           -- Sample Customer Accounts (user03x, user04x)
                                                                                                                           (true, 'customer039@example.com', 'sub-039', 'Bùi Ngọc Minh Thư', '0912345039','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -90,17 +90,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at
                                                                                                                           (true, 'customer046@example.com', 'sub-046', 'Võ Thị Thùy Trinh', '0912345046','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'customer047@example.com', 'sub-047', 'Huỳnh Thị Thanh Trúc', '0912345047','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'customer048@example.com', 'sub-048', 'Nguyễn Thanh Trúc', '0912345048','2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
--- =================================================================================
--- user_roles
--- =================================================================================
-INSERT INTO public.user_roles (user_id, role)
-SELECT id, CASE
-               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh0308@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
-               WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
-               WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
-               ELSE 'CUSTOMER'
-    END FROM public.app_user;
 
 -- =================================================================================
 -- car_model
@@ -181,19 +170,28 @@ INSERT INTO public.service (id, service_type, service_name, category, created_by
 
 
 -- =================================================================================
--- STEP 2: INSERT DATA FOR TABLES WITH FOREIGN KEYS
+-- STEP 2: INSERT DATA FOR DEPENDENT TABLES
 -- =================================================================================
+-- =================================================================================
+-- user_roles (phụ thuộc vào app_user)
+-- =================================================================================
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, CASE
+               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh0308@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
+               WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
+               WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
+               ELSE 'CUSTOMER'
+    END FROM public.app_user;
 
 -- =================================================================================
--- maintenance_milestone (car_model)
+-- maintenance_milestone (phụ thuộc vào car_model)
 -- =================================================================================
 INSERT INTO public.maintenance_milestone (kilometer_at, year_at, car_model_id, created_by, created_at, updated_at, updated_by)
 SELECT km, year_at, cm.id, 'system', '2025-10-11 08:34:17', '2025-10-11 08:34:17', 'system'
 FROM public.car_model cm, (VALUES (12000, 1), (24000, 2), (36000, 3), (48000, 4), (60000, 5), (72000, 6), (84000, 7), (96000, 8), (108000, 9), (120000, 10)) AS milestones(km, year_at);
 
-
 -- =================================================================================
--- vehicles. app_user (qua owner_id), car_model (qua car_model_id)
+-- vehicles (phụ thuộc vào app_user, car_model)
 -- =================================================================================
 INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, owner_id, next_km, next_date, old_km, old_date, created_by, created_at, updated_at, updated_by)
 VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF3'), '29A-111.11', 'VIN00000000000001', (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), 24000, '2026-10-30 17:00:00', 10000, '2025-10-30 17:00:00', 'system', NOW(), NOW(), 'system');
@@ -205,63 +203,7 @@ INSERT INTO public.vehicles (active, car_model_id, license_plate, vin_number, ow
 VALUES (true, (SELECT id FROM car_model WHERE car_name = 'VF9'), '51A-CUS-159', 'VIN00000000000004', (SELECT id FROM app_user WHERE email = 'wendyhimekawa@gmail.com'), 'system', NOW(), NOW(), 'system');
 
 -- =================================================================================
--- subscription_info (Bảng gói dịch vụ). phụ thuộc vào app_user
--- =================================================================================
-INSERT INTO public.subscription_info (owner_id, start_date, end_date, payment_date, created_by, created_at, updated_by, updated_at)
-VALUES
-    -- Scenario 1: Active subscription for user 'customerrole01@gmail.com'
-    (
-        (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'),
-        '2025-01-15 10:00:00',
-        '2026-01-15 10:00:00',
-        '2025-01-15 10:00:00',
-        'system', NOW(), 'system', NOW()
-    ),
-    -- Scenario 2: Subscription about to expire for user 'customer030@example.com'
-    (
-        (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'),
-        '2024-12-01 14:30:00',
-        '2025-12-01 14:30:00',
-        '2024-12-01 14:30:00',
-        'system', NOW(), 'system', NOW()
-    ),
-    -- Scenario 3: Expired subscription for user 'customer031@example.com'
-    (
-        (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'),
-        '2024-09-01 11:00:00',
-        '2025-09-01 11:00:00',
-        '2024-09-01 11:00:00',
-        'system', NOW(), 'system', NOW()
-    ),
-    -- Scenario 4: Active subscription for the admin 'lengochan090105@gmail.com'
-    (
-        (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
-        '2025-10-29 09:18:13',
-        '2026-10-29 09:18:13',
-        '2025-10-29 09:18:13',
-        'lengochan090105@gmail.com', NOW(), 'lengochan090105@gmail.com', NOW()
-    );
-
-
--- =================================================================================
--- payment_history
--- =================================================================================
-INSERT INTO public.payment_history (subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years, amount)
-VALUES
-    -- Payment history for Subscription belonging to 'customerrole01@gmail.com'
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
-    -- Payment history for Subscription belonging to 'customer030@example.com'
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2024-11-20 14:28:00', 'system_seed', '2024-11-20 14:30:00', 'system_callback', 'PAYID-VALID-00003', 1, 1000.00),
-    -- Payment history for Subscription belonging to 'lengochan090105@gmail.com'
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:11', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQWY79717451CM661680U', 1, 1000.00),
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:27', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1, 1000.00),
-    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-10-29 09:18:05', 'lengochan090105@gmail.com', '2025-10-29 09:18:13', 'system_callback', 'PAYID-NEAXSRI0K2341200L885441K', 1, 1000.00);
-
-
-
--- =================================================================================
--- spare_part, phụ thuộc vào car_model
+-- spare_part (phụ thuộc vào car_model)
 -- =================================================================================
 INSERT INTO public.spare_part (part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id, created_at, created_by, updated_at, updated_by)
 SELECT
@@ -342,10 +284,8 @@ FROM
          ('VF9-SNS-01', 'ABS Wheel Speed Sensor', 'Sensor', 1350000, 12, 5, 6)
     ) AS parts(part_number, part_name, category, unit_price, stock_quantity, min_stock_level, car_model_id);
 
-
-
 -- =================================================================================
--- maintenance_schedule
+-- maintenance_schedule (phụ thuộc vào car_model, maintenance_milestone, service)
 -- =================================================================================
 INSERT INTO public.maintenance_schedule (car_model_id, maintenance_milestone_id, service_id, is_default, created_by, created_at, updated_by, updated_at)
 SELECT
@@ -364,151 +304,88 @@ FROM
 WHERE
     s.service_type = 'M'
   AND (
-    -- Rule 1: "general" check-up services are required at EVERY milestone.
     s.category = 'general'
-        -- Rule 2: "Cabin Air Filter" (id=1) is replaced at EVERY milestone.
         OR s.id = 1
-        -- Rule 3: "Brake Fluid" (id=2) and "Coolant" (id=5) are replaced in EVEN years (2, 4, 6, 8, 10).
         OR (s.id IN (2, 5) AND mm.year_at % 2 = 0)
-        -- Rule 4: "T-BOX Battery" (id=4) is replaced only at the 6-year milestone.
         OR (s.id = 4 AND mm.year_at = 6)
     );
 
+-- =================================================================================
+-- subscription_info (phụ thuộc vào app_user)
+-- =================================================================================
+INSERT INTO public.subscription_info (owner_id, start_date, end_date, payment_date, created_by, created_at, updated_by, updated_at)
+VALUES
+    ((SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), '2025-01-15 10:00:00', '2026-01-15 10:00:00', '2025-01-15 10:00:00', 'system', NOW(), 'system', NOW()),
+    ((SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), '2024-12-01 14:30:00', '2025-12-01 14:30:00', '2024-12-01 14:30:00', 'system', NOW(), 'system', NOW()),
+    ((SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), '2024-09-01 11:00:00', '2025-09-01 11:00:00', '2024-09-01 11:00:00', 'system', NOW(), 'system', NOW()),
+    ((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '2025-10-29 09:18:13', '2026-10-29 09:18:13', '2025-10-29 09:18:13', 'lengochan090105@gmail.com', NOW(), 'lengochan090105@gmail.com', NOW());
 
 
 -- =================================================================================
--- maintenance_history
--- Status Enum: 0=CUSTOMER_SUBMITTED, 1=TECHNICIAN_RECEIVED, 2=TECHNICIAN_COMPLETED, 3=DONE
+-- STEP 3: INSERT DATA FOR TRANSACTIONAL TABLES (THỨ TỰ QUAN TRỌNG)
 -- =================================================================================
--- Scenario 1: A NEW appointment, pending staff acceptance (status=0)
-INSERT INTO public.maintenance_history (vehicle_id, owner_id, num_of_km, submitted_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at)
-VALUES ((SELECT id FROM vehicles WHERE license_plate = '51G-111.13'), (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 5000, '2025-12-09 09:00:00', 0, true, false, 'First periodic maintenance check.', 1, '10:00:00', '2025-12-15'::DATE, 'customerrole01@gmail.com', '2025-12-09 09:00:00');
-
--- Scenario 4: A fully completed record that will have a corresponding service_record
-INSERT INTO public.maintenance_history (vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at, updated_by, updated_at)
-VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), (SELECT id FROM app_user WHERE email = 'staffrole001@gmail.com'), (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com'), 10000, '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00', 3, true, true, 'General check-up and minor repairs.', 2, '12:00:00', '2025-10-30'::DATE, 'lengochan090105@gmail.com', '2025-10-30 10:36:36', 'staffrole001@gmail.com', '2025-10-30 17:15:00');
-
--- A booking record that corresponds to the completed maintenance history
+-- =================================================================================
+-- bookings (phải có trước service_records)
+-- =================================================================================
 INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
 VALUES((SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), '0373587006', '29A-111.11', 'VF3', 'VIN00000000000001', 'ECar Thu Duc', '2025-10-30 12:00:00', 'General check-up and minor repairs.', 'COMPLETED', 'lengochan090105@gmail.com', '2025-10-30 10:36:36');
 
--- service_records: Links to the BOOKING, not the maintenance_history
+-- =================================================================================
+-- maintenance_history
+-- =================================================================================
+INSERT INTO public.maintenance_history (vehicle_id, owner_id, num_of_km, submitted_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at)
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '51G-111.13'), (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'), 5000, '2025-12-09 09:00:00', 0, true, false, 'First periodic maintenance check.', 1, '10:00:00', '2025-12-15'::DATE, 'customerrole01@gmail.com', '2025-12-09 09:00:00');
+
+INSERT INTO public.maintenance_history (vehicle_id, owner_id, staff_id, technician_id, num_of_km, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at, status, is_maintenance, is_repair, remark, center_id, schedule_time, schedule_date, created_by, created_at, updated_by, updated_at)
+VALUES ((SELECT id FROM vehicles WHERE license_plate = '29A-111.11'), (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'), (SELECT id FROM app_user WHERE email = 'staffrole001@gmail.com'), (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com'), 10000, '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00', 3, true, true, 'General check-up and minor repairs.', 2, '12:00:00', '2025-10-30'::DATE, 'lengochan090105@gmail.com', '2025-10-30 10:36:36', 'staffrole001@gmail.com', '2025-10-30 17:15:00');
+
+-- =================================================================================
+-- payment_history (phụ thuộc vào subscription_info)
+-- =================================================================================
+INSERT INTO public.payment_history (subscription_id, payment_method, payment_status, created_at, created_by, updated_at, updated_by, payment_id, num_of_years, amount)
+VALUES
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-01-15 09:55:00', 'system_seed', '2025-01-15 10:00:00', 'system_callback', 'PAYID-VALID-00001', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2024-11-20 14:25:00', 'system_seed', NULL, NULL, 'PAYID-PENDING-00002', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2024-11-20 14:28:00', 'system_seed', '2024-11-20 14:30:00', 'system_callback', 'PAYID-VALID-00003', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:11', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQWY79717451CM661680U', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'INIT', '2025-10-29 09:14:27', 'lengochan090105@gmail.com', NULL, NULL, 'PAYID-NEAXQ2Y0NK79660W9331753E', 1, 1000.00),
+    ((SELECT id FROM subscription_info WHERE owner_id = (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com') ORDER BY id DESC LIMIT 1),'paypal', 'APPROVED', '2025-10-29 09:18:05', 'lengochan090105@gmail.com', '2025-10-29 09:18:13', 'system_callback', 'PAYID-NEAXSRI0K2341200L885441K', 1, 1000.00);
+
+-- =================================================================================
+-- service_records (phụ thuộc vào bookings)
+-- =================================================================================
 INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
 VALUES ((SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00'), '29A-111.11', 10000, '2025-10-30 17:00:00', 'staffrole001@gmail.com', '2025-10-30 17:00:00');
 
--- service_record_details
+-- =================================================================================
+-- service_record_details (phụ thuộc vào service_records)
+-- =================================================================================
 INSERT INTO public.service_record_details (service_record_id, item_name, action, notes) VALUES
                                                                                             (1, 'Level 1 Periodic Maintenance (12,000 km)', 'INSPECT', 'Completed as scheduled.'),
                                                                                             (1, 'ABS Sensor Replacement', 'REPLACE', 'Replaced front right wheel sensor.'),
                                                                                             (1, 'Brake Caliper Inspection', 'INSPECT', 'Wear is within acceptable limits.'),
                                                                                             (1, 'Electrical System Check', 'INSPECT', 'Minor fault detected and fixed.');
 
+-- =================================================================================
+-- service_part_usage (phụ thuộc vào service_records, spare_part)
+-- =================================================================================
+INSERT INTO public.service_part_usage (service_record_id, spare_part_id, quantity_used, price_at_time_of_use)
+VALUES
+    (1, 1, 1, 180000),
+    (1, 2, 1, 800000);
+UPDATE public.service_records
+SET total_parts_cost = (180000 + 800000)
+WHERE id = 1;
 
 -- =================================================================================
--- maintenance_item
+-- maintenance_item (phụ thuộc vào maintenance_history)
 -- =================================================================================
 INSERT INTO public.maintenance_item (maintenance_history_id, maintenance_milestone_id, service_id, created_by, created_at, updated_by, updated_at)
 VALUES
-    -- Link to the periodic maintenance milestone
-    (
-        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
-        (SELECT id FROM maintenance_milestone WHERE car_model_id = 1 AND year_at = 1),
-        NULL,
-        'technicianrole01@gmail.com',
-        '2025-10-30 16:22:22',
-        NULL,
-        NULL
-    ),
-    -- Link to the repair service: ABS Sensor (id=27)
-    (
-        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
-        NULL,
-        27,
-        'technicianrole01@gmail.com',
-        '2025-10-30 16:22:22',
-        NULL,
-        NULL
-    ),
-    -- Link to the repair service: Brake Caliper (id=30)
-    (
-        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
-        NULL,
-        30,
-        'technicianrole01@gmail.com',
-        '2025-10-30 16:22:22',
-        NULL,
-        NULL
-    ),
-    -- Link to the repair service: Other (id=32)
-    (
-        (SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'),
-        NULL,
-        32,
-        'technicianrole01@gmail.com',
-        '2025-10-30 16:22:22',
-        NULL,
-        NULL
-    );
-
-
-
--- =================================================================================
--- STEP 5: COMPLETE THE CYCLE (Create a Booking and its corresponding Service Record)
--- =================================================================================
--- 5.1: First, create a sample 'Booking' record that corresponds to our completed 'MaintenanceHistory' Scenario 4.
-INSERT INTO public.bookings (user_id, customer_phone_number, license_plate, car_model, vin_number, service_center, appointment_date_time, notes, status, created_by, created_at)
-VALUES(
-          (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
-          '0373587006',
-          '29A-111.11',
-          'VF3',
-          'VIN00000000000001',
-          'ECar Thu Duc',
-          '2025-10-30 12:00:00',
-          'General check-up and minor repairs.',
-          'COMPLETED',
-          'lengochan090105@gmail.com',
-          '2025-10-30 10:36:36'
-      );
-
--- 5.2: Now, create the main service record, linking it to the 'Booking' we just created.
-INSERT INTO public.service_records (booking_id, license_plate, kilometer_reading, service_date, created_by, created_at)
-VALUES (
-           (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1),
-    '29A-111.11',
-    10000,
-    '2025-10-30 17:00:00',
-    'staffrole001@gmail.com',
-    '2025-10-30 17:00:00'
-    );
-
--- 5.3: Add the details for the service record created above.
-INSERT INTO public.service_record_details (service_record_id, item_name, action, notes)
-VALUES
-    (
-        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
-        'Level 1 Periodic Maintenance (12,000 km)',
-        'INSPECT',
-        'Completed as scheduled.'
-    ),
-    (
-        (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
-    'ABS Sensor Replacement',
-    'REPLACE',
-    'Replaced front right wheel sensor.'
-    ),
-    (
-    (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
-    'Brake Caliper Inspection',
-    'INSPECT',
-    'Wear is within acceptable limits.'
-    ),
-    (
-    (SELECT id FROM service_records WHERE booking_id = (SELECT id FROM bookings WHERE license_plate = '29A-111.11' AND appointment_date_time = '2025-10-30 12:00:00' ORDER BY id DESC LIMIT 1) ORDER BY id DESC LIMIT 1),
-    'Electrical System Check',
-    'INSPECT',
-    'Minor fault detected and fixed.'
-    );
+    ((SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'), (SELECT id FROM maintenance_milestone WHERE car_model_id = 1 AND year_at = 1), NULL, 'technicianrole01@gmail.com', '2025-10-30 16:22:22', NULL, NULL),
+    ((SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'), NULL, 27, 'technicianrole01@gmail.com', '2025-10-30 16:22:22', NULL, NULL),
+    ((SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'), NULL, 30, 'technicianrole01@gmail.com', '2025-10-30 16:22:22', NULL, NULL),
+    ((SELECT id FROM maintenance_history WHERE vehicle_id = (SELECT id FROM vehicles WHERE license_plate = '29A-111.11') AND submitted_at = '2025-10-30 10:36:36'), NULL, 32, 'technicianrole01@gmail.com', '2025-10-30 16:22:22', NULL, NULL);
 
 
 -- =================================================================================
@@ -528,3 +405,6 @@ SELECT setval(pg_get_serial_sequence('public.maintenance_schedule', 'id'), COALE
 SELECT setval(pg_get_serial_sequence('public.spare_part', 'id'), COALESCE(MAX(id), 1)) FROM public.spare_part;
 SELECT setval(pg_get_serial_sequence('public.service_records', 'id'), COALESCE(MAX(id), 1)) FROM public.service_records;
 SELECT setval(pg_get_serial_sequence('public.service_record_details', 'id'), COALESCE(MAX(id), 1)) FROM public.service_record_details;
+SELECT setval(pg_get_serial_sequence('public.bookings', 'id'), COALESCE(MAX(id), 1)) FROM public.bookings;
+SELECT setval(pg_get_serial_sequence('public.expense', 'id'), COALESCE(MAX(id), 1)) FROM public.expense;
+SELECT setval(pg_get_serial_sequence('public.service_part_usage', 'id'), COALESCE(MAX(id), 1)) FROM public.service_part_usage;

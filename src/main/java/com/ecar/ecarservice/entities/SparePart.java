@@ -19,12 +19,11 @@ import java.time.LocalDateTime;
 @ToString
 @EntityListeners(AuditingEntityListener.class)
 public class SparePart {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "part_number", nullable = false)
+    @Column(name = "part_number", nullable = false, unique = true)
     private String partNumber;
 
     @Column(name = "part_name", nullable = false)
@@ -36,11 +35,11 @@ public class SparePart {
     @Column(name = "unit_price")
     private Double unitPrice;
 
-    @Column(name = "stock_quantity")
-    private Integer stockQuantity;
-
-    @Column(name = "min_stock_level")
-    private Integer minStockLevel;
+//    @Column(name = "stock_quantity")
+//    private Integer stockQuantity;
+//
+//    @Column(name = "min_stock_level")
+//    private Integer minStockLevel;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
