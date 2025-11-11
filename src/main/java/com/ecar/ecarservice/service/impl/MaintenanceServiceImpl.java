@@ -260,16 +260,19 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
         maintenanceItemRepository.saveAll(items);
 
+        // ======================= GỬI MAIL THÔNG BÁO PHÂN CÔNG TECHNICIAN =======================
+        emailService.sendTechnicianAssignedEmail(assignedTechnician, saved);
+
         // ======================= GỬI MAIL NGAY KHI TECHNICIAN NHẬN XE =======================
         AppUser owner = saved.getOwner();
         Vehicle vehicle = saved.getVehicle();
         if (owner != null && assignedTechnician != null && vehicle != null && vehicle.getCarModel() != null) {
-            // @Async sẽ chạy background thread, không cần executorService
             emailService.sendTechnicianReceivedEmail(owner, assignedTechnician, vehicle);
         } else {
             System.err.println("Cannot send technician received email: missing owner, technician, or vehicle data.");
         }
     }
+
 
     // ====================== LAY PHIEU KY THUAT VIEN ======================
     @Override
