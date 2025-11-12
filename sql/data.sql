@@ -1,4 +1,4 @@
-CREATE EXTENSION unaccent;
+
 
 -- RUN THIS COMMAND FIRST TO CLEAR OLD DATA IF NEEDED
 TRUNCATE TABLE
@@ -33,7 +33,7 @@ TRUNCATE TABLE
 -- =================================================================================
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                           (true, 'lengochan090105@gmail.com', '117568473599883678495', 'Lê Ngọc Hân', '0373587001', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                          (true, 'dinhthingocanh0308@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (true, 'dinhthingocanh030805@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'namhoai020505@gmail.com', '118080103497063505858', 'Nam Hoài', '0373587009', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'boyhayhaha12345@gmail.com', '10414838788924653426', 'Nguyễn Đăng Phú', '0373587010', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (true, 'kassassinrk@gmail.com', '101853864144089879263', 'Nguyễn Dũng', '0373587011', '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -177,7 +177,7 @@ INSERT INTO public.service (id, service_type, service_name, category, created_by
 -- =================================================================================
 INSERT INTO public.user_roles (user_id, role)
 SELECT id, CASE
-               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh0308@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
+               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh030805@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
                WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
                WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
                ELSE 'CUSTOMER'
@@ -408,3 +408,68 @@ SELECT setval(pg_get_serial_sequence('public.service_record_details', 'id'), COA
 SELECT setval(pg_get_serial_sequence('public.bookings', 'id'), COALESCE(MAX(id), 1)) FROM public.bookings;
 SELECT setval(pg_get_serial_sequence('public.expense', 'id'), COALESCE(MAX(id), 1)) FROM public.expense;
 SELECT setval(pg_get_serial_sequence('public.service_part_usage', 'id'), COALESCE(MAX(id), 1)) FROM public.service_part_usage;
+
+
+
+
+
+
+-- =================================================================================
+-- STEP 5: UPDATE CENTER_ID FOR STAFF AND TECHNICIANS (RẤT QUAN TRỌNG)
+-- Gán nhân viên và kỹ thuật viên vào các trung tâm
+-- =================================================================================
+
+-- Center 1: ECar Binh Duong (ID = 1)
+UPDATE public.app_user
+SET center_id = 1
+WHERE email IN (
+    -- Staff
+                'staffrole001@gmail.com',
+                'staff010@example.com',
+                'staff011@example.com',
+                'staff012@example.com',
+    -- Technicians
+                'technicianrole01@gmail.com',
+                'tech020@example.com',
+                'tech021@example.com',
+                'tech022@example.com'
+    );
+
+-- Center 2: ECar Thu Duc (ID = 2)
+UPDATE public.app_user
+SET center_id = 2
+WHERE email IN (
+    -- Staff
+                'kaitetsuya91@gmail.com',
+                'staff013@example.com',
+                'staff014@example.com',
+                'staff015@example.com',
+    -- Technicians
+                'shadehygge@gmail.com',
+                'tech023@example.com',
+                'tech024@example.com',
+                'tech025@example.com'
+    );
+
+-- Center 3: ECar District 1 (ID = 3)
+UPDATE public.app_user
+SET center_id = 3
+WHERE email IN (
+    -- Staff
+                'staff016@example.com',
+                'staff017@example.com',
+                'staff018@example.com',
+                'staff019@example.com',
+    -- Technicians
+                'tech026@example.com',
+                'tech027@example.com',
+                'tech028@example.com',
+                'tech029@example.com'
+    );
+
+
+
+
+
+
+
