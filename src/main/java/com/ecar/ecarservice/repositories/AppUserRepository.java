@@ -61,4 +61,7 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
      * Tên phương thức findByRolesContains... rất quan trọng vì "roles" là một Collection (Set)
      */
     List<AppUser> findByRolesContainsAndCenterId(AppRole role, Long centerId);
+
+//    List<AppUser> findByRolesContainingAndCenterId(AppRole role, Long centerId);
+
 }

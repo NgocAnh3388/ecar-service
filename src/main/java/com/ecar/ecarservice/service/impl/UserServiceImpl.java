@@ -261,7 +261,7 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public List<AppUser> getTechniciansByCenter(Long centerId) {
         // Cần tạo phương thức mới trong AppUserRepository
-        return appUserRepository.findByRolesContainingAndCenterId(AppRole.TECHNICIAN, centerId);
+        return appUserRepository.findByRolesContainsAndCenterId(AppRole.TECHNICIAN, centerId);
     }
 
 }

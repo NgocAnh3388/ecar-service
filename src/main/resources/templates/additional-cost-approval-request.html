@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Yêu cầu Duyệt Chi phí Phát sinh</title></head>
+<body style="font-family: Arial, sans-serif;">
+<div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2>Yêu cầu Duyệt Chi phí Phát sinh</h2>
+    <p>Xin chào <strong th:text="${customerName}">Customer Name</strong>,</p>
+    <p>Trong quá trình kiểm tra xe <strong th:text="${licensePlate}"></strong>, kỹ thuật viên của chúng tôi đã phát hiện một vấn đề cần xử lý, dẫn đến một khoản chi phí phát sinh. Vui lòng xem chi tiết dưới đây và xác nhận để chúng tôi có thể tiếp tục dịch vụ.</p>
+
+    <h3>Chi tiết Chi phí Phát sinh:</h3>
+    <p><strong>Lý do:</strong> <span th:text="${reason}"></span></p>
+    <p><strong>Số tiền:</strong> <strong style="color: #dc3545;" th:text="${amount}">550,000 VND</strong></p>
+
+    <p style="margin-top: 20px;">Bạn có thể duyệt khoản chi phí này bằng cách truy cập vào lịch sử bảo dưỡng trong tài khoản của bạn.</p>
+    <p>Trân trọng,<br/>Đội ngũ Ecar Service Center</p>
+</div>
+</body>
+</html>

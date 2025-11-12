@@ -23,6 +23,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -463,4 +464,58 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .collect(Collectors.toList());
     }
 
+
+
+    @Override
+    @Transactional
+    public void addOrUpdateAdditionalCost(Long ticketId, BigDecimal amount, String reason) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
+
+        // Cập nhật thông tin chi phí phát sinh
+        ticket.setHasAdditionalCost(true);
+        ticket.setAdditionalCostAmount(amount);
+        ticket.setAdditionalCostReason(reason);
+
+        // Chuyển trạng thái sang chờ khách hàng duyệt
+        ticket.setStatus(MaintenanceStatus.CUSTOMER_APPROVAL_PENDING);
+
+        maintenanceHistoryRepository.save(ticket);
+
+        // Gửi email thông báo cho khách hàng
+        // Giả định EmailService có phương thức này
+        emailService.sendAdditionalCostApprovalRequestEmail(ticket.getOwner(), ticket);
+    }
+
+    @Override
+    @Transactional
+    public void approveAdditionalCost(Long ticketId, OidcUser oidcUser) {
+        AppUser currentUser = userService.getCurrentUser(oidcUser);
+
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
+                .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
+
+        // Xác thực đúng là chủ của phiếu dịch vụ
+        if (!ticket.getOwner().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException("You are not authorized to approve costs for this ticket.");
+        }
+
+        // Kiểm tra trạng thái hợp lệ
+        if (ticket.getStatus() != MaintenanceStatus.CUSTOMER_APPROVAL_PENDING) {
+            throw new IllegalStateException("This ticket is not awaiting customer approval.");
+        }
+
+        // Cập nhật trạng thái
+        ticket.setStatus(MaintenanceStatus.CUSTOMER_APPROVED);
+
+        maintenanceHistoryRepository.save(ticket);
+
+        // Lấy thông tin nhân viên đã được gán cho phiếu này
+        AppUser staffAssigned = ticket.getStaff();
+
+        // Chỉ gửi email nếu phiếu này đã có nhân viên phụ trách
+        if (staffAssigned != null) {
+            emailService.sendCostApprovedNotificationToStaff(staffAssigned, ticket);
+        }
+    }
 }

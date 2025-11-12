@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface MaintenanceService {
@@ -50,5 +51,15 @@ public interface MaintenanceService {
      * @return Danh sách các phụ tùng và số lượng.
      */
     List<UsedPartDto> getUsedParts(Long ticketId);
+
+    /**
+     * Staff/Technician thêm hoặc cập nhật chi phí phát sinh cho một phiếu dịch vụ.
+     */
+    void addOrUpdateAdditionalCost(Long ticketId, BigDecimal amount, String reason);
+
+    /**
+     * Customer duyệt chi phí phát sinh.
+     */
+    void approveAdditionalCost(Long ticketId, OidcUser oidcUser);
 
 }

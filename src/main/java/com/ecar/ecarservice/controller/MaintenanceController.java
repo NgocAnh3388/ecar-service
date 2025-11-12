@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.controller;
 
+import com.ecar.ecarservice.dto.AdditionalCostRequest;
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
 import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.MaintenanceHistory;
@@ -139,6 +140,28 @@ public class MaintenanceController {
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
     public ResponseEntity<List<UsedPartDto>> getUsedPartsForTask(@PathVariable Long ticketId) {
         return ResponseEntity.ok(maintenanceService.getUsedParts(ticketId));
+    }
+
+    // === API CHO NGHIỆP VỤ MỚI ===
+
+    // API cho Staff/Tech để thêm/cập nhật chi phí phát sinh
+    @PutMapping("/tasks/{ticketId}/additional-cost")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
+    public ResponseEntity<Void> addOrUpdateAdditionalCost(
+            @PathVariable Long ticketId,
+            @RequestBody AdditionalCostRequest request) { // Cần tạo DTO này
+        maintenanceService.addOrUpdateAdditionalCost(ticketId, request.getAmount(), request.getReason());
+        return ResponseEntity.ok().build();
+    }
+
+    // API cho Customer để duyệt chi phí
+    @PostMapping("/tasks/{ticketId}/approve-cost")
+    @PreAuthorize("hasRole('CUSTOMER')") // Chỉ customer mới được duyệt
+    public ResponseEntity<Void> approveAdditionalCost(
+            @PathVariable Long ticketId,
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        maintenanceService.approveAdditionalCost(ticketId, oidcUser);
+        return ResponseEntity.ok().build();
     }
 
 }
