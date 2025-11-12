@@ -22,7 +22,7 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true # show sql
     hibernate:
-      ddl-auto: update
+      ddl-auto: update # create, create-drop, update, validate, none
 #  # Cấu hình SQL initialization
 #  sql:
 #    init:
@@ -61,3 +61,10 @@ server:
 logging:
   level:
     org.springframework.security: INFO
+
+
+# Gioi han so luong dich vu toi da ma moi technician duoc phan cong cung luc
+technician:
+  max:
+    concurrent:
+      services: 3

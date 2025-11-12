@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.entities;
 
 import com.ecar.ecarservice.enums.AppRole;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
@@ -20,10 +21,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "app_user")
-@Getter
-@Setter
-@ToString
-@RequiredArgsConstructor
+@Getter @Setter @ToString
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 public class AppUser {
     @Id
@@ -74,5 +75,10 @@ public class AppUser {
     @OneToMany(mappedBy = "owner", fetch = FetchType.LAZY)
     @JsonManagedReference
     private List<Vehicle> vehicles;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "center_id")
+    @JsonBackReference
+    private Center center;
 
 }

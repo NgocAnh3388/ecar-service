@@ -46,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**").authenticated()
                         .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
+                        .requestMatchers("/api/maintenance/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e
