@@ -50,11 +50,23 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
     })
     @Query("SELECT mh FROM MaintenanceHistory mh WHERE mh.center.id = :centerId ORDER BY mh.status ASC, mh.submittedAt DESC")
     List<MaintenanceHistory> findAllByCenterIdSortedForManagement(Long centerId);
-    /**
-     * Tìm tất cả các dịch vụ đang ở một trạng thái cụ thể
-     * (Dùng để tìm các dịch vụ đang ở trạng thái TECHNICIAN_RECEIVED)
-     */
-    List<MaintenanceHistory> findByStatus(MaintenanceStatus status);
+
+
+    public interface TechnicianLoad {
+        Long getTechnicianId();
+        Long getLoadCount();
+    }
+
+
+    @Query("SELECT mh.technician.id as technicianId, COUNT(mh.id) as loadCount " +
+            "FROM MaintenanceHistory mh " +
+            "WHERE mh.status = :status " +
+            "AND mh.technician.id IN :technicianIds " +
+            "GROUP BY mh.technician.id")
+    List<TechnicianLoad> getTechnicianLoadByStatusAndIds(
+            @Param("status") MaintenanceStatus status,
+            @Param("technicianIds") List<Long> technicianIds
+    );
 
 
 
