@@ -1,6 +1,7 @@
 package com.ecar.ecarservice.repositories;
 
 import com.ecar.ecarservice.entities.MaintenanceHistory;
+import com.ecar.ecarservice.enums.MaintenanceStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -20,11 +21,12 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
     @Query(value = "SELECT mh " +
             "FROM MaintenanceHistory mh " +
             "WHERE mh.owner.id = :ownerId " +
-            "AND mh.vehicle.licensePlate LIKE %:searchValue% " +
+            "AND mh.vehicle.licensePlate LIKE CONCAT('%', :searchValue, '%') " +
             "ORDER BY mh.createdAt DESC")
     Page<MaintenanceHistory> searchByOwner(@Param("ownerId") Long ownerId,
                                            @Param("searchValue") String searchValue,
                                            Pageable pageable);
+
 
     @EntityGraph(attributePaths = {
             "vehicle",
@@ -48,5 +50,12 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
     })
     @Query("SELECT mh FROM MaintenanceHistory mh WHERE mh.center.id = :centerId ORDER BY mh.status ASC, mh.submittedAt DESC")
     List<MaintenanceHistory> findAllByCenterIdSortedForManagement(Long centerId);
+    /**
+     * Tìm tất cả các dịch vụ đang ở một trạng thái cụ thể
+     * (Dùng để tìm các dịch vụ đang ở trạng thái TECHNICIAN_RECEIVED)
+     */
+    List<MaintenanceHistory> findByStatus(MaintenanceStatus status);
+
+
 
 }

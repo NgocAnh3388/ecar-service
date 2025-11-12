@@ -190,9 +190,9 @@ INSERT INTO public.service (id, service_type, service_name, category, created_by
 -- =================================================================================
 INSERT INTO public.user_roles (user_id, role)
 SELECT id, CASE
-               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh0308@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
-               WHEN email IN ('staffrole001@gmail.com', 'kaitetsuya91@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
-               WHEN email IN ('technicianrole01@gmail.com', 'shadehygge@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
+               WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh030805@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
+               WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
+               WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
                ELSE 'CUSTOMER'
     END FROM public.app_user;
 

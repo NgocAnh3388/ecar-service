@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -85,6 +86,12 @@ public class MaintenanceHistory {
 
     @Column(name = "schedule_date")
     private LocalDate scheduleDate;
+
+    @Column(name = "has_additional_cost")
+    private Boolean hasAdditionalCost = false; // Mặc định là không có
+
+    @Column(name = "additional_cost_amount")
+    private BigDecimal additionalCostAmount; // Dùng BigDecimal để đảm bảo chính xác cho tiền tệ
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
