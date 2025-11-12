@@ -15,6 +15,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
@@ -94,18 +95,19 @@ public class MaintenanceController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}/technician-complete") // Dùng @PutMapping sẽ đúng ngữ nghĩa hơn là @PostMapping
-    // Sửa thành hasAnyRole và bỏ tiền tố 'ROLE_'
+    @PostMapping("/{id}/technician-complete") // <-- SỬA THÀNH @PostMapping
     @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN', 'STAFF')")
-    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(@PathVariable Long id) { // Đổi tên để tránh trùng lặp
+    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser
+    ) {
         try {
-            // Gọi phương thức trong service mà chúng ta vừa implement
-            MaintenanceHistoryDTO updatedDto = maintenanceService.completeTechnicianTask(id);
-            // Nếu thành công, trả về 200 OK cùng với dữ liệu đã được cập nhật
+            MaintenanceHistoryDTO updatedDto = maintenanceService.completeServiceByTechnician(id, oidcUser);
             return ResponseEntity.ok(updatedDto);
         } catch (EntityNotFoundException e) {
-            // Nếu service ném ra lỗi không tìm thấy, trả về 404 Not Found
             return ResponseEntity.notFound().build();
+        } catch (AccessDeniedException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(null);
         }
     }
 
