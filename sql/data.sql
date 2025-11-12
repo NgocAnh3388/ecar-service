@@ -124,15 +124,16 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id,
                                                                                                                                      -- Sample Staff Accounts (user01x)
                                                                                                                                      -- Center 1: ECar Binh Duong
                                                                                                                                      (true, 'staffrole001@gmail.com', '103635268146202778075', 'Staff Role', '0373587002', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff010@example.com', 'sub-010', 'Võ Đức Anh', '0912345010', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff011@example.com', 'sub-011', 'Nguyễn Quốc Bảo', '0912345011', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff012@example.com', 'sub-012', 'Huỳnh Vũ Bằng', '0912345012', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      -- Center 2: ECar Thu Duc
-                                                                                                                                     (true, 'staff012@example.com', 'sub-012', 'Huỳnh Vũ Bằng', '0912345012', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff013@example.com', 'sub-013', 'Nguyễn Ngọc Minh Châu', '0912345013', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff014@example.com', 'sub-014', 'Nguyễn Ngọc Trân Châu', '0912345014', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff015@example.com', 'sub-015', 'Phạm Huy Cường', '0912345015', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      -- Center 3: ECar District 1
+                                                                                                                                     (true, 'wendyalvarez090105@gmail.com', '111568723029841279568', 'Wendy Alvarez', '0912345053', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff016@example.com', 'sub-016', 'Lê Thị Ngọc Hân', '0912345016', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff017@example.com', 'sub-017', 'Nguyễn Thị Thanh Hân', '0912345017', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff018@example.com', 'sub-018', 'Trần Công Hiệp', '0912345018', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -141,17 +142,18 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id,
                                                                                                                                      -- Sample Technician Accounts (user02x)
                                                                                                                                      -- Center 1: ECar Binh Duong
                                                                                                                                      (true, 'technicianrole01@gmail.com', '112040040855698268458', 'Technician Role', '0373587003', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'staff020@example.com', 'sub-020', 'Đặng Nguyễn Trung Huy', '0912345020',1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech021@example.com', 'sub-021', 'Nguyễn Phan Minh Hưng', '0912345021', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech022@example.com', 'sub-022', 'Lê Quang Khải', '0912345022', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech023@example.com', 'sub-023', 'Lê Nguyên Khan', '0912345023', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      -- Center 2: ECar Thu Duc
-                                                                                                                                     (true, 'tech023@example.com', 'sub-023', 'Lê Nguyên Khan', '0912345023', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech024@example.com', 'sub-024', 'Dương Hồng Khang', '0912345024', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech025@example.com', 'sub-025', 'Nguyễn Đăng Khoa', '0912345025', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech026@example.com', 'sub-026', 'Nguyễn Ngọc Kiều My', '0912345026', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech027@example.com', 'sub-027', 'Phan Cao Trọng Nghĩa', '0912345027', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      -- Center 3: ECar District 1
+                                                                                                                                     (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech028@example.com', 'sub-028', 'Trần Thúy Ngọc', '0912345028', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech029@example.com', 'sub-029', 'Lê Hoàng Uyển Nhi', '0912345029', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'tech030@example.com', 'sub-030', 'Châu Hiệp Phát', '0912345030', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -160,7 +162,6 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id,
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                                      -- Sample Customer Accounts (user03x, user04x)
                                                                                                                                      (true, 'customerrole01@gmail.com', '110833741228031693365', 'Customer Role', '0373587004', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'customer033@example.com', 'sub-033', 'Võ Hồng Phương', '0912345033', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'customer034@example.com', 'sub-034', 'Lê Nguyễn Ngọc Quý', '0912345034', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'customer035@example.com', 'sub-035', 'Nguyễn Kim Quyên', '0912345035', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
@@ -195,7 +196,7 @@ INSERT INTO public.user_roles (user_id, role)
 SELECT id, CASE
                WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh030805@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
                WHEN email IN ('staffrole001@gmail.com', 'kaitetsuya91@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
-               WHEN email IN ('technicianrole01@gmail.com', 'shadehygge@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
+               WHEN email IN ('technicianrole01@gmail.com', 'shadehygge@gmail.com', 'wendyhimekawa@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
                ELSE 'CUSTOMER'
     END FROM public.app_user;
 
@@ -519,7 +520,6 @@ INSERT INTO public.maintenance_history (
     schedule_date, schedule_time, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at,
     -- Nhân sự liên quan
     staff_id, technician_id,
-    -- THÊM 2 CỘT AUDITING CÒN THIẾU
     created_by, created_at
 )
 VALUES
@@ -538,7 +538,7 @@ VALUES
         (SELECT id FROM vehicles WHERE license_plate = '29A-111.11'),
         (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
         2, 'CUSTOMER_APPROVAL_PENDING', true, true, 'Check engine light', 15000,
-        true, 550000, 'Cần thay thêm cảm biến ABS.',
+        true, 550000, 'Requires replacement of ABS sensor.',
         '2025-11-20', '09:00:00', NOW(), null, null, null, null,
         null, null,
         'lengochan090105@gmail.com', NOW() -- Cung cấp giá trị cho created_by và created_at
@@ -548,7 +548,7 @@ VALUES
         (SELECT id FROM vehicles WHERE license_plate = '29A-111.11'),
         (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
         2, 'DONE', true, true, 'General check-up and minor repairs.', 10000,
-        true, 180000, 'Chi phí phát sinh đã được duyệt.',
+        true, 180000, 'Additional cost was approved.',
         '2025-10-30', '12:00:00', '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00',
         (SELECT id FROM app_user WHERE email = 'staffrole001@gmail.com'),
         (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com'),

@@ -8,6 +8,7 @@ import com.ecar.ecarservice.entities.Vehicle;
 import com.ecar.ecarservice.payload.requests.BookingRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -25,6 +27,11 @@ public class EmailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
+
+    // Lấy địa chỉ email người gửi từ file application.yml
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
 
     public EmailService(JavaMailSender mailSender, TemplateEngine templateEngine) {
         this.mailSender = mailSender;
@@ -217,9 +224,12 @@ public class EmailService {
     }
 
     /** ------------------- SEND HTML EMAIL (shared) ------------------- */
-    private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {
+    private void sendHtmlEmail(String to, String subject, String htmlBody)
+            throws MessagingException, UnsupportedEncodingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+        helper.setFrom(fromEmail, "Ecar Service Center");
+
         helper.setTo(to);
         helper.setSubject(subject);
         helper.setText(htmlBody, true);
