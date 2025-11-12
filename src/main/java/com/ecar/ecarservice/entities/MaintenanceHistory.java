@@ -59,6 +59,7 @@ public class MaintenanceHistory {
     @Column(name = "completed_at")
     private LocalDateTime completedAt;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private MaintenanceStatus status;
 
@@ -87,11 +88,14 @@ public class MaintenanceHistory {
     @Column(name = "schedule_date")
     private LocalDate scheduleDate;
 
-    @Column(name = "has_additional_cost")
+    @Column(name = "has_additional_cost", nullable = false)
     private Boolean hasAdditionalCost = false; // Mặc định là không có
 
-    @Column(name = "additional_cost_amount")
+    @Column(name = "additional_cost_amount", precision = 19, scale = 2)
     private BigDecimal additionalCostAmount; // Dùng BigDecimal để đảm bảo chính xác cho tiền tệ
+
+    @Column(name = "additional_cost_reason")
+    private String additionalCostReason;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

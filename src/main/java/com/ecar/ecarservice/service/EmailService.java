@@ -180,6 +180,41 @@ public class EmailService {
         }
     }
 
+    // --- PHƯƠNG THỨC MỚI: Gửi email yêu cầu khách hàng duyệt chi phí ---
+    @Async
+    public void sendAdditionalCostApprovalRequestEmail(AppUser owner, MaintenanceHistory ticket) {
+        try {
+            Context context = new Context();
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
+            context.setVariable("reason", ticket.getAdditionalCostReason());
+            // Định dạng số tiền cho đẹp
+            String formattedAmount = String.format("%,.0f VND", ticket.getAdditionalCostAmount());
+            context.setVariable("amount", formattedAmount);
+
+            String htmlContent = templateEngine.process("additional-cost-approval-request", context);
+            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Yêu cầu Duyệt Chi phí Phát sinh cho Phiếu DV #" + ticket.getId(), htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send additional cost approval request email: " + e.getMessage());
+        }
+    }
+
+    // --- (Tùy chọn) PHƯƠNG THỨC MỚI: Gửi email thông báo cho staff khi khách đã duyệt ---
+    @Async
+    public void sendCostApprovedNotificationToStaff(AppUser staff, MaintenanceHistory ticket) {
+        try {
+            Context context = new Context();
+            context.setVariable("customerName", ticket.getOwner().getFullName());
+            String formattedAmount = String.format("%,.0f VND", ticket.getAdditionalCostAmount());
+            context.setVariable("amount", formattedAmount);
+            context.setVariable("ticketId", ticket.getId());
+
+            String htmlContent = templateEngine.process("cost-approved-notification", context);
+            sendHtmlEmail(staff.getEmail(), "[Thông báo] Khách hàng đã duyệt chi phí cho Phiếu DV #" + ticket.getId(), htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send cost approved notification email: " + e.getMessage());
+        }
+    }
 
     /** ------------------- SEND HTML EMAIL (shared) ------------------- */
     private void sendHtmlEmail(String to, String subject, String htmlBody) throws MessagingException {

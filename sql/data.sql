@@ -1,3 +1,6 @@
+DROP SCHEMA public CASCADE;
+CREATE SCHEMA public;
+
 -- Kích hoạt extension để tìm kiếm không dấu (nếu chưa có)
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
@@ -29,80 +32,6 @@ TRUNCATE TABLE
 -- =================================================================================
 -- STEP 1: INSERT DATA FOR BASE TABLES (KHÔNG CÓ KHÓA NGOẠI)
 -- =================================================================================
-
--- =================================================================================
--- app_user
--- =================================================================================
-INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
-                                                                                                                                     (true, 'lengochan090105@gmail.com', '117568473599883678495', 'Lê Ngọc Hân', '0373587001', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'dinhthingocanh030805@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'namhoai020505@gmail.com', '118080103497063505858', 'Nam Hoài', '0373587009', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'boyhayhaha12345@gmail.com', '10414838788924653426', 'Nguyễn Đăng Phú', '0373587010', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'kassassinrk@gmail.com', '101853864144089879263', 'Nguyễn Dũng', '0373587011', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
-                                                                                                                                     -- Sample Staff Accounts (user01x)
-                                                                                                                                     -- Center 1: ECar Binh Duong
-                                                                                                                                     (true, 'staffrole001@gmail.com', '103635268146202778075', 'Staff Role', '0373587002', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff010@example.com', 'sub-010', 'Võ Đức Anh', '0912345010', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff011@example.com', 'sub-011', 'Nguyễn Quốc Bảo', '0912345011', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     -- Center 2: ECar Thu Duc
-                                                                                                                                     (true, 'staff012@example.com', 'sub-012', 'Huỳnh Vũ Bằng', '0912345012', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff013@example.com', 'sub-013', 'Nguyễn Ngọc Minh Châu', '0912345013', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff014@example.com', 'sub-014', 'Nguyễn Ngọc Trân Châu', '0912345014', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff015@example.com', 'sub-015', 'Phạm Huy Cường', '0912345015', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     -- Center 3: ECar District 1
-                                                                                                                                     (true, 'staff016@example.com', 'sub-016', 'Lê Thị Ngọc Hân', '0912345016', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff017@example.com', 'sub-017', 'Nguyễn Thị Thanh Hân', '0912345017', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff018@example.com', 'sub-018', 'Trần Công Hiệp', '0912345018', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff019@example.com', 'sub-019', 'Phan Sơn Hoàng', '0912345019', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
-                                                                                                                                     -- Sample Technician Accounts (user02x)
-                                                                                                                                     -- Center 1: ECar Binh Duong
-                                                                                                                                     (true, 'technicianrole01@gmail.com', '112040040855698268458', 'Technician Role', '0373587003', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'staff020@example.com', 'sub-020', 'Đặng Nguyễn Trung Huy', '0912345020',1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech021@example.com', 'sub-021', 'Nguyễn Phan Minh Hưng', '0912345021', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech022@example.com', 'sub-022', 'Lê Quang Khải', '0912345022', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     -- Center 2: ECar Thu Duc
-                                                                                                                                     (true, 'tech023@example.com', 'sub-023', 'Lê Nguyên Khan', '0912345023', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech024@example.com', 'sub-024', 'Dương Hồng Khang', '0912345024', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech025@example.com', 'sub-025', 'Nguyễn Đăng Khoa', '0912345025', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech026@example.com', 'sub-026', 'Nguyễn Ngọc Kiều My', '0912345026', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech027@example.com', 'sub-027', 'Phan Cao Trọng Nghĩa', '0912345027', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     -- Center 3: ECar District 1
-                                                                                                                                     (true, 'tech028@example.com', 'sub-028', 'Trần Thúy Ngọc', '0912345028', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech029@example.com', 'sub-029', 'Lê Hoàng Uyển Nhi', '0912345029', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech030@example.com', 'sub-030', 'Châu Hiệp Phát', '0912345030', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech031@example.com', 'sub-031', 'Nguyễn Hồng Phúc', '0912345031', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'tech032@example.com', 'sub-032', 'Phan Tâm Phương', '0912345032', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
-                                                                                                                                     -- Sample Customer Accounts (user03x, user04x)
-                                                                                                                                     (true, 'customerrole01@gmail.com', '110833741228031693365', 'Customer Role', '0373587004', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer033@example.com', 'sub-033', 'Võ Hồng Phương', '0912345033', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer034@example.com', 'sub-034', 'Lê Nguyễn Ngọc Quý', '0912345034', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer035@example.com', 'sub-035', 'Nguyễn Kim Quyên', '0912345035', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer036@example.com', 'sub-036', 'Ngô Thị Mỹ Quỳnh', '0912345036', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer037@example.com', 'sub-037', 'Huỳnh Trúc Tâm', '0912345037', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer038@example.com', 'sub-038', 'Trần Hưng Thịnh', '0912345038', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer039@example.com', 'sub-039', 'Bùi Ngọc Minh Thư', '0912345039', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer040@example.com', 'sub-040', 'Đoàn Thị Kiều Thư', '0912345040', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer041@example.com', 'sub-041', 'Lê Minh Thư', '0912345041', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
-                                                                                                                                     -- Sample Customer Accounts (user03x, user04x)
-                                                                                                                                     (true, 'customer042@example.com', 'sub-042', 'Nguyễn Lý Mỹ Tiên', '0912345042', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer043@example.com', 'sub-043', 'Nguyễn Thị Cẩm Tiên', '0912345043', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer044@example.com', 'sub-044', 'Nguyễn Thị Cẩm Tiên', '0912345044', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer045@example.com', 'sub-045', 'Trần Ngọc Quế Trang', '0912345045', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer046@example.com', 'sub-046', 'Võ Thị Thùy Trinh', '0912345046', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer047@example.com', 'sub-047', 'Huỳnh Thị Thanh Trúc', '0912345047', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer048@example.com', 'sub-048', 'Nguyễn Thanh Trúc', '0912345048', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer049@example.com', 'sub-049', 'Phạm Thanh Trường', '0912345049', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer050@example.com', 'sub-050', 'Trần Cẩm Tú', '0912345050', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer051@example.com', 'sub-051', 'Đỗ Trần Tường Vy', '0912345051', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'customer052@example.com', 'sub-052', 'Kiều Lê Thảo Vy', '0912345052', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
-
 
 -- =================================================================================
 -- car_model
@@ -179,7 +108,81 @@ INSERT INTO public.service (id, service_type, service_name, category, created_by
                                                                                                                           (52, 'F', 'Tire Pressure Monitoring System (TPMS) Sensor', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (53, 'F', 'Shock Absorber Replacement', 'suspension', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                           (54, 'F', 'Interior Plastic Trim Replacement', 'interior', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                          (55, 'F', 'Error Light Diagnosis and Software Update', 'other', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system');
+                                                                                                                          (55, 'F', 'Error Light Diagnosis and Software Update', 'other', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                          (56, 'F', 'Headlight Bulb Replacement', 'electric', 'system', '2025-10-11 08:34:17.121222', '2025-10-11 08:34:17.121222', 'system');
+
+-- =================================================================================
+-- app_user
+-- =================================================================================
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                                     (true, 'lengochan090105@gmail.com', '117568473599883678495', 'Lê Ngọc Hân', '0373587001', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'dinhthingocanh030805@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'namhoai020505@gmail.com', '118080103497063505858', 'Nam Hoài', '0373587009', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'boyhayhaha12345@gmail.com', '10414838788924653426', 'Nguyễn Đăng Phú', '0373587010', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'kassassinrk@gmail.com', '101853864144089879263', 'Nguyễn Dũng', '0373587011', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                                     -- Sample Staff Accounts (user01x)
+                                                                                                                                     -- Center 1: ECar Binh Duong
+                                                                                                                                     (true, 'staffrole001@gmail.com', '103635268146202778075', 'Staff Role', '0373587002', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'kaitetsuya91@gmail.com', '101969093178465016620', 'Luân Hoàng', '0373587005', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff010@example.com', 'sub-010', 'Võ Đức Anh', '0912345010', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff011@example.com', 'sub-011', 'Nguyễn Quốc Bảo', '0912345011', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     -- Center 2: ECar Thu Duc
+                                                                                                                                     (true, 'staff012@example.com', 'sub-012', 'Huỳnh Vũ Bằng', '0912345012', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff013@example.com', 'sub-013', 'Nguyễn Ngọc Minh Châu', '0912345013', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff014@example.com', 'sub-014', 'Nguyễn Ngọc Trân Châu', '0912345014', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff015@example.com', 'sub-015', 'Phạm Huy Cường', '0912345015', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     -- Center 3: ECar District 1
+                                                                                                                                     (true, 'staff016@example.com', 'sub-016', 'Lê Thị Ngọc Hân', '0912345016', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff017@example.com', 'sub-017', 'Nguyễn Thị Thanh Hân', '0912345017', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff018@example.com', 'sub-018', 'Trần Công Hiệp', '0912345018', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff019@example.com', 'sub-019', 'Phan Sơn Hoàng', '0912345019', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                                     -- Sample Technician Accounts (user02x)
+                                                                                                                                     -- Center 1: ECar Binh Duong
+                                                                                                                                     (true, 'technicianrole01@gmail.com', '112040040855698268458', 'Technician Role', '0373587003', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'shadehygge@gmail.com', '115145529639894629785', 'Hygge Shade', '0373587006', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'staff020@example.com', 'sub-020', 'Đặng Nguyễn Trung Huy', '0912345020',1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech021@example.com', 'sub-021', 'Nguyễn Phan Minh Hưng', '0912345021', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech022@example.com', 'sub-022', 'Lê Quang Khải', '0912345022', 1, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     -- Center 2: ECar Thu Duc
+                                                                                                                                     (true, 'tech023@example.com', 'sub-023', 'Lê Nguyên Khan', '0912345023', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech024@example.com', 'sub-024', 'Dương Hồng Khang', '0912345024', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech025@example.com', 'sub-025', 'Nguyễn Đăng Khoa', '0912345025', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech026@example.com', 'sub-026', 'Nguyễn Ngọc Kiều My', '0912345026', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech027@example.com', 'sub-027', 'Phan Cao Trọng Nghĩa', '0912345027', 2, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     -- Center 3: ECar District 1
+                                                                                                                                     (true, 'tech028@example.com', 'sub-028', 'Trần Thúy Ngọc', '0912345028', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech029@example.com', 'sub-029', 'Lê Hoàng Uyển Nhi', '0912345029', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech030@example.com', 'sub-030', 'Châu Hiệp Phát', '0912345030', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech031@example.com', 'sub-031', 'Nguyễn Hồng Phúc', '0912345031', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'tech032@example.com', 'sub-032', 'Phan Tâm Phương', '0912345032', 3, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                                     -- Sample Customer Accounts (user03x, user04x)
+                                                                                                                                     (true, 'customerrole01@gmail.com', '110833741228031693365', 'Customer Role', '0373587004', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'wendyhimekawa@gmail.com', '115830350857850462621', 'Alvarez Wendy', '0373587007', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer033@example.com', 'sub-033', 'Võ Hồng Phương', '0912345033', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer034@example.com', 'sub-034', 'Lê Nguyễn Ngọc Quý', '0912345034', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer035@example.com', 'sub-035', 'Nguyễn Kim Quyên', '0912345035', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer036@example.com', 'sub-036', 'Ngô Thị Mỹ Quỳnh', '0912345036', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer037@example.com', 'sub-037', 'Huỳnh Trúc Tâm', '0912345037', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer038@example.com', 'sub-038', 'Trần Hưng Thịnh', '0912345038', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer039@example.com', 'sub-039', 'Bùi Ngọc Minh Thư', '0912345039', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer040@example.com', 'sub-040', 'Đoàn Thị Kiều Thư', '0912345040', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer041@example.com', 'sub-041', 'Lê Minh Thư', '0912345041', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
+INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
+                                                                                                                                     -- Sample Customer Accounts (user03x, user04x)
+                                                                                                                                     (true, 'customer042@example.com', 'sub-042', 'Nguyễn Lý Mỹ Tiên', '0912345042', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer043@example.com', 'sub-043', 'Nguyễn Thị Cẩm Tiên', '0912345043', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer044@example.com', 'sub-044', 'Nguyễn Thị Cẩm Tiên', '0912345044', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer045@example.com', 'sub-045', 'Trần Ngọc Quế Trang', '0912345045', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer046@example.com', 'sub-046', 'Võ Thị Thùy Trinh', '0912345046', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer047@example.com', 'sub-047', 'Huỳnh Thị Thanh Trúc', '0912345047', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer048@example.com', 'sub-048', 'Nguyễn Thanh Trúc', '0912345048', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer049@example.com', 'sub-049', 'Phạm Thanh Trường', '0912345049', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer050@example.com', 'sub-050', 'Trần Cẩm Tú', '0912345050', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer051@example.com', 'sub-051', 'Đỗ Trần Tường Vy', '0912345051', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'customer052@example.com', 'sub-052', 'Kiều Lê Thảo Vy', '0912345052', null,'2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
 
 
 -- =================================================================================
@@ -504,7 +507,6 @@ INSERT INTO public.bookings (user_id, center_id, customer_phone_number, license_
                                                                                                                                                                                                 );
 -- =================================================================================
 -- maintenance_history (Phiếu dịch vụ nội bộ)
--- Tạo ra các kịch bản khác nhau để kiểm thử
 -- =================================================================================
 INSERT INTO public.maintenance_history (
     -- Thông tin chính
@@ -516,70 +518,61 @@ INSERT INTO public.maintenance_history (
     -- Thông tin lịch hẹn & thời gian
     schedule_date, schedule_time, submitted_at, staff_receive_at, technician_receive_at, completed_at, hand_over_at,
     -- Nhân sự liên quan
-    staff_id, technician_id
+    staff_id, technician_id,
+    -- THÊM 2 CỘT AUDITING CÒN THIẾU
+    created_by, created_at
 )
 VALUES
-    -- Kịch bản 1: Phiếu mới, đang chờ nhân viên tiếp nhận (status = CUSTOMER_SUBMITTED)
-    -- Phiếu này sẽ tự động có id = 1
+    -- Kịch bản 1: Phiếu mới (id=1)
     (
         (SELECT id FROM vehicles WHERE license_plate = '51G-111.13'),
         (SELECT id FROM app_user WHERE email = 'customerrole01@gmail.com'),
-        1, -- ECar Binh Duong
-        'CUSTOMER_SUBMITTED',
-        true, true, 'Brake noise check', 20000,
+        1, 'CUSTOMER_SUBMITTED', true, true, 'Brake noise check', 20000,
         false, 0, null,
         '2025-12-15', '10:00:00', NOW(), null, null, null, null,
-        null, null
+        null, null,
+        'customerrole01@gmail.com', NOW() -- Cung cấp giá trị cho created_by và created_at
     ),
-    -- Kịch bản 2: Phiếu đang chờ khách hàng duyệt chi phí phát sinh (status = CUSTOMER_APPROVAL_PENDING)
-    -- Phiếu này sẽ tự động có id = 2
+    -- Kịch bản 2: Phiếu chờ duyệt (id=2)
     (
         (SELECT id FROM vehicles WHERE license_plate = '29A-111.11'),
         (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
-        2, -- ECar Thu Duc
-        'CUSTOMER_APPROVAL_PENDING',
-        true, true, 'Check engine light', 15000,
+        2, 'CUSTOMER_APPROVAL_PENDING', true, true, 'Check engine light', 15000,
         true, 550000, 'Cần thay thêm cảm biến ABS.',
         '2025-11-20', '09:00:00', NOW(), null, null, null, null,
-        null, null
+        null, null,
+        'lengochan090105@gmail.com', NOW() -- Cung cấp giá trị cho created_by và created_at
     ),
-    -- Kịch bản 3: Phiếu đã hoàn thành toàn bộ quy trình (status = DONE)
-    -- Phiếu này sẽ tự động có id = 3
+    -- Kịch bản 3: Phiếu đã hoàn thành (id=3)
     (
         (SELECT id FROM vehicles WHERE license_plate = '29A-111.11'),
         (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
-        2, -- ECar Thu Duc
-        'DONE',
-        true, true, 'General check-up and minor repairs.', 10000,
+        2, 'DONE', true, true, 'General check-up and minor repairs.', 10000,
         true, 180000, 'Chi phí phát sinh đã được duyệt.',
         '2025-10-30', '12:00:00', '2025-10-30 10:36:36', '2025-10-30 10:40:00', '2025-10-30 10:45:00', '2025-10-30 16:22:22', '2025-10-30 17:15:00',
         (SELECT id FROM app_user WHERE email = 'staffrole001@gmail.com'),
-        (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com')
+        (SELECT id FROM app_user WHERE email = 'technicianrole01@gmail.com'),
+        'lengochan090105@gmail.com', '2025-10-30 10:36:36' -- Cung cấp giá trị cho created_by và created_at
     );
-
-
 -- =================================================================================
 -- maintenance_item_parts (Phụ tùng DỰ KIẾN được gán cho một phiếu dịch vụ)
 -- =================================================================================
 INSERT INTO public.maintenance_item_parts (maintenance_history_id, spare_part_id, quantity)
 SELECT
-    map.maintenance_history_id,
+    -- Thay vì dùng ID cứng, chúng ta tìm ID của maintenance_history dựa trên `remark`
+    (SELECT id FROM public.maintenance_history WHERE remark = map.history_remark),
     sp.id,
     map.quantity
 FROM (
          VALUES
-             -- Kịch bản 1: Phiếu dịch vụ số 1 (Brake noise check cho xe VF6)
-             -- Nhân viên dự kiến cần kiểm tra và có thể thay thế má phanh.
-             (1, 'VF6-BRK-01', 1),
+             -- Kịch bản 1: Liên kết với phiếu dịch vụ có ghi chú 'Brake noise check'
+             ('Brake noise check', 'VF6-BRK-01', 1),
 
-             -- Kịch bản 2: Phiếu dịch vụ số 2 (Chờ duyệt chi phí cho xe VF3)
-             -- Nhân viên đã xác định cần thay 1 cảm biến ABS và đã báo giá cho khách.
-             (2, 'VF3-SNS-01', 1),
+             -- Kịch bản 2: Liên kết với phiếu dịch vụ có ghi chú 'Check engine light'
+             ('Check engine light', 'VF3-SNS-01', 1),
+             ('Check engine light', 'VF3-FLT-01', 1)
 
-             -- (Tùy chọn) Có thể dự kiến thêm các mục khác cho phiếu số 2
-             (2, 'VF3-FLT-01', 1)
-
-     ) AS map(maintenance_history_id, part_number, quantity)
+     ) AS map(history_remark, part_number, quantity)
          JOIN public.spare_part sp ON map.part_number = sp.part_number;
 
 
