@@ -379,6 +379,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setUpdatedAt(LocalDateTime.now());
 
         maintenanceHistoryRepository.save(ticket);
+    }
+
     // ====================== NHAC BAO DUONG TRUOC 10 NGAY ======================
     @Transactional
     @Scheduled(cron = "0 0 8 * * *")
