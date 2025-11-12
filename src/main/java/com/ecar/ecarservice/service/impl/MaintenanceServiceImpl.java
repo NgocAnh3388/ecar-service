@@ -12,6 +12,7 @@ import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;
 import com.ecar.ecarservice.service.UserService;
 import com.ecar.ecarservice.threads.EmailThread;
+import com.ecar.ecarservice.threads.TechnicianEmailThread;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -260,6 +261,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         maintenanceHistory.setTechnician(assignedTechnician);
         maintenanceHistory.setStaffReceiveAt(LocalDateTime.now());
         maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now());
+        maintenanceHistory.setMaintenanceScheduleId(request.scheduleId());
 
         // Cập nhật trạng thái đã được technician nhận
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
@@ -292,7 +294,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         AppUser owner = saved.getOwner();
         Vehicle vehicle = saved.getVehicle();
         if (owner != null && assignedTechnician != null && vehicle != null && vehicle.getCarModel() != null) {
-            emailService.sendTechnicianReceivedEmail(owner, assignedTechnician, vehicle);
+            executorService.submit(new TechnicianEmailThread(emailService, owner, assignedTechnician, vehicle));
         } else {
             System.err.println("Cannot send technician received email: missing owner, technician, or vehicle data.");
         }
