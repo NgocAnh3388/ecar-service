@@ -3,6 +3,7 @@ package com.ecar.ecarservice.service.impl;
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
 import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.*;
+import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.enums.MaintenanceStatus;
 import com.ecar.ecarservice.payload.requests.*;
 import com.ecar.ecarservice.payload.responses.*;
@@ -98,11 +99,30 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     // ====================== QUAN LY PHIEU ======================
     @Override
     @Transactional(readOnly = true)
-    public List<MaintenanceTicketResponse> getTickets(OidcUser user) {
-        return maintenanceHistoryRepository.findAllAndSortForManagement()
-                .stream()
+    public List<MaintenanceTicketResponse> getTickets(OidcUser oidcUser) {
+        // Lấy thông tin người dùng hiện tại, bao gồm cả vai trò và center
+        AppUser currentUser = userService.getCurrentUser(oidcUser);
+
+        List<MaintenanceHistory> tickets;
+
+        // --- LOGIC PHÂN QUYỀN ĐƯỢC ĐẶT Ở ĐÂY ---
+        if (currentUser.getRoles().contains(AppRole.ADMIN)) {
+            // NẾU LÀ ADMIN: Lấy tất cả các phiếu từ tất cả các center
+            tickets = maintenanceHistoryRepository.findAllAndSortForManagement();
+        } else {
+            // NẾU LÀ STAFF HOẶC TECHNICIAN: Chỉ lấy các phiếu thuộc center của họ
+            Center userCenter = currentUser.getCenter();
+            if (userCenter == null) {
+                // Xử lý trường hợp một staff/technician chưa được gán center (trả về danh sách rỗng)
+                return Collections.emptyList();
+            }
+            // Cần tạo phương thức mới trong MaintenanceHistoryRepository
+            tickets = maintenanceHistoryRepository.findAllByCenterIdSortedForManagement(userCenter.getId());
+        }
+
+        return tickets.stream()
                 .map(this::fromMaintenanceHistory)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     private MaintenanceTicketResponse fromMaintenanceHistory(MaintenanceHistory history) {

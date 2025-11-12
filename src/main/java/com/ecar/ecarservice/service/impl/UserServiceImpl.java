@@ -255,4 +255,13 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + email));
         return convertToDto(user);
     }
+
+    // ===================== Lấy danh sách technician chỉ thuộc về một center cụ thể =====================
+    @Override
+    @Transactional(readOnly = true)
+    public List<AppUser> getTechniciansByCenter(Long centerId) {
+        // Cần tạo phương thức mới trong AppUserRepository
+        return appUserRepository.findByRolesContainingAndCenterId(AppRole.TECHNICIAN, centerId);
+    }
+
 }

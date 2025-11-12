@@ -56,4 +56,9 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
     List<AppUser> findAllWithDetailsByIds(@Param("ids") List<Long> ids);
 
     List<AppUser> findByRoles(AppRole role);
+
+    // Tìm người dùng theo vai trò VÀ center
+    List<AppUser> findByRolesContainingAndCenterId(AppRole role, Long centerId);
+
+
 }

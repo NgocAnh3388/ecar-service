@@ -24,5 +24,6 @@ public interface UserService {
     AppUser getCurrentUserById(Long id);
     void toggleActiveUser(Long id);
 
+    List<AppUser> getTechniciansByCenter(Long centerId);
 
 }
