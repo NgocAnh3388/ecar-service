@@ -35,7 +35,7 @@ TRUNCATE TABLE
 -- =================================================================================
 INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id, created_at, created_by, updated_at, updated_by) VALUES
                                                                                                                                      (true, 'lengochan090105@gmail.com', '117568473599883678495', 'Lê Ngọc Hân', '0373587001', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
-                                                                                                                                     (true, 'dinhthingocanh0308@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
+                                                                                                                                     (true, 'dinhthingocanh030805@gmail.com', '105167307593551204911', 'Ngọc Anh', '0373587008', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'namhoai020505@gmail.com', '118080103497063505858', 'Nam Hoài', '0373587009', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'boyhayhaha12345@gmail.com', '10414838788924653426', 'Nguyễn Đăng Phú', '0373587010', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system'),
                                                                                                                                      (true, 'kassassinrk@gmail.com', '101853864144089879263', 'Nguyễn Dũng', '0373587011', null, '2025-10-11 08:34:17.121222', 'system', '2025-10-11 08:34:17.121222', 'system');
@@ -191,8 +191,8 @@ INSERT INTO public.service (id, service_type, service_name, category, created_by
 INSERT INTO public.user_roles (user_id, role)
 SELECT id, CASE
                WHEN email IN ('lengochan090105@gmail.com', 'dinhthingocanh030805@gmail.com', 'namhoai020505@gmail.com', 'boyhayhaha12345@gmail.com', 'kassassinrk@gmail.com') THEN 'ADMIN'
-               WHEN email IN ('kaitetsuya91@gmail.com', 'staffrole001@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
-               WHEN email IN ('shadehygge@gmail.com', 'technicianrole01@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
+               WHEN email IN ('staffrole001@gmail.com', 'kaitetsuya91@gmail.com') OR email LIKE 'staff%' THEN 'STAFF'
+               WHEN email IN ('technicianrole01@gmail.com', 'shadehygge@gmail.com') OR email LIKE 'tech%' THEN 'TECHNICIAN'
                ELSE 'CUSTOMER'
     END FROM public.app_user;
 
