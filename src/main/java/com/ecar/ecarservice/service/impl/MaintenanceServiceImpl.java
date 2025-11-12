@@ -315,7 +315,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     // ====================== KY THUAT VIEN HOAN TAT CONG VIEC ======================
     @Override
     @Transactional
-    public void completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
+    public MaintenanceHistoryDTO completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
         AppUser currentTechnician = userService.getCurrentUser(oidcUser);
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
@@ -331,6 +331,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
         ticket.setCompletedAt(LocalDateTime.now());
         maintenanceHistoryRepository.save(ticket);
+        return null;
     }
 
     // ====================== CAP NHAT TRANG THAI & XE SAU BAO DUONG ======================

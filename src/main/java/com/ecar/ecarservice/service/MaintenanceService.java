@@ -31,7 +31,7 @@ public interface MaintenanceService {
     List<MaintenanceTicketResponse> getTicketsForTechnician(OidcUser user);
 
     @Transactional
-    void completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
+    MaintenanceHistoryDTO completeServiceByTechnician(Long ticketId, OidcUser oidcUser);
 
     MaintenanceHistoryDTO completeTechnicianTask(Long maintenanceId);
 
