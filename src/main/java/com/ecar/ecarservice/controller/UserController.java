@@ -2,6 +2,7 @@ package com.ecar.ecarservice.controller;
 
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
+import com.ecar.ecarservice.dto.VehicleDto;
 import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -94,6 +96,49 @@ public class UserController {
     public ResponseEntity<Void> toggleActive(@PathVariable Long id) {
         userService.toggleActiveUser(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/technicians/by-center/{centerId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<List<UserDto>> getTechniciansByCenter(@PathVariable Long centerId) {
+        // Gọi đến service để lấy danh sách Entity
+        List<AppUser> technicians = userService.getTechniciansByCenter(centerId);
+
+        // Chuyển đổi danh sách Entity sang danh sách DTO
+        List<UserDto> technicianDtos = technicians.stream()
+                .map(this::convertToDto) // Tái sử dụng hàm convertToDto bạn đã có
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(technicianDtos);
+    }
+
+    private UserDto convertToDto(AppUser user) {
+        UserDto dto = new UserDto();
+        dto.setId(user.getId());
+        dto.setEmail(user.getEmail());
+        dto.setFullName(user.getFullName());
+        dto.setPhoneNo(user.getPhoneNo());
+        dto.setRoles(user.getRoles());
+        dto.setActive(user.isActive());
+
+        // Chuyển đổi thông tin xe của người dùng (nếu có)
+        if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
+            List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
+                VehicleDto vehicleDto = new VehicleDto();
+                // Giả định VehicleDto có các setter tương ứng
+                vehicleDto.setLicensePlate(v.getLicensePlate());
+                vehicleDto.setCarModel(v.getCarModel());
+                vehicleDto.setVinNumber(v.getVinNumber());
+                vehicleDto.setNextKm(v.getNextKm());
+                vehicleDto.setNextDate(v.getNextDate());
+                vehicleDto.setOldKm(v.getOldKm());
+                vehicleDto.setOldDate(v.getOldDate());
+                return vehicleDto;
+            }).collect(Collectors.toList());
+            dto.setVehicles(vehicleDtos);
+        }
+
+        return dto;
     }
 
 }

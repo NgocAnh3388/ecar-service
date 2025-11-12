@@ -45,6 +45,11 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
     @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
     List<MaintenanceHistory> findByTechnicianIdOrderByStatusAscTechnicianReceivedAtDesc(Long technicianId);
 
+    @EntityGraph(attributePaths = {
+            "vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"
+    })
+    @Query("SELECT mh FROM MaintenanceHistory mh WHERE mh.center.id = :centerId ORDER BY mh.status ASC, mh.submittedAt DESC")
+    List<MaintenanceHistory> findAllByCenterIdSortedForManagement(Long centerId);
     /**
      * Tìm tất cả các dịch vụ đang ở một trạng thái cụ thể
      * (Dùng để tìm các dịch vụ đang ở trạng thái TECHNICIAN_RECEIVED)
