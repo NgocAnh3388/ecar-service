@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "center")
@@ -49,4 +51,8 @@ public class Center {
     @LastModifiedBy
     @Column(name = "updated_by", insertable = false)
     private String updatedBy;
+
+    @OneToMany(mappedBy = "center", fetch = FetchType.LAZY)
+    @JsonManagedReference // Quản lý quan hệ
+    private List<AppUser> technicians;
 }
