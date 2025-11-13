@@ -8,4 +8,6 @@ import lombok.Data;
 public class StockUpdateDTO {
     @NotNull private Boolean isAddition;
     @Min(1) private Integer quantityChange;
+
+    private Integer minStockLevel;
 }

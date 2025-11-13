@@ -107,6 +107,12 @@ public class InventoryServiceImpl implements InventoryService {
 
         item.setStockQuantity(Math.max(0, newQty));
 
+        // THÊM CHECK NÀY
+        if (stockDto.getMinStockLevel() != null) {
+            int safeMin = Math.max(1, stockDto.getMinStockLevel());
+            item.setMinStockLevel(safeMin);
+        }
+
         return toInventoryDTO(inventoryRepository.save(item));
     }
 
