@@ -2,7 +2,7 @@ package com.ecar.ecarservice.dto;
 
 import lombok.Data;
 
-//DTO này đại diện cho thông tin tồn kho của một phụ tùng tại một center cụ thể
+//DTO này đại diện cho thông tin tồn kho của MỘT phụ tùng tại MỘT center cụ thể.
 @Data
 public class InventoryDTO {
     private Long id; // ID của bản ghi inventory

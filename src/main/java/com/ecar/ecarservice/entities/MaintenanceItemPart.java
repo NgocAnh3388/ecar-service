@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 // Entity mới để lưu phụ tùng đã dùng cho một phiếu dịch vụ
+//Ghi nhận Phụ tùng DỰ KIẾN sẽ dùng
 @Entity
 @Table(name = "maintenance_item_parts")
 @Getter

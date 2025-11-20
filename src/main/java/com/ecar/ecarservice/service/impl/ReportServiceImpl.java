@@ -4,6 +4,7 @@ import com.ecar.ecarservice.enums.PaymentStatus;
 import com.ecar.ecarservice.payload.responses.ProfitReportResponse;
 import com.ecar.ecarservice.repositories.ExpenseRepository;
 import com.ecar.ecarservice.repositories.PaymentHistoryRepository;
+import com.ecar.ecarservice.repositories.ServiceRecordRepository;
 import com.ecar.ecarservice.service.ReportService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ public class ReportServiceImpl implements ReportService {
 
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final ExpenseRepository expenseRepository; // <-- Inject Repo Chi phí
+    private final ServiceRecordRepository serviceRecordRepository;
 
     @Override
     public ProfitReportResponse getProfitReport(LocalDate startDate, LocalDate endDate) {

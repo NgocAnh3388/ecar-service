@@ -20,7 +20,7 @@ public class InventoryServiceImpl implements InventoryService {
     private final CarModelRepository carModelRepository;
     private final ServiceSparePartRepository serviceSparePartRepository;
     private final InventoryRepository inventoryRepository;
-
+    private final ServicePartUsageRepository servicePartUsageRepository;
     // =================== SPARE PART (Thông tin chung) ===================
     @Override
     @Transactional
@@ -132,6 +132,15 @@ public class InventoryServiceImpl implements InventoryService {
                 .collect(Collectors.toList());
     }
 
+    // =================== INVENTORY đã sử dụng ===================
+    @Override
+    @Transactional(readOnly = true)
+    public List<UsedPartHistoryDTO> getUsedPartsHistory() {
+        return servicePartUsageRepository.findAllOrderByServiceDateDesc().stream()
+                .map(this::toUsedPartHistoryDTO)
+                .collect(Collectors.toList());
+    }
+
     // =================== SUGGESTION LOGIC ===================
     @Override
     @Transactional(readOnly = true)
@@ -189,4 +198,17 @@ public class InventoryServiceImpl implements InventoryService {
         dto.setMinStockLevel(inventory.getMinStockLevel());
         return dto;
     }
+
+    private UsedPartHistoryDTO toUsedPartHistoryDTO(ServicePartUsage usage) {
+        UsedPartHistoryDTO dto = new UsedPartHistoryDTO();
+        dto.setPartName(usage.getSparePart().getPartName());
+        dto.setPartNumber(usage.getSparePart().getPartNumber());
+        dto.setQuantityUsed(usage.getQuantityUsed());
+        dto.setPriceAtTimeOfUse(usage.getPriceAtTimeOfUse());
+        dto.setServiceDate(usage.getServiceRecord().getServiceDate());
+        dto.setLicensePlate(usage.getServiceRecord().getLicensePlate());
+        dto.setCenterName(usage.getServiceRecord().getBooking().getCenter().getCenterName());
+        return dto;
+    }
+
 }

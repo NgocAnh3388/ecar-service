@@ -25,7 +25,7 @@ public class CreateServiceRecordRequest {
     // Ví dụ: [{partId: 101, quantity: 4}, {partId: 205, quantity: 1}]
     private List<UsedPartDto> usedParts; // Danh sách phụ tùng đã dùng
 
-    private BigDecimal laborCost;
-    private BigDecimal coveredByPackage;
+    private BigDecimal laborCost; // Chi phí tiền công
+    private BigDecimal coveredByPackage; // Số tiền được gói bảo dưỡng/subscription chi trả
 
 }

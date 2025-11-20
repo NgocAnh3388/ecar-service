@@ -18,6 +18,9 @@ public class ServiceRecordResponseDto {
     private String createdBy;
     private List<ServiceDetailDto> details;
 
+    // hiển thị chi tiết phụ tùng đã dùng trên hóa đơn
+    private List<UsedPartDetailDto> usedParts;
+
     private BigDecimal totalPartsCost;
     private BigDecimal laborCost;
     private BigDecimal totalActualCost;

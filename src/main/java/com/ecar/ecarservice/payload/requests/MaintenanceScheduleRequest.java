@@ -4,6 +4,10 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+/**
+ * DTO dùng để nhận dữ liệu khi khách hàng tạo một yêu cầu/phiếu dịch vụ mới.
+ * Đây là điểm khởi đầu cho một quy trình bảo dưỡng/sửa chữa.
+ */
 
 public record MaintenanceScheduleRequest(
         Long centerId,

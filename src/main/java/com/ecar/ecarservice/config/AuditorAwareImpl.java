@@ -12,7 +12,7 @@ public class AuditorAwareImpl implements AuditorAware<String> {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated() || authentication.getPrincipal().equals("anonymousUser")) {
-            return Optional.of("system"); // Hoặc trả về Optional.empty()
+            return Optional.of("system"); //k có người dùng nào được xác thực: hành động này được thực hiện bởi hệ thống
         }
 
         // Lấy email từ principal

@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 
 
 import java.time.LocalDateTime;
-
+//Quản lý Gói dịch vụ & Thanh toán
 @Entity
 @Table(name = "payment_history")
 @Getter

@@ -11,7 +11,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-
+//Thông tin chung của Phụ tùng
 @Entity
 @Table(name = "spare_part")
 @Getter
@@ -35,11 +35,11 @@ public class SparePart {
     @Column(name = "unit_price")
     private Double unitPrice;
 
-    @Column(name = "stock_quantity")
-    private Integer stockQuantity;
-
-    @Column(name = "min_stock_level")
-    private Integer minStockLevel;
+//    @Column(name = "stock_quantity")
+//    private Integer stockQuantity;
+//
+//    @Column(name = "min_stock_level")
+//    private Integer minStockLevel;
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)

@@ -3,7 +3,7 @@ package com.ecar.ecarservice.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+//Tồn kho của một Phụ tùng tại một Center
 @Entity
 @Table(name = "inventory",
         uniqueConstraints = @UniqueConstraint(columnNames = {"center_id", "spare_part_id"})) // Đảm bảo mỗi phụ tùng chỉ có 1 bản ghi tồn kho tại 1 center

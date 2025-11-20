@@ -17,15 +17,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    // =================== TẢI NGƯỜI DÙNG THEO USERNAME (EMAIL) ===================
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         AppUser appUser = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return User.builder()
                 .username(appUser.getEmail())
-                .password(appUser.getPassword())
+                .password(appUser.getPassword()) // Mật khẩu đã được mã hóa trong DB
                 .roles(appUser.getRoles().stream().map(Enum::name).toArray(String[]::new))
-                .disabled(!appUser.isActive())
+                .disabled(!appUser.isActive()) // Vô hiệu hóa nếu tài khoản không active
                 .build();
     }
 }
