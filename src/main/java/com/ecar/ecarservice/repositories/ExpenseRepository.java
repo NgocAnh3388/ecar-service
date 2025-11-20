@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     /**
-     * Tính tổng chi phí trong một khoảng thời gian.
+     * Tính tổng chi phí trong một khoảng ngày (dùng LocalDate để khớp với Entity).
      */
     @Query("SELECT SUM(e.amount) FROM Expense e " +
             "WHERE e.expenseDate BETWEEN :startDate AND :endDate")
