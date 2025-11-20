@@ -19,6 +19,7 @@ public class CarModelController {
         this.carModelService = carModelService;
     }
 
+    // =================== LẤY TẤT CẢ DÒNG XE ===================
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseEntity<List<CarModelResponse>> getAll() {
         return ResponseEntity.ok(this.carModelService.getAll());

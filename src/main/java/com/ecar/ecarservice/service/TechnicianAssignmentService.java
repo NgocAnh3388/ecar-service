@@ -28,7 +28,7 @@ public class TechnicianAssignmentService {
 
         // 1. Lấy tất cả technician thuộc trung tâm này (Giữ nguyên)
         List<AppUser> allTechniciansInCenter = appUserRepository
-                .findByRolesContainsAndCenterId(AppRole.TECHNICIAN, centerId);
+                .findByRolesContainingAndCenterId(AppRole.TECHNICIAN, centerId);
 
         //Nếu không có tech nào, trả về luôn
         if (allTechniciansInCenter.isEmpty()) {

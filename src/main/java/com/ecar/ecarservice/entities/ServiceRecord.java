@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+//Hóa đơn dịch vụ cuối cùng
 @Entity
 @Table(name = "service_records")
 @Getter

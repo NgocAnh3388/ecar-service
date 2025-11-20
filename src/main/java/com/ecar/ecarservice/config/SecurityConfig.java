@@ -23,9 +23,19 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
 import java.util.stream.Stream;
+/**
+ * Class cấu hình chính cho Spring Security.
+ * Chịu trách nhiệm về:
+ * - Bảo vệ các API endpoint.
+ * - Cấu hình đăng nhập bằng Google (OAuth2/OIDC).
+ * - Xử lý CORS.
+ * - Quản lý việc mã hóa mật khẩu.
+ */
 
 @Configuration
 @EnableWebSecurity
@@ -33,6 +43,7 @@ import java.util.stream.Stream;
 public class SecurityConfig {
 
 
+    // =================== SECURITY FILTER CHAIN ===================
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
         http
@@ -63,11 +74,13 @@ public class SecurityConfig {
 
         return http.build();
     }
+    // =================== PASSWORD ENCODER ===================
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // =================== OIDC USER SERVICE (Xử lý Login Google) ===================
     @Bean
     public OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService(AppUserRepository appUserRepository) {
         final OidcUserService delegate = new OidcUserService();
@@ -123,17 +136,20 @@ public class SecurityConfig {
         return new DefaultOidcUser(mergedAuthorities, oidcUser.getIdToken(), oidcUser.getUserInfo(), "name");
     }
 
+    // =================== CORS CONFIGURATION ===================
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of("http://localhost:4200")); // Cho phép Angular gọi
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // Cho phép tất cả method
+        configuration.setAllowedHeaders(List.of("*")); // Cho phép tất cả headers
+        configuration.setAllowCredentials(true); // Cho phép gửi cookie/token nếu cần
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
+    // =================== AUTHENTICATION PROVIDER (Cho Login truyền thống) ===================
     @Bean
     public DaoAuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();

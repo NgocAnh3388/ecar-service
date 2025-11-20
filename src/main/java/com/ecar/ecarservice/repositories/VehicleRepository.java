@@ -17,7 +17,10 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
     Optional<Vehicle> findByIdAndOwnerIdAndActiveTrue(Long id, Long ownerId);
 
-    // Trong VehicleRepository.java
+    /**
+     * Tìm tất cả các xe có ngày bảo dưỡng tiếp theo (next_date) là một ngày cụ thể.
+     * Sử dụng CAST để chỉ so sánh phần ngày, bỏ qua phần giờ.
+     */
     @Query("SELECT v FROM Vehicle v WHERE v.nextDate IS NOT NULL AND CAST(v.nextDate AS date) = :targetDate")
     List<Vehicle> findVehiclesDueForMaintenanceOn(@Param("targetDate") LocalDate targetDate);
 

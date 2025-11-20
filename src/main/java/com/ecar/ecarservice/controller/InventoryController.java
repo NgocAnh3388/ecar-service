@@ -96,6 +96,12 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getPartSuggestions(centerId, carModelId, serviceIds));
     }
 
+    @GetMapping("/used-history")
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<List<UsedPartHistoryDTO>> getUsedPartsHistory() {
+        return ResponseEntity.ok(inventoryService.getUsedPartsHistory());
+    }
+
     @GetMapping("/test/trigger-report") // Test-only endpoint
     public ResponseEntity<String> triggerReport() {
         inventoryAlertScheduler.sendDailyLowStockReport();

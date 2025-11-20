@@ -19,6 +19,10 @@ public interface InventoryService {
     List<InventoryDTO> getLowStockAlertsByCenter(Long centerId);
     List<InventoryDTO> getStockAcrossCenters(Long partId); // Lấy tồn kho của 1 phụ tùng ở mọi center
 
+    // === Inventory đã sử dụng ===
+    List<UsedPartHistoryDTO> getUsedPartsHistory();
+
+
     // === Suggestion Logic ===
     List<SparePartSuggestionDTO> getPartSuggestions(Long centerId, Long carModelId, List<Long> serviceIds);
 

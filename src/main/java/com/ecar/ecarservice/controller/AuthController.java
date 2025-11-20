@@ -35,6 +35,7 @@ public class AuthController {
         this.authManager = authManager;
     }
 
+    // =================== ĐĂNG KÝ TÀI KHOẢN MỚI ===================
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody AppUser user) {
         if (userRepo.findByEmail(user.getEmail()).isPresent()) {
@@ -54,14 +55,17 @@ public class AuthController {
                 ));
     }
 
+    // =================== ĐĂNG NHẬP ===================
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody Map<String,String> loginData) {
         String email = loginData.get("email");
         String password = loginData.get("password");
+        // Sử dụng AuthenticationManager của Spring Security để xác thực thông tin đăng nhập
         try {
             Authentication authentication = authManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
+            // Nếu xác thực thành công, lưu thông tin vào SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
             AppUser user = userRepo.findByEmail(email).orElseThrow();
             return ResponseEntity.ok(Map.of(
@@ -70,13 +74,16 @@ public class AuthController {
                     "roles", user.getRoles()
             ));
         } catch (BadCredentialsException ex) {
+            // Nếu xác thực thất bại (sai email/mật khẩu), trả về lỗi 401
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(Map.of("message","Invalid email or password"));
         }
     }
 
+    // =================== ĐĂNG XUẤT ===================
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        // Xóa thông tin xác thực khỏi SecurityContext để đăng xuất người dùng
         SecurityContextHolder.clearContext();
         return ResponseEntity.ok(Map.of("message","Logged out successfully"));
     }

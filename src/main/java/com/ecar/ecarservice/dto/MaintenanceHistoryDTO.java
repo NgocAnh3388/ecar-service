@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+//DTO dùng để hiển thị thông tin tóm tắt của một phiếu dịch vụ trong danh sách lịch sử của khách hàng.
 @Data
 @Builder
 public class MaintenanceHistoryDTO {

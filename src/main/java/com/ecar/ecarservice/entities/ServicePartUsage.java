@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import java.math.BigDecimal;
-
+//Ghi nhận Phụ tùng ĐÃ DÙNG trong hóa đơn
 @Entity
 @Table(name = "service_part_usage")
 @Getter

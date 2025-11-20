@@ -3,7 +3,7 @@ import com.ecar.ecarservice.enums.MaintenanceAction;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
+//Chi tiết công việc trong hóa đơn
 @Entity
 @Table(name = "service_record_details")
 @Getter

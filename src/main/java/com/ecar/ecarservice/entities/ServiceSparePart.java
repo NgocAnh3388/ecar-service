@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+// Bảng quy tắc: Dịch vụ nào cần Phụ tùng nào
 @Entity
 @Table(name = "service_spare_parts_map") // Bảng map giữa Dịch vụ và Phụ tùng
 @Getter

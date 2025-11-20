@@ -9,8 +9,8 @@ public class SparePartDTO {
     private String partName;
     private String category;
     private Double unitPrice;
-    private Integer stockQuantity;
-    private Integer minStockLevel;
+//    private Integer stockQuantity;
+//    private Integer minStockLevel;
     private Long carModelId;
     private String carModelName;
 }

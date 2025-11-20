@@ -76,6 +76,7 @@ public class AppUser {
     @JsonManagedReference
     private List<Vehicle> vehicles;
 
+//    Một Staff/Technician sẽ thuộc về một Center.
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "center_id")
     @JsonBackReference

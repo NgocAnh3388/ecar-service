@@ -19,6 +19,7 @@ public class CenterController {
         this.centerService = centerService;
     }
 
+    // =================== LẤY TẤT CẢ TRUNG TÂM ===================
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ResponseEntity<List<CenterResponse>> getAllCenter() {
         return ResponseEntity.ok(this.centerService.getAllCenter());

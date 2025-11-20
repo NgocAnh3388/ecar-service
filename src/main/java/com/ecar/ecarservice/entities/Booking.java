@@ -4,20 +4,18 @@ import com.ecar.ecarservice.enums.BookingStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import jakarta.persistence.Column;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bookings")
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class) // Kích hoạt tính năng Auditing
+@EntityListeners(AuditingEntityListener.class)
 public class Booking {
 
     @Id
@@ -37,19 +35,23 @@ public class Booking {
     @Column(nullable = false)
     private String licensePlate; // Biển số xe
 
+    @Column // Không cần nullable = false vì có thể không bắt buộc
     private String carModel;     // Dòng xe
+
+    @Column
     private String vinNumber;      // Số VIN
 
     // --- Thông tin lịch hẹn ---
     @Column(nullable = false)
-    private String serviceCenter; // Xưởng dịch vụ
+    private String serviceCenter; // Tên xưởng dịch vụ (lưu lại dạng text)
 
     @Column(nullable = false)
     private LocalDateTime appointmentDateTime; // Ngày giờ hẹn
 
+    @Column
     private String serviceAdvisor; // Cố vấn dịch vụ (có thể null)
 
-    @Lob // Dùng cho các trường văn bản dài
+    @Lob
     @Column(columnDefinition = "TEXT")
     private String notes; // Nội dung yêu cầu thêm
 
@@ -58,8 +60,10 @@ public class Booking {
     @Column(nullable = false)
     private BookingStatus status;
 
+    // --- MỐI QUAN HỆ LOGIC TỚI CENTER ---
+    // Đây là mối quan hệ thực tế để lọc và truy vấn theo center.
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "center_id") // Tên cột khóa ngoại trong bảng bookings
+    @JoinColumn(name = "center_id", nullable = false) // Bắt buộc mỗi booking phải thuộc về 1 center
     private Center center;
 
     // --- 4 Fields Auditing ---

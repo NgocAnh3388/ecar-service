@@ -24,6 +24,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Quản lý toàn bộ quy trình dịch vụ bảo dưỡng/sửa chữa (phiếu dịch vụ nội bộ).
+ */
 @RestController
 @RequestMapping("/api/maintenance")
 public class MaintenanceController {
@@ -34,6 +37,15 @@ public class MaintenanceController {
         this.maintenanceService = maintenanceService;
     }
 
+    // =================== CUSTOMER: TẠO YÊU CẦU DỊCH VỤ MỚI ===================
+    @PostMapping("/create")
+    public ResponseEntity<Map<String, Long>> createSchedule(@RequestBody MaintenanceScheduleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
+        MaintenanceHistory newTicket = this.maintenanceService.createSchedule(request, oidcUser);
+        Map<String, Long> response = Map.of("ticketId", newTicket.getId());
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    // =================== CUSTOMER: XEM LỊCH SỬ ===================
     @PostMapping("/history")
     public ResponseEntity<Page<MaintenanceHistoryDTO>> getMaintenanceHistory(
             @AuthenticationPrincipal OidcUser oidcUser,
@@ -42,74 +54,36 @@ public class MaintenanceController {
         return ResponseEntity.ok(this.maintenanceService.getMaintenanceHistory(oidcUser, request));
     }
 
-    @PostMapping("/create") // Dùng @PostMapping cho gọn
-    public ResponseEntity<Map<String, Long>> createSchedule(@RequestBody MaintenanceScheduleRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
-        MaintenanceHistory newTicket = this.maintenanceService.createSchedule(request, oidcUser);
-
-        // Trả về một đối tượng JSON chứa ID
-        Map<String, Long> response = Map.of("ticketId", newTicket.getId());
-
-        // Trả về status 201 Created cùng với ID
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+    // API cho Customer để duyệt chi phí
+    @PostMapping("/tasks/{ticketId}/approve-cost")
+    @PreAuthorize("hasRole('CUSTOMER')") // Chỉ customer mới được duyệt
+    public ResponseEntity<Void> approveAdditionalCost(
+            @PathVariable Long ticketId,
+            @AuthenticationPrincipal OidcUser oidcUser) {
+        maintenanceService.approveAdditionalCost(ticketId, oidcUser);
+        return ResponseEntity.ok().build();
     }
 
+    // =================== ADMIN/STAFF: XEM TẤT CẢ CÁC PHIẾU ===================
     @RequestMapping("/all")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN','TECHNICIAN')")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
     public ResponseEntity<List<MaintenanceTicketResponse>> getTickets(@AuthenticationPrincipal OidcUser user) {
         return ResponseEntity.ok(this.maintenanceService.getTickets(user));
     }
 
-    @GetMapping("/milestone/{carModelId}")
-    public ResponseEntity<List<MilestoneResponse>> getMilestone(@PathVariable Long carModelId) {
-        return ResponseEntity.ok(this.maintenanceService.getMilestone(carModelId));
-    }
-
-    @GetMapping("/service-group/{carModelId}/{milestoneId}")
-    public ResponseEntity<List<ServiceGroup>> getMaintenanceServiceGroupByCarModelIdAndMilestoneId(@PathVariable Long carModelId,
-                                                                                                   @PathVariable Long milestoneId) {
-        return ResponseEntity.ok(this.maintenanceService.getMaintenanceServiceGroup(carModelId, milestoneId));
-    }
-
-    @GetMapping("/service-group/{ticketId}")
-    public ResponseEntity<List<ServiceGroup>> getServiceGroup(@PathVariable Long ticketId) {
-        return ResponseEntity.ok(this.maintenanceService.getServiceGroup(ticketId));
-    }
-
+    // =================== STAFF: PHÂN CÔNG CÔNG VIỆC CHO TECHNICIAN chọn mốc bảo dưỡng, dịch vụ sửa chữa, gán technician===================
     @PostMapping("/service-create")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN','TECHNICIAN')")
-    public ResponseEntity<Void> createService(@AuthenticationPrincipal OidcUser oidcUser, @RequestBody ServiceCreateRequest request) {
+    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    public ResponseEntity<Void> createService(@RequestBody ServiceCreateRequest request, @AuthenticationPrincipal OidcUser oidcUser) {
         this.maintenanceService.createService(request, oidcUser);
         return ResponseEntity.ok().build();
     }
-
-    @GetMapping("/technician/my-tasks")
-    @PreAuthorize("hasRole('TECHNICIAN')")
-    public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
-        return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
-    }
-
-    @PutMapping("/technician/tasks/{ticketId}/complete")
-    @PreAuthorize("hasRole('TECHNICIAN')")
-    public ResponseEntity<Void> completeService(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
-        maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
-        return ResponseEntity.ok().build();
-    }
-
-    @PostMapping("/{id}/technician-complete") // <-- SỬA THÀNH @PostMapping
-    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN', 'STAFF')")
-    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(
-            @PathVariable Long id,
-            @AuthenticationPrincipal OidcUser oidcUser
-    ) {
-        try {
-            MaintenanceHistoryDTO updatedDto = maintenanceService.completeServiceByTechnician(id, oidcUser);
-            return ResponseEntity.ok(updatedDto);
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (AccessDeniedException | IllegalStateException e) {
-            return ResponseEntity.badRequest().body(null);
-        }
-    }
+//    @PostMapping("/assign-task")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+//    public ResponseEntity<Void> assignTaskToTechnician(@RequestBody ServiceCreateRequest request) {
+//        this.maintenanceService.assignTask(request);
+//        return ResponseEntity.ok().build();
+//    }
 
     // ====================== HỦY PHIẾU ======================
     @PutMapping("/{id}/cancel")
@@ -127,9 +101,61 @@ public class MaintenanceController {
         return ResponseEntity.ok().build();
     }
 
+    // =================== TECHNICIAN: XEM CÔNG VIỆC CỦA MÌNH ===================
+    @GetMapping("/technician/my-tasks")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<List<MaintenanceTicketResponse>> getMyTasks(@AuthenticationPrincipal OidcUser user) {
+        return ResponseEntity.ok(this.maintenanceService.getTicketsForTechnician(user));
+    }
 
-    public record UpdateUsedPartsRequest(List<UsedPartDto> usedParts) {}
+    // =================== TECHNICIAN: BÁO CÁO HOÀN THÀNH KỸ THUẬT ===================
+    @PutMapping("/technician/tasks/{ticketId}/complete")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<Void> completeService(@PathVariable Long ticketId, @AuthenticationPrincipal OidcUser oidcUser) {
+        maintenanceService.completeServiceByTechnician(ticketId, oidcUser);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/{id}/technician-complete") // <-- SỬA THÀNH @PostMapping
+    @PreAuthorize("hasAnyRole('TECHNICIAN', 'ADMIN', 'STAFF')")
+    public ResponseEntity<MaintenanceHistoryDTO> completeTaskByTechnician(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser
+    ) {
+        try {
+            MaintenanceHistoryDTO updatedDto = maintenanceService.completeServiceByTechnician(id, oidcUser);
+            return ResponseEntity.ok(updatedDto);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (AccessDeniedException | IllegalStateException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
 
+    // ==========================================================
+    // == API CHUNG (STAFF, ADMIN, TECHNICIAN)
+    // ==========================================================
+//    Lấy danh sách các mốc bảo dưỡng cho một dòng xe.
+    @GetMapping("/milestone/{carModelId}")
+    public ResponseEntity<List<MilestoneResponse>> getMilestone(@PathVariable Long carModelId) {
+        return ResponseEntity.ok(this.maintenanceService.getMilestone(carModelId));
+    }
+
+//    Lấy checklist dịch vụ bảo dưỡng mặc định theo dòng xe và mốc bảo dưỡng.
+    @GetMapping("/service-group/{carModelId}/{milestoneId}")
+    public ResponseEntity<List<ServiceGroup>> getMaintenanceServiceGroupByCarModelIdAndMilestoneId(@PathVariable Long carModelId,
+                                                                                                   @PathVariable Long milestoneId) {
+        return ResponseEntity.ok(this.maintenanceService.getMaintenanceServiceGroup(carModelId, milestoneId));
+    }
+
+//    Lấy checklist các dịch vụ sửa chữa (cùng với các dịch vụ đã chọn) cho một phiếu.
+    @GetMapping("/service-group/{ticketId}")
+    public ResponseEntity<List<ServiceGroup>> getServiceGroup(@PathVariable Long ticketId) {
+        return ResponseEntity.ok(this.maintenanceService.getServiceGroup(ticketId));
+    }
+
+        public record UpdateUsedPartsRequest(List<UsedPartDto> usedParts) {}
+
+    //    Cập nhật danh sách phụ tùng dự kiến sẽ sử dụng cho một phiếu dịch vụ.
     @PutMapping("/tasks/{ticketId}/used-parts")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
     public ResponseEntity<Void> updateUsedPartsForTask(
@@ -138,31 +164,21 @@ public class MaintenanceController {
         maintenanceService.updateUsedParts(ticketId, request.usedParts());
         return ResponseEntity.ok().build();
     }
+
+    //    Lấy danh sách phụ tùng dự kiến đã được lưu cho một phiếu dịch vụ.
     @GetMapping("/tasks/{ticketId}/used-parts")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
     public ResponseEntity<List<UsedPartDto>> getUsedPartsForTask(@PathVariable Long ticketId) {
         return ResponseEntity.ok(maintenanceService.getUsedParts(ticketId));
     }
 
-    // === API CHO NGHIỆP VỤ MỚI ===
-
-    // API cho Staff/Tech để thêm/cập nhật chi phí phát sinh
+    //    Thêm hoặc cập nhật chi phí phát sinh cho một phiếu dịch vụ.
     @PutMapping("/tasks/{ticketId}/additional-cost")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
     public ResponseEntity<Void> addOrUpdateAdditionalCost(
             @PathVariable Long ticketId,
-            @RequestBody AdditionalCostRequest request) { // Cần tạo DTO này
+            @RequestBody AdditionalCostRequest request) {
         maintenanceService.addOrUpdateAdditionalCost(ticketId, request.getAmount(), request.getReason());
-        return ResponseEntity.ok().build();
-    }
-
-    // API cho Customer để duyệt chi phí
-    @PostMapping("/tasks/{ticketId}/approve-cost")
-    @PreAuthorize("hasRole('CUSTOMER')") // Chỉ customer mới được duyệt
-    public ResponseEntity<Void> approveAdditionalCost(
-            @PathVariable Long ticketId,
-            @AuthenticationPrincipal OidcUser oidcUser) {
-        maintenanceService.approveAdditionalCost(ticketId, oidcUser);
         return ResponseEntity.ok().build();
     }
 
