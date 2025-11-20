@@ -266,6 +266,13 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         // Cập nhật trạng thái đã được technician nhận
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
 
+        if (request.isMaintenance() != null) {
+            maintenanceHistory.setIsMaintenance(request.isMaintenance()); 
+        }
+        if (request.isRepair() != null) {
+            maintenanceHistory.setIsRepair(request.isRepair());
+        }
+
         // Lưu thông tin maintenanceHistory
         MaintenanceHistory saved = maintenanceHistoryRepository.save(maintenanceHistory);
 

@@ -7,6 +7,8 @@ public record ServiceCreateRequest(
         Long numOfKm,
         Long scheduleId,
         Long technicianId,
-        List<Long> checkedServiceIds
+        List<Long> checkedServiceIds,
+        Boolean isMaintenance,
+        Boolean isRepair
 ) {
 }
