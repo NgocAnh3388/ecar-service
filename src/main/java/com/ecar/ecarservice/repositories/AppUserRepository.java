@@ -45,7 +45,13 @@ public interface AppUserRepository extends JpaRepository<AppUser, Long> {
             "LOWER(unaccent(au.full_name)) LIKE LOWER(unaccent(CONCAT('%', :searchValue, '%'))) " +
             "OR LOWER(au.email) LIKE LOWER(CONCAT('%', :searchValue, '%')) " +
             "OR au.phone_no LIKE CONCAT('%', :searchValue, '%')",
-            countQuery = "SELECT count(*) FROM app_user au WHERE ...", // Giữ nguyên
+
+            // --- ĐÃ SỬA LẠI COUNT QUERY ---
+            countQuery = "SELECT count(*) FROM app_user au WHERE " +
+                    "LOWER(unaccent(au.full_name)) LIKE LOWER(unaccent(CONCAT('%', :searchValue, '%'))) " +
+                    "OR LOWER(au.email) LIKE LOWER(CONCAT('%', :searchValue, '%')) " +
+                    "OR au.phone_no LIKE CONCAT('%', :searchValue, '%')",
+
             nativeQuery = true)
     Page<Long> searchUserIdsByValue(@Param("searchValue") String searchValue, Pageable pageable);
 

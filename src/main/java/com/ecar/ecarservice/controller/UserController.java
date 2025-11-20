@@ -20,98 +20,99 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true") // <--- KIỂM TRA DÒNG NÀY
+
 public class UserController {
+
     private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
     }
 
-    // 1. Get List of Users
+    // 1. Get all users
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
     }
 
-    // 2. Get User with ID
-    @GetMapping("/{id}")
+    // 2. Get user by ID
+    @GetMapping("/{id:[0-9]+}") // Chỉ match số để tránh xung đột với /search
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         UserDto userDto = userService.getUserById(id);
         return ResponseEntity.ok(userDto);
     }
 
-
-    @RequestMapping(value = "/info", method = RequestMethod.GET)
-    public ResponseEntity<AppUser> getUserInfo(@AuthenticationPrincipal OidcUser oidcUser) {
-        return ResponseEntity.ok(userService.getCurrentUser(oidcUser));
-    }
-
-    // 3. Update User (ví dụ: chỉ cập nhật role)
-    @PutMapping("/{id}") // SỬA: Dùng @PutMapping và lấy ID từ đường dẫn
+    // 3. Create user
+    @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreateDTO userUpdateDTO) {
-        // Gọi service với cả id và DTO chứa thông tin mới
-        return ResponseEntity.ok(userService.updateUser(id, userUpdateDTO));
-    }
-
-    // 4. Delete User
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')") // THÊM: Chỉ Admin mới được xóa
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build(); // Trả về 204 No Content
-    }
-
-    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity<Void> createUser(@Valid @RequestBody UserCreateDTO userCreateDTO) {
-        this.userService.createUser(userCreateDTO);
+        userService.createUser(userCreateDTO);
         return ResponseEntity.ok().build();
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.POST)
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    // 4. Update user
+    @PutMapping("/{id:[0-9]+}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreateDTO userUpdateDTO) {
+        return ResponseEntity.ok(userService.updateUser(id, userUpdateDTO));
+    }
+
+    // 5. Delete user
+    @DeleteMapping("/{id:[0-9]+}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    // 6. Search users (POST /api/users/search)
+    @PostMapping("/search")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseEntity<Page<AppUser>> searchUsers(@RequestBody UserSearchRequest request) {
         Page<AppUser> searchResult = userService.searchUsers(request);
-        return new  ResponseEntity<>(searchResult, HttpStatus.OK);
+        return ResponseEntity.ok(searchResult);
     }
 
-    @RequestMapping(value = "get-by-role/{roleName}", method = RequestMethod.GET)
+    // 7. Get users by role
+    @GetMapping("/role/{roleName}")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseEntity<List<AppUser>> getUserListByRole(@PathVariable String roleName) {
-        return ResponseEntity.ok(this.userService.getUserListByRole(roleName));
+        return ResponseEntity.ok(userService.getUserListByRole(roleName));
     }
 
+    // 8. Get current logged-in user info
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe(@AuthenticationPrincipal OidcUser oidcUser) {
         if (oidcUser == null || oidcUser.getEmail() == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
-        // Lấy user từ DB để có vehicles
         UserDto userDto = userService.getUserByEmail(oidcUser.getEmail());
         return ResponseEntity.ok(userDto);
     }
 
-    @PutMapping("/{id}/toggle-active")
+    // 9. Toggle active status
+    @PutMapping("/{id:[0-9]+}/toggle-active")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> toggleActive(@PathVariable Long id) {
         userService.toggleActiveUser(id);
         return ResponseEntity.ok().build();
     }
 
+    // 10. Get technicians by center
     @GetMapping("/technicians/by-center/{centerId}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+    @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
     public ResponseEntity<List<UserDto>> getTechniciansByCenter(@PathVariable Long centerId) {
-        // Gọi đến service để lấy danh sách Entity
         List<AppUser> technicians = userService.getTechniciansByCenter(centerId);
-
-        // Chuyển đổi danh sách Entity sang danh sách DTO
         List<UserDto> technicianDtos = technicians.stream()
-                .map(this::convertToDto) // Tái sử dụng hàm convertToDto bạn đã có
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
-
         return ResponseEntity.ok(technicianDtos);
     }
 
+    // Chuyển AppUser → UserDto
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -121,11 +122,9 @@ public class UserController {
         dto.setRoles(user.getRoles());
         dto.setActive(user.isActive());
 
-        // Chuyển đổi thông tin xe của người dùng (nếu có)
         if (user.getVehicles() != null && !user.getVehicles().isEmpty()) {
             List<VehicleDto> vehicleDtos = user.getVehicles().stream().map(v -> {
                 VehicleDto vehicleDto = new VehicleDto();
-                // Giả định VehicleDto có các setter tương ứng
                 vehicleDto.setLicensePlate(v.getLicensePlate());
                 vehicleDto.setCarModel(v.getCarModel());
                 vehicleDto.setVinNumber(v.getVinNumber());
@@ -139,6 +138,12 @@ public class UserController {
         }
 
         return dto;
+    }
+    @GetMapping("/get-by-role/technician")
+    public ResponseEntity<List<UserDto>> getTechnicians() {
+        List<AppUser> techs = userService.getUserListByRole("TECHNICIAN");
+        List<UserDto> dtos = techs.stream().map(this::convertToDto).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
     }
 
 }

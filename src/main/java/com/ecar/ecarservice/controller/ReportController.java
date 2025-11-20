@@ -8,10 +8,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/reports")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+
 public class ReportController {
 
     private final ReportService reportService;
@@ -24,12 +27,16 @@ public class ReportController {
      * @return Báo cáo Lợi nhuận
      */
     @GetMapping("/profit")
-    @PreAuthorize("hasRole('ADMIN')") // <-- BẢO MẬT: CHỈ ADMIN
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProfitReportResponse> getProfitReport(
             @RequestParam("startDate") LocalDate startDate,
             @RequestParam("endDate") LocalDate endDate) {
 
-        ProfitReportResponse response = reportService.getProfitReport(startDate, endDate);
+        LocalDateTime startDateTime = startDate.atStartOfDay();
+        LocalDateTime endDateTime = endDate.atTime(23, 59, 59);
+
+        ProfitReportResponse response = reportService.getProfitReport(startDateTime, endDateTime);
         return ResponseEntity.ok(response);
     }
+
 }
