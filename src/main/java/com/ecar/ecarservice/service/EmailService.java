@@ -28,7 +28,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    // Lấy địa chỉ email người gửi từ file application.yml
+    // Get sender email address from application.yml
     @Value("${spring.mail.username}")
     private String fromEmail;
 
@@ -47,11 +47,11 @@ public class EmailService {
             context.setVariable("licensePlate", request.licensePlate());
             context.setVariable("carModel", request.carModelName());
             context.setVariable("serviceCenter", request.centerName());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy");
             context.setVariable("appointmentTime", request.scheduledAt().format(formatter));
 
             String htmlContent = templateEngine.process("booking-confirmation-email", context);
-            sendHtmlEmail(request.email(), "Ecar Service Center - Xac nhan dat lich", htmlContent);
+            sendHtmlEmail(request.email(), "Ecar Service Center - Booking Confirmation", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send booking confirmation email: " + e.getMessage());
         }
@@ -71,10 +71,10 @@ public class EmailService {
             context.setVariable("paymentId", paymentId);
             context.setVariable("description", description);
             context.setVariable("paymentDate",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("payment-confirmation-email", context);
-            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Xac nhan thanh toan", htmlContent);
+            sendHtmlEmail(user.getEmail(), "Ecar Service Center - Payment Confirmation", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send payment confirmation email: " + e.getMessage());
         }
@@ -90,12 +90,41 @@ public class EmailService {
             context.setVariable("licensePlate", vehicle.getLicensePlate());
             context.setVariable("carModel", vehicle.getCarModel().getCarName());
             context.setVariable("receivedAt",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("technician-received-email", context);
-            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Technician da tiep nhan xe", htmlContent);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Technician Received Your Vehicle", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send technician received email: " + e.getMessage());
+        }
+    }
+
+
+    /** ------------------- TECHNICIAN COMPLETED ------------------- */
+    @Async
+    public void sendTechnicianCompletedEmail(AppUser owner, AppUser technician, MaintenanceHistory ticket) {
+        try {
+            if (owner == null || technician == null || ticket == null || ticket.getVehicle() == null) {
+                System.err.println("Cannot send technician completed email: missing data.");
+                return;
+            }
+
+            Context context = new Context();
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("technicianName", technician.getFullName());
+            context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
+            context.setVariable("carModel", ticket.getVehicle().getCarModel().getCarName());
+            context.setVariable("ticketId", ticket.getId());
+            context.setVariable("completedAt",
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
+
+            String htmlContent = templateEngine.process("technician-completed-email", context);
+            sendHtmlEmail(owner.getEmail(),
+                    "Ecar Service Center - Your Vehicle Maintenance is Completed",
+                    htmlContent);
+
+        } catch (Exception e) {
+            System.err.println("Failed to send technician completed email: " + e.getMessage());
         }
     }
 
@@ -110,7 +139,7 @@ public class EmailService {
             context.setVariable("nextDate", nextDate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("maintenance-reminder-email", context);
-            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Nhac nho bao duong", htmlContent);
+            sendHtmlEmail(owner.getEmail(), "Ecar Service Center - Maintenance Reminder", htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send reminder email: " + e.getMessage());
         }
@@ -135,12 +164,12 @@ public class EmailService {
             context.setVariable("centerName", maintenanceHistory.getCenter().getCenterName());
             context.setVariable("appointmentTime",
                     LocalDateTime.of(maintenanceHistory.getScheduleDate(), maintenanceHistory.getScheduleTime())
-                            .format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+                            .format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
             context.setVariable("assignedAt",
-                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'ngay' dd-MM-yyyy")));
+                    LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm 'on' dd-MM-yyyy")));
 
             String htmlContent = templateEngine.process("technician-assigned-email", context);
-            sendHtmlEmail(technician.getEmail(), "Ecar Service Center - Ban da duoc phan cong", htmlContent);
+            sendHtmlEmail(technician.getEmail(), "Ecar Service Center - You Have Been Assigned", htmlContent);
 
         } catch (Exception e) {
             System.err.println("Failed to send technician assigned email: " + e.getMessage());
@@ -149,8 +178,8 @@ public class EmailService {
 
 
 
-    /** ------------------- LOW STOCK ALERT (Phương thức mới) ------------------- */
-    @Async // Chạy bất đồng bộ để không làm chậm luồng xử lý chính
+    /** ------------------- LOW STOCK ALERT (New method) ------------------- */
+    @Async // Run asynchronously to avoid slowing the main thread
     public void sendLowStockAlertEmail(AppUser recipient, Inventory inventoryItem) {
         try {
             Context context = new Context();
@@ -164,12 +193,12 @@ public class EmailService {
             String htmlContent = templateEngine.process("low-stock-alert-email", context);
             sendHtmlEmail(recipient.getEmail(), "[Ecar Service] Low Stock Alert for " + inventoryItem.getSparePart().getPartName(), htmlContent);
         } catch (Exception e) {
-            // Ghi log lỗi thay vì để nó làm crash ứng dụng
+            // Log error instead of crashing the application
             System.err.println("Failed to send low stock alert email to " + recipient.getEmail() + ": " + e.getMessage());
         }
     }
 
-    /** ------------------- DAILY LOW STOCK REPORT (Phương thức mới) ------------------- */
+    /** ------------------- DAILY LOW STOCK REPORT (New method) ------------------- */
     @Async
     public void sendLowStockReportEmail(AppUser recipient, Center center, List<Inventory> lowStockItems) {
         try {
@@ -187,7 +216,7 @@ public class EmailService {
         }
     }
 
-    // --- PHƯƠNG THỨC MỚI: Gửi email yêu cầu khách hàng duyệt chi phí ---
+    // --- NEW METHOD: Send email requesting customer to approve additional cost ---
     @Async
     public void sendAdditionalCostApprovalRequestEmail(AppUser owner, MaintenanceHistory ticket) {
         try {
@@ -195,18 +224,18 @@ public class EmailService {
             context.setVariable("customerName", owner.getFullName());
             context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
             context.setVariable("reason", ticket.getAdditionalCostReason());
-            // Định dạng số tiền cho đẹp
+            // Format amount nicely
             String formattedAmount = String.format("%,.0f VND", ticket.getAdditionalCostAmount());
             context.setVariable("amount", formattedAmount);
 
             String htmlContent = templateEngine.process("additional-cost-approval-request", context);
-            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Yêu cầu Duyệt Chi phí Phát sinh cho Phiếu DV #" + ticket.getId(), htmlContent);
+            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Request for Additional Cost Approval for Ticket #" + ticket.getId(), htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send additional cost approval request email: " + e.getMessage());
         }
     }
 
-    // --- (Tùy chọn) PHƯƠNG THỨC MỚI: Gửi email thông báo cho staff khi khách đã duyệt ---
+    // --- OPTIONAL NEW METHOD: Notify staff when customer approves ---
     @Async
     public void sendCostApprovedNotificationToStaff(AppUser staff, MaintenanceHistory ticket) {
         try {
@@ -217,7 +246,7 @@ public class EmailService {
             context.setVariable("ticketId", ticket.getId());
 
             String htmlContent = templateEngine.process("cost-approved-notification", context);
-            sendHtmlEmail(staff.getEmail(), "[Thông báo] Khách hàng đã duyệt chi phí cho Phiếu DV #" + ticket.getId(), htmlContent);
+            sendHtmlEmail(staff.getEmail(), "[Notification] Customer has approved cost for Ticket #" + ticket.getId(), htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send cost approved notification email: " + e.getMessage());
         }

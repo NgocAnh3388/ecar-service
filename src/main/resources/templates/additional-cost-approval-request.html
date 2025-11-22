@@ -1,18 +1,102 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head><title>Yêu cầu Duyệt Chi phí Phát sinh</title></head>
-<body style="font-family: Arial, sans-serif;">
-<div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
-    <h2>Yêu cầu Duyệt Chi phí Phát sinh</h2>
-    <p>Xin chào <strong th:text="${customerName}">Customer Name</strong>,</p>
-    <p>Trong quá trình kiểm tra xe <strong th:text="${licensePlate}"></strong>, kỹ thuật viên của chúng tôi đã phát hiện một vấn đề cần xử lý, dẫn đến một khoản chi phí phát sinh. Vui lòng xem chi tiết dưới đây và xác nhận để chúng tôi có thể tiếp tục dịch vụ.</p>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Additional Expense Approval Request</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
 
-    <h3>Chi tiết Chi phí Phát sinh:</h3>
-    <p><strong>Lý do:</strong> <span th:text="${reason}"></span></p>
-    <p><strong>Số tiền:</strong> <strong style="color: #dc3545;" th:text="${amount}">550,000 VND</strong></p>
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            padding: 25px 30px;
+        }
 
-    <p style="margin-top: 20px;">Bạn có thể duyệt khoản chi phí này bằng cách truy cập vào lịch sử bảo dưỡng trong tài khoản của bạn.</p>
-    <p>Trân trọng,<br/>Đội ngũ Ecar Service Center</p>
+        .header {
+            background-color: #0D6EFD;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #0D6EFD;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            background: #eaf3ff;
+            border-left: 4px solid #0D6EFD;
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-size: 15px;
+        }
+
+        .highlight p {
+            margin: 6px 0;
+        }
+
+        .amount {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .footer {
+            text-align: center;
+            background-color: #f1f5f9;
+            padding: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Ecar Service Center</h1>
+    </div>
+
+    <div class="content">
+        <h2>Additional Expense Approval Request</h2>
+
+        <p>Hello <strong th:text="${customerName}"></strong>,</p>
+
+        <p>During the inspection of your vehicle <strong th:text="${licensePlate}"></strong>, our technician identified an issue that requires additional work, resulting in an extra charge. Please review the details below and approve to allow us to continue the service.</p>
+
+        <div class="highlight">
+            <p><strong>Reason:</strong> <span th:text="${reason}"></span></p>
+            <p><strong>Amount:</strong> <span class="amount" th:text="${amount}"></span></p>
+        </div>
+
+        <p>You can approve this additional expense by accessing your maintenance history in your account.</p>
+
+        <p>Best regards,<br/>Ecar Service Center Team</p>
+    </div>
+
+    <div class="footer">
+        This is an automated email from Ecar Service Center. Please do not reply to this email.
+    </div>
 </div>
 </body>
 </html>

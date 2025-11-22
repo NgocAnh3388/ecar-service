@@ -1,34 +1,123 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Payment Confirmation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background-color: #198754; /* xanh thanh lịch giống Payment */
+            color: white;
+            text-align: center;
+            padding: 25px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .content {
+            padding: 25px 30px;
+            line-height: 1.6;
+        }
+
+        .content h2 {
+            color: #198754;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .highlight {
+            background: #eaf6f0;
+            border-left: 4px solid #198754;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+        }
+
+        .highlight p {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+
+        .details {
+            margin-top: 15px;
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+        }
+
+        .details p {
+            margin: 6px 0;
+            font-size: 15px;
+        }
+
+        .footer {
+            text-align: center;
+            background-color: #f1f5f9;
+            padding: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .footer a {
+            color: #198754;
+            text-decoration: none;
+        }
+    </style>
 </head>
-<body style="font-family: Arial, sans-serif; background-color: #f4f6f8; padding: 20px;">
-<div style="max-width: 600px; margin: auto; background-color: #ffffff; padding: 30px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-    <h2 style="color: #198754;">Ecar Service Center - Payment Confirmation</h2>
-    <p>Hello <strong th:text="${customerName}">Customer Name</strong>,</p>
-    <p>Your payment has been successfully received with the following details:</p>
-    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
-        <tr>
-            <td style="padding: 8px; font-weight: bold;">Payment Amount:</td>
-            <td style="padding: 8px;" th:text="${paymentAmount}">$1000.00</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; font-weight: bold;">Payment ID:</td>
-            <td style="padding: 8px;" th:text="${paymentId}">PAY12345</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; font-weight: bold;">Description:</td>
-            <td style="padding: 8px;" th:text="${description}">Service Package Renewal</td>
-        </tr>
-        <tr>
-            <td style="padding: 8px; font-weight: bold;">Payment Date:</td>
-            <td style="padding: 8px;" th:text="${paymentDate}">10:00 AM, Nov 10, 2025</td>
-        </tr>
-    </table>
-    <p style="margin-top: 20px;">Thank you for using our services!</p>
-    <p>Best regards,<br/>Ecar Service Center Team</p>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Ecar Service Center</h1>
+    </div>
+
+    <div class="content">
+        <h2>Payment Confirmation</h2>
+
+        <p>Hello <strong th:text="${customerName}"></strong>,</p>
+
+        <p>We have successfully received your payment. Here are the details of your transaction:</p>
+
+        <div class="highlight">
+            <p><strong>Payment Amount:</strong> <span th:text="${paymentAmount}"></span></p>
+            <p><strong>Payment ID:</strong> <span th:text="${paymentId}"></span></p>
+            <p><strong>Description:</strong> <span th:text="${description}"></span></p>
+            <p><strong>Payment Date:</strong> <span th:text="${paymentDate}"></span></p>
+        </div>
+
+        <p>Thank you for using our services! We look forward to serving you again.</p>
+
+        <div class="details">
+            <p>If you have any questions regarding this payment, please contact our support team.</p>
+            <p>Email: <a href="mailto:support@ecarservice.com">ecarservice@gmail.com</a></p>
+            <p>Phone: +373456789</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Ecar Service Center. All rights reserved.</p>
+        <p>
+            <a href="#">Privacy Policy</a> |
+            <a href="#">Ecar Service Center Team</a>
+        </p>
+    </div>
 </div>
 </body>
 </html>

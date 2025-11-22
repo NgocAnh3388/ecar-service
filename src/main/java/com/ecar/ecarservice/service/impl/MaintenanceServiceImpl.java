@@ -312,27 +312,56 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .toList();
     }
 
-    // ====================== KY THUAT VIEN HOAN TAT CONG VIEC ======================
     @Override
     @Transactional
     public MaintenanceHistoryDTO completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
         AppUser currentTechnician = userService.getCurrentUser(oidcUser);
+
+        // Lấy ticket
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
 
+        // Kiểm tra quyền
         if (ticket.getTechnician() == null || !ticket.getTechnician().getId().equals(currentTechnician.getId())) {
             throw new AccessDeniedException("You are not assigned to this service ticket.");
         }
 
+        // Kiểm tra trạng thái
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
             throw new IllegalStateException("Ticket is not ready to be completed. Current state: " + ticket.getStatus());
         }
 
+        // Cập nhật trạng thái và thời gian hoàn thành
         ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
         ticket.setCompletedAt(LocalDateTime.now());
-        maintenanceHistoryRepository.save(ticket);
-        return null;
+        MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
+
+        // Cập nhật thông tin xe
+        Vehicle vehicle = savedTicket.getVehicle();
+        if (vehicle != null) {
+            long nextKm = (savedTicket.getNumOfKm() / 12000 + 1) * 12000;
+            LocalDateTime nextDate = savedTicket.getCompletedAt().plusYears(1);
+            vehicle.setOldKm(savedTicket.getNumOfKm());
+            vehicle.setOldDate(savedTicket.getCompletedAt());
+            vehicle.setNextKm(nextKm);
+            vehicle.setNextDate(nextDate);
+            vehicleRepository.save(vehicle);
+        }
+
+        // Gửi email thông báo cho khách hàng (bất đồng bộ)
+        AppUser owner = savedTicket.getOwner();
+        if (owner != null && currentTechnician != null && vehicle != null) {
+            executorService.submit(() ->
+                    emailService.sendTechnicianCompletedEmail(owner, currentTechnician, savedTicket)
+            );
+        } else {
+            System.err.println("Cannot send technician completed email: missing owner, technician, or vehicle data.");
+        }
+
+        // Trả về DTO
+        return convertToDTO(savedTicket);
     }
+
 
     // ====================== CAP NHAT TRANG THAI & XE SAU BAO DUONG ======================
     @Override

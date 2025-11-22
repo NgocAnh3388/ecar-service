@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class MeController {
 
+    //API này dùng để trả về thông tin cá nhân của người dùng đang đăng nhập.
     @GetMapping("/me")
     public Map<String,Object> me(@AuthenticationPrincipal OidcUser user) {
         var roles = user.getAuthorities().stream()

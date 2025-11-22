@@ -13,6 +13,6 @@ public record ProfitReportResponse(
         BigDecimal totalExpense,
         BigDecimal netProfit,
         String currency,
-        List<MonthlyDetail> monthlyBreakdown // <--- THÊM TRƯỜNG NÀY
+        List<MonthlyDetail> monthlyBreakdown
 ) {
 }
