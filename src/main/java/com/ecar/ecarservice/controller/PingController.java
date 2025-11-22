@@ -13,3 +13,6 @@ public class PingController {
         System.out.println("ping");
     }
 }
+
+//Khi bạn (hoặc Frontend) gọi vào đường dẫn http://localhost:8080/api/ping,
+// server sẽ in chữ "ping" ra màn hình console (log) và trả về mã thành công (HTTP 200 OK).

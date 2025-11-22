@@ -1,74 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Ecar Service - Technician Assignment</title>
+    <title>Technician Assignment</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #eef2f7;
             color: #333;
             margin: 0;
             padding: 0;
         }
+
         .container {
-            max-width: 650px;
-            margin: 30px auto;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.1);
-            padding: 20px;
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
+
         .header {
-            background-color: #1e88e5;
-            color: #ffffff;
-            padding: 15px;
-            border-radius: 10px 10px 0 0;
+            background-color: #0D6EFD;
+            color: white;
             text-align: center;
-            font-size: 20px;
-            font-weight: bold;
+            padding: 25px 20px;
         }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
         .content {
-            margin-top: 20px;
+            padding: 25px 30px;
             line-height: 1.6;
         }
+
+        .content h2 {
+            color: #0D6EFD;
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .highlight {
+            color: #0D6EFD;
+            font-weight: bold;
+        }
+
         .details {
-            background-color: #f1f1f1;
-            padding: 15px;
+            background: #eaf3ff;
+            border-left: 4px solid #0D6EFD;
+            padding: 12px 15px;
             border-radius: 8px;
             margin: 15px 0;
+            font-size: 15px;
         }
+
         .details p {
-            margin: 5px 0;
+            margin: 6px 0;
         }
+
         .footer {
-            font-size: 12px;
-            color: #777;
             text-align: center;
-            margin-top: 20px;
-        }
-        .highlight {
-            color: #1e88e5;
-            font-weight: bold;
+            background-color: #f1f5f9;
+            padding: 20px;
+            font-size: 13px;
+            color: #666;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="header">Ecar Service Center</div>
+    <div class="header">
+        <h1>Ecar Service Center</h1>
+    </div>
+
     <div class="content">
-        <p>Hello <span class="highlight" th:text="${technicianName}">Technician Name</span>,</p>
+        <h2>Technician Assignment</h2>
+
+        <p>Hello <span class="highlight" th:text="${technicianName}"></span>,</p>
         <p>You have been assigned to perform maintenance for a customer vehicle:</p>
+
         <div class="details">
-            <p><strong>Customer:</strong> <span th:text="${customerName}">Customer Name</span></p>
-            <p><strong>Vehicle:</strong> <span th:text="${carModel}">Car Model</span> - <span th:text="${licensePlate}">License Plate</span></p>
-            <p><strong>Service Center:</strong> <span th:text="${centerName}">Center Name</span></p>
-            <p><strong>Appointment Time:</strong> <span th:text="${appointmentTime}">Appointment Time</span></p>
-            <p><strong>Assigned At:</strong> <span th:text="${assignedAt}">Assigned At</span></p>
+            <p><strong>Customer:</strong> <span th:text="${customerName}"></span></p>
+            <p><strong>Vehicle:</strong> <span th:text="${carModel}"></span> - <span th:text="${licensePlate}"></span></p>
+            <p><strong>Service Center:</strong> <span th:text="${centerName}"></span></p>
+            <p><strong>Appointment Time:</strong> <span th:text="${appointmentTime}"></span></p>
+            <p><strong>Assigned At:</strong> <span th:text="${assignedAt}"></span></p>
         </div>
+
         <p>Please prepare and carry out the task as scheduled.</p>
         <p>Thank you for your cooperation!</p>
     </div>
+
     <div class="footer">
         This is an automated email from Ecar Service Center. Please do not reply to this email.
     </div>

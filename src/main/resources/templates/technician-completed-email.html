@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Maintenance Reminder</title>
+    <meta charset="UTF-8">
+    <title>Service Completed Notification</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,7 @@
         }
 
         .header {
-            background-color: #0D6EFD;
+            background-color: #198754; /* xanh giống Payment */
             color: white;
             text-align: center;
             padding: 25px 20px;
@@ -39,17 +39,22 @@
         }
 
         .content h2 {
-            color: #0D6EFD;
+            color: #198754;
             margin-bottom: 10px;
             font-size: 20px;
         }
 
         .highlight {
-            background: #eaf3ff;
-            border-left: 4px solid #0D6EFD;
+            background: #eaf6f0;
+            border-left: 4px solid #198754;
             padding: 10px 15px;
             border-radius: 6px;
             margin: 15px 0;
+        }
+
+        .highlight p {
+            margin: 6px 0;
+            font-size: 15px;
         }
 
         .details {
@@ -72,23 +77,8 @@
         }
 
         .footer a {
-            color: #0D6EFD;
+            color: #198754;
             text-decoration: none;
-        }
-
-        .button {
-            display: inline-block;
-            background-color: #0D6EFD;
-            color: white !important;
-            text-decoration: none;
-            padding: 12px 22px;
-            border-radius: 8px;
-            margin-top: 15px;
-            font-weight: 600;
-        }
-
-        .button:hover {
-            background-color: #0056b3;
         }
     </style>
 </head>
@@ -99,22 +89,24 @@
     </div>
 
     <div class="content">
-        <h2>Maintenance Reminder</h2>
+        <h2>Service Completed</h2>
 
-        <p>Dear <strong th:text="${customerName}"></strong>,</p>
+        <p>Hello <strong th:text="${customerName}"></strong>,</p>
 
-        <p>We hope you are enjoying your driving experience. This is a friendly reminder that your car is scheduled for maintenance soon.</p>
+        <p>Your vehicle has been serviced successfully by our technician. Here are the details:</p>
 
         <div class="highlight">
-            <p><strong>Car Model:</strong> <span th:text="${carModel}"></span></p>
+            <p><strong>Technician:</strong> <span th:text="${technicianName}"></span></p>
+            <p><strong>Vehicle:</strong> <span th:text="${carModel}"></span></p>
             <p><strong>License Plate:</strong> <span th:text="${licensePlate}"></span></p>
-            <p><strong>Next Maintenance Date:</strong> <span th:text="${nextDate}"></span></p>
+            <p><strong>Ticket ID:</strong> <span th:text="${ticketId}"></span></p>
+            <p><strong>Completed At:</strong> <span th:text="${completedAt}"></span></p>
         </div>
 
-        <p>To ensure your vehicle remains in optimal condition and safety, please confirm your maintenance appointment promptly.</p>
+        <p>Thank you for choosing our services! We hope to see you again for your next maintenance.</p>
 
         <div class="details">
-            <p>If you have any questions or need to reschedule, please contact our service center support team.</p>
+            <p>If you have any questions regarding this service, please contact our support team.</p>
             <p>Email: <a href="mailto:support@ecarservice.com">ecarservice@gmail.com</a></p>
             <p>Phone: +373456789</p>
         </div>
