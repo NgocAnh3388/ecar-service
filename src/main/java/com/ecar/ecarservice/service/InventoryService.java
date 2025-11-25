@@ -23,7 +23,7 @@ public interface InventoryService {
     List<UsedPartHistoryDTO> getUsedPartsHistory();
 
 
-    // === Suggestion Logic ===
-    List<SparePartSuggestionDTO> getPartSuggestions(Long centerId, Long carModelId, List<Long> serviceIds);
+//    // === Suggestion Logic ===
+//    List<SparePartSuggestionDTO> getPartSuggestions(Long centerId, Long carModelId, List<Long> serviceIds);
 
 }

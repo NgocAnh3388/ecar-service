@@ -61,5 +61,6 @@ public interface MaintenanceService {
      * Customer duyệt chi phí phát sinh.
      */
     void approveAdditionalCost(Long ticketId, OidcUser oidcUser);
+    void handoverCarToCustomer(Long id);
 
 }

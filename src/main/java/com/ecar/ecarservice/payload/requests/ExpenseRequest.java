@@ -9,7 +9,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 /**
  * DTO dùng để nhận dữ liệu khi Admin tạo một khoản chi phí vận hành mới.
- * Sử dụng validation để đảm bảo dữ liệu đầu vào hợp lệ.
  */
 
 public record ExpenseRequest(

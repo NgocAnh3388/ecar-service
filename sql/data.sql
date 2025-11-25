@@ -25,7 +25,6 @@ TRUNCATE TABLE
     public.expense,
     public.service_part_usage,
     public.inventory,
-    public.service_spare_parts_map,
     public.maintenance_item_parts
     RESTART IDENTITY CASCADE;
 
@@ -187,7 +186,7 @@ INSERT INTO public.app_user (active, email, sub, full_name, phone_no, center_id,
 
 
 -- =================================================================================
--- STEP 2: INSERT DATA FOR DEPENDENT TABLES user_roles, vehicles, spare_part, inventory, service_spare_parts_map
+-- STEP 2: INSERT DATA FOR DEPENDENT TABLES user_roles, vehicles, spare_part, inventory
 -- =================================================================================
 -- =================================================================================
 -- user_roles (phụ thuộc vào app_user)
@@ -353,67 +352,6 @@ FROM ( VALUES
      ) AS inv(center_id, part_number, stock_quantity, min_stock_level)
          JOIN public.spare_part sp ON inv.part_number = sp.part_number;
 
-
--- =================================================================================
--- service_spare_parts_map (QUY TẮC: Dịch vụ nào cần Phụ tùng nào)
--- Liên kết đến service và spare_part, phải được chèn sau chúng.
--- =================================================================================
-INSERT INTO public.service_spare_parts_map (service_id, spare_part_id, default_quantity)
-SELECT mapping.service_id,sp.id, mapping.default_quantity
-FROM ( VALUES
-           -- Ánh xạ các dịch vụ thay thế (F) tới các phụ tùng tương ứng
-
-           -- Dịch vụ liên quan đến Phanh (Brake)
-           (26, 'VF3-BRK-01', 1), -- Brake Pad Replacement -> VF3 Front Brake Pads
-           (26, 'VF5-BRK-01', 1), -- Brake Pad Replacement -> VF5 Front Brake Pads
-           (26, 'VF6-BRK-01', 1), -- Brake Pad Replacement -> VF6 Front Brake Pads
-           (26, 'VF7-BRK-01', 1), -- Brake Pad Replacement -> VF7 Front Brake Pads
-           (26, 'VF8-BRK-01', 1), -- Brake Pad Replacement -> VF8 Front Brake Pads
-           (26, 'VF9-BRK-01', 1), -- Brake Pad Replacement -> VF9 Front Brake Pads
-
-           (27, 'VF3-SNS-01', 1), -- ABS Sensor Replacement -> VF3 ABS Sensor
-           (27, 'VF5-SNS-01', 1), -- ABS Sensor Replacement -> VF5 ABS Sensor
-           (27, 'VF6-SNS-01', 1), -- ABS Sensor Replacement -> VF6 ABS Sensor
-           (27, 'VF7-SNS-01', 1), -- ABS Sensor Replacement -> VF7 ABS Sensor
-           (27, 'VF8-SNS-01', 1), -- ABS Sensor Replacement -> VF8 ABS Sensor
-           (27, 'VF9-SNS-01', 1), -- ABS Sensor Replacement -> VF9 ABS Sensor
-
-           (28, 'VF3-BRK-03', 2), -- Brake Disc Replacement -> VF3 Front Brake Disc (thường thay theo cặp)
-           (28, 'VF5-BRK-03', 2), -- Brake Disc Replacement -> VF5 Front Brake Disc
-           (28, 'VF6-BRK-03', 2), -- Brake Disc Replacement -> VF6 Front Brake Disc
-
-           -- Dịch vụ liên quan đến Lọc (Filter) và Pin (Battery)
-           (1, 'VF3-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF3 Filter
-           (1, 'VF5-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF5 Filter
-           (1, 'VF6-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF6 Filter
-           (1, 'VF7-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF7 Filter
-           (1, 'VF8-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF8 Filter
-           (1, 'VF9-FLT-01', 1),  -- Maintenance Cabin Air Filter -> VF9 Filter
-
-           (39, 'VF3-BAT-01', 1), -- Battery Service/Replacement -> VF3 12V Battery
-           (39, 'VF5-BAT-01', 1), -- Battery Service/Replacement -> VF5 12V Battery
-           (39, 'VF6-BAT-01', 1), -- Battery Service/Replacement -> VF6 12V Battery
-
-           -- Dịch vụ liên quan đến Gầm và Lốp (Suspension & Tire)
-           (53, 'VF3-SUS-01', 2), -- Shock Absorber Replacement -> VF3 Front Shocks (thường thay theo cặp)
-           (53, 'VF5-SUS-01', 2), -- Shock Absorber Replacement -> VF5 Front Shocks
-           (53, 'VF6-SUS-01', 2), -- Shock Absorber Replacement -> VF6 Front Shocks
-           (53, 'VF8-SUS-01', 2), -- Shock Absorber Replacement -> VF8 Air Struts
-
-           (50, 'VF3-TYR-01', 4), -- Tire/Wheel Replacement -> VF3 Tire (giả sử thay cả bộ 4 bánh)
-           (50, 'VF5-TYR-01', 4), -- Tire/Wheel Replacement -> VF5 Tire
-           (50, 'VF6-TYR-01', 4), -- Tire/Wheel Replacement -> VF6 Tire
-
-           -- Dịch vụ liên quan đến Gạt mưa và Đèn (Wiper & Lighting)
-           (15, 'VF3-WPR-01', 1), -- Wiper Blades Replacement -> VF3 Wiper Kit
-           (15, 'VF5-WPR-01', 1), -- Wiper Blades Replacement -> VF5 Wiper Kit
-           (15, 'VF6-WPR-01', 1), -- Wiper Blades Replacement -> VF6 Wiper Kit
-           (15, 'VF8-WPR-01', 1), -- Wiper Blades Replacement -> VF8 Wiper Kit
-
-           -- Một số dịch vụ không có trong danh sách (id > 55) nhưng có thể cần
-           (56, 'VF3-LGT-01', 2)  -- Headlight Bulb Replacement -> VF3 Headlight (thường thay theo cặp)
-     ) AS mapping(service_id, part_number, default_quantity)
-         JOIN public.spare_part sp ON mapping.part_number = sp.part_number;
 
 -- =================================================================================
 -- maintenance_schedule (phụ thuộc vào car_model, maintenance_milestone, service)
@@ -699,5 +637,4 @@ SELECT setval(pg_get_serial_sequence('public.bookings', 'id'), COALESCE(MAX(id),
 SELECT setval(pg_get_serial_sequence('public.expense', 'id'), COALESCE(MAX(id), 1)) FROM public.expense;
 SELECT setval(pg_get_serial_sequence('public.service_part_usage', 'id'), COALESCE(MAX(id), 1)) FROM public.service_part_usage;
 SELECT setval(pg_get_serial_sequence('public.inventory', 'id'), COALESCE(MAX(id), 1)) FROM public.inventory;
-SELECT setval(pg_get_serial_sequence('public.service_spare_parts_map', 'id'), COALESCE(MAX(id), 1)) FROM public.service_spare_parts_map;
 SELECT setval(pg_get_serial_sequence('public.maintenance_item_parts', 'id'), COALESCE(MAX(id), 1)) FROM public.maintenance_item_parts;

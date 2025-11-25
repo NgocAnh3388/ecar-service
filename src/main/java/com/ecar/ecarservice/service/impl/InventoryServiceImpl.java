@@ -18,7 +18,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final SparePartRepository sparePartRepository;
     private final CarModelRepository carModelRepository;
-    private final ServiceSparePartRepository serviceSparePartRepository;
+//    private final ServiceSparePartRepository serviceSparePartRepository;
     private final InventoryRepository inventoryRepository;
     private final ServicePartUsageRepository servicePartUsageRepository;
     // =================== SPARE PART (Thông tin chung) ===================
@@ -141,23 +141,36 @@ public class InventoryServiceImpl implements InventoryService {
                 .collect(Collectors.toList());
     }
 
-    // =================== SUGGESTION LOGIC ===================
-    @Override
-    @Transactional(readOnly = true)
-    public List<SparePartSuggestionDTO> getPartSuggestions(Long centerId, Long carModelId, List<Long> serviceIds) {
-        if (serviceIds == null || serviceIds.isEmpty()) {
-            return Collections.emptyList();
-        }
+//    // =================== SUGGESTION LOGIC ===================
+//    @Override
+//    @Transactional(readOnly = true)
+//    public List<SparePartSuggestionDTO> getPartSuggestions(Long centerId, Long carModelId, List<Long> serviceIds) {
+//        if (serviceIds == null || serviceIds.isEmpty()) {
+//            return Collections.emptyList();
+//        }
+//
+//        List<ServiceSparePart> mappings = serviceSparePartRepository.findByServiceIdsAndCarModelId(serviceIds, carModelId);
+//
+//        return mappings.stream().map(mapping -> {
+//            Inventory inventoryItem = inventoryRepository
+//                    .findByCenterIdAndSparePartId(centerId, mapping.getSparePart().getId())
+//                    .orElse(null);
+//            return toSuggestionDTO(mapping, inventoryItem);
+//        }).collect(Collectors.toList());
+//    }
 
-        List<ServiceSparePart> mappings = serviceSparePartRepository.findByServiceIdsAndCarModelId(serviceIds, carModelId);
-
-        return mappings.stream().map(mapping -> {
-            Inventory inventoryItem = inventoryRepository
-                    .findByCenterIdAndSparePartId(centerId, mapping.getSparePart().getId())
-                    .orElse(null);
-            return toSuggestionDTO(mapping, inventoryItem);
-        }).collect(Collectors.toList());
-    }
+//    private SparePartSuggestionDTO toSuggestionDTO(ServiceSparePart mapping, Inventory inventoryItem) {
+//        SparePart part = mapping.getSparePart();
+//        SparePartSuggestionDTO dto = new SparePartSuggestionDTO();
+//        dto.setPartId(part.getId());
+//        dto.setPartName(part.getPartName());
+//        dto.setPartNumber(part.getPartNumber());
+//        dto.setUnitPrice(part.getUnitPrice());
+//        dto.setDefaultQuantity(mapping.getDefaultQuantity());
+//        dto.setServiceId(mapping.getService().getId());
+//        dto.setStockQuantity(inventoryItem != null ? inventoryItem.getStockQuantity() : 0);
+//        return dto;
+//    }
 
     // =================== HELPER/CONVERTER METHODS ===================
     private SparePartDTO toSparePartDTO(SparePart part) {
@@ -174,18 +187,6 @@ public class InventoryServiceImpl implements InventoryService {
         return dto;
     }
 
-    private SparePartSuggestionDTO toSuggestionDTO(ServiceSparePart mapping, Inventory inventoryItem) {
-        SparePart part = mapping.getSparePart();
-        SparePartSuggestionDTO dto = new SparePartSuggestionDTO();
-        dto.setPartId(part.getId());
-        dto.setPartName(part.getPartName());
-        dto.setPartNumber(part.getPartNumber());
-        dto.setUnitPrice(part.getUnitPrice());
-        dto.setDefaultQuantity(mapping.getDefaultQuantity());
-        dto.setServiceId(mapping.getService().getId());
-        dto.setStockQuantity(inventoryItem != null ? inventoryItem.getStockQuantity() : 0);
-        return dto;
-    }
 
     private InventoryDTO toInventoryDTO(Inventory inventory) {
         InventoryDTO dto = new InventoryDTO();

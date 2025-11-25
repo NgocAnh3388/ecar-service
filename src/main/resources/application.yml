@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/ecardb # postgres sql url
     username: postgres # postgres username
-    password: 12345 # postgres password
+    password: postgres # postgres password
     # config thread-pool
     type: com.zaxxer.hikari.HikariDataSource
     hikari:

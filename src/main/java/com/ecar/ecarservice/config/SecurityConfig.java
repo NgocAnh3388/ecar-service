@@ -6,6 +6,7 @@ import com.ecar.ecarservice.repositories.AppUserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,6 +20,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -47,17 +49,24 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, OAuth2UserService<OidcUserRequest, OidcUser> oidcUserService) throws Exception {
         http
+                // Vô hiệu hóa CSRF vì chúng ta đang xây dựng API cho SPA, không dùng session-based form
                 .csrf(csrf -> csrf.disable())
+                // Áp dụng cấu hình CORS được định nghĩa trong bean corsConfigurationSource()
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                // Định nghĩa các quy tắc phân quyền cho các đường dẫn (URL)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/ping/**").permitAll()
+                        // Cho phép các đường dẫn này mà không cần xác thực
+                        .requestMatchers("/api/ping/**",  "/error", "/").permitAll()
+                        // Các đường dẫn OAuth2 nội bộ cũng cần được cho phép
                         .requestMatchers("/", "/login**", "/oauth2/**", "/logout").permitAll()
+                        // Tất cả các request API khác đều yêu cầu xác thực
                         .requestMatchers("/api/me").authenticated()
                         .requestMatchers("/api/me/**").authenticated()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .requestMatchers("/api/bookings/**").authenticated()
                         .requestMatchers("/api/service-records").authenticated()  // Cho phép người dùng đã đăng nhập xem lịch sử dịch vụ
                         .requestMatchers("/api/maintenance/**").authenticated()
+                        // Bất kỳ request nào khác chưa được định nghĩa ở trên đều yêu cầu phải xác thực
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e
@@ -68,13 +77,16 @@ public class SecurityConfig {
                         })
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/oauth2/authorization/google")
                         .userInfoEndpoint(endpoint -> endpoint.oidcUserService(oidcUserService))
+                        // Sau khi đăng nhập Google thành công, chuyển hướng về Frontend
                         .defaultSuccessUrl("http://localhost:4200", true)
                 );
 
         return http.build();
     }
     // =================== PASSWORD ENCODER ===================
+    //BCryptPasswordEncoder để mã hóa và so sánh mật khẩu một cách an toàn
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

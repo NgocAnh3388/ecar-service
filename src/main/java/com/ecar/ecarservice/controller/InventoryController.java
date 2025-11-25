@@ -86,15 +86,15 @@ public class InventoryController {
         return ResponseEntity.ok(inventoryService.getStockAcrossCenters(partId));
     }
 
-    // =================== SUGGESTIONS ===================
-    @GetMapping("/suggestions")
-    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
-    public ResponseEntity<List<SparePartSuggestionDTO>> getPartSuggestions(
-            @RequestParam Long centerId,
-            @RequestParam Long carModelId,
-            @RequestParam List<Long> serviceIds) {
-        return ResponseEntity.ok(inventoryService.getPartSuggestions(centerId, carModelId, serviceIds));
-    }
+//    // =================== SUGGESTIONS ===================
+//    @GetMapping("/suggestions")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'TECHNICIAN')")
+//    public ResponseEntity<List<SparePartSuggestionDTO>> getPartSuggestions(
+//            @RequestParam Long centerId,
+//            @RequestParam Long carModelId,
+//            @RequestParam List<Long> serviceIds) {
+//        return ResponseEntity.ok(inventoryService.getPartSuggestions(centerId, carModelId, serviceIds));
+//    }
 
     @GetMapping("/used-history")
     @PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")

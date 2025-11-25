@@ -550,4 +550,29 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             emailService.sendCostApprovedNotificationToStaff(staffAssigned, ticket);
         }
     }
+
+    @Override
+    public void handoverCarToCustomer(Long id) {
+        // Tìm trong bảng HISTORY (đơn hàng), không phải Schedule
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
+
+        // Log ra để debug nếu cần
+        System.out.println("Current Status: " + ticket.getStatus());
+
+        // Kiểm tra trạng thái
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_COMPLETED) {
+            throw new RuntimeException("Invalid status for handover. Current: " + ticket.getStatus());
+        }
+
+        // Cập nhật trạng thái
+        ticket.setStatus(MaintenanceStatus.DONE);
+
+        // Cập nhật thời gian giao xe (nếu entity có trường này - thấy trong log có field hand_over_at)
+        ticket.setHandOverAt(LocalDateTime.now());
+
+        // Lưu
+        maintenanceHistoryRepository.save(ticket);
+    }
+
 }

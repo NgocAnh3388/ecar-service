@@ -21,6 +21,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -180,6 +181,22 @@ public class MaintenanceController {
             @RequestBody AdditionalCostRequest request) {
         maintenanceService.addOrUpdateAdditionalCost(ticketId, request.getAmount(), request.getReason());
         return ResponseEntity.ok().build();
+    }
+
+
+    @PutMapping("/{id}/handover")
+    public ResponseEntity<?> handoverCar(@PathVariable Long id) {
+        try {
+            maintenanceService.handoverCarToCustomer(id);
+
+            // SỬA Ở ĐÂY: Trả về Map JSON { "message": "..." } thay vì MessageResponse
+            return ResponseEntity.ok(Collections.singletonMap("message", "Vehicle handed over successfully!"));
+
+        } catch (Exception e) {
+            // SỬA Ở ĐÂY: Trả về Map lỗi
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.singletonMap("message", "Error: " + e.getMessage()));
+        }
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.ecar.ecarservice.enums.MaintenanceStatus;
 
 import java.time.LocalDateTime;
 //Lịch trình bảo dưỡng mặc định
@@ -38,6 +39,10 @@ public class MaintenanceSchedule {
     @Column(name = "is_default")
     private Boolean isDefault;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status") // Nên map rõ tên cột trong DB
+    private MaintenanceStatus status;
+
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -55,6 +60,10 @@ public class MaintenanceSchedule {
     private String updatedBy;
 
     public static String getCategory(MaintenanceSchedule schedule) {
-        return schedule.getService().getCategory();
+        // Cần kiểm tra null để tránh lỗi NullPointerException
+        if (schedule.getService() != null) {
+            return schedule.getService().getCategory();
+        }
+        return "";
     }
 }
