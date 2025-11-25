@@ -39,7 +39,7 @@ public class UserController {
 
     // 2. Get user by ID
     @GetMapping("/{id:[0-9]+}") // Chỉ match số để tránh xung đột với /search
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or authentication.name == @userServiceImpl.getUserById(#id).email")
     public ResponseEntity<UserDto> getUserById(@PathVariable Long id) {
         UserDto userDto = userService.getUserById(id);
         return ResponseEntity.ok(userDto);
@@ -55,7 +55,8 @@ public class UserController {
 
     // 4. Update user
     @PutMapping("/{id:[0-9]+}")
-    @PreAuthorize("hasRole('ADMIN')")
+    // Cho phép nều là ADMIN  -HOẶC-  Email của người gửi request trùng với email trong body update
+    @PreAuthorize("hasRole('ADMIN') or #userUpdateDTO.email == authentication.principal.email")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreateDTO userUpdateDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userUpdateDTO));
     }

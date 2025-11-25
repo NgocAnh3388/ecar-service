@@ -11,14 +11,18 @@ import java.time.LocalTime;
 
 public record MaintenanceScheduleRequest(
         Long centerId,
-        @JsonFormat(pattern="HH:mm")
+
+        // Thêm :ss vào pattern
+        @JsonFormat(pattern="HH:mm:ss")
         LocalTime scheduleTime,
+
+        //  dd-MM-yyyy
         @JsonFormat(pattern="dd-MM-yyyy")
         LocalDate scheduleDate,
+
         Long vehicleId,
         Long numOfKm,
         Boolean isMaintenance,
         Boolean isRepair,
         String remark
-) {
-}
+) {}
