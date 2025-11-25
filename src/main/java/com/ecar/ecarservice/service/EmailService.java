@@ -38,7 +38,7 @@ public class EmailService {
         this.templateEngine = templateEngine;
     }
 
-    /** ------------------- BOOKING CONFIRMATION (using BookingRequest) ------------------- */
+    /** ------------------- BOOKING CONFIRMATION ------------------- */
     @Async
     public void sendBookingConfirmationEmail(BookingRequest request) {
         try {
@@ -178,8 +178,8 @@ public class EmailService {
 
 
 
-    /** ------------------- LOW STOCK ALERT (New method) ------------------- */
-    @Async // Run asynchronously to avoid slowing the main thread
+    /** ------------------- LOW STOCK ALERT ------------------- */
+    @Async
     public void sendLowStockAlertEmail(AppUser recipient, Inventory inventoryItem) {
         try {
             Context context = new Context();
@@ -193,12 +193,11 @@ public class EmailService {
             String htmlContent = templateEngine.process("low-stock-alert-email", context);
             sendHtmlEmail(recipient.getEmail(), "[Ecar Service] Low Stock Alert for " + inventoryItem.getSparePart().getPartName(), htmlContent);
         } catch (Exception e) {
-            // Log error instead of crashing the application
             System.err.println("Failed to send low stock alert email to " + recipient.getEmail() + ": " + e.getMessage());
         }
     }
 
-    /** ------------------- DAILY LOW STOCK REPORT (New method) ------------------- */
+    /** ------------------- DAILY LOW STOCK REPORT ------------------- */
     @Async
     public void sendLowStockReportEmail(AppUser recipient, Center center, List<Inventory> lowStockItems) {
         try {
@@ -216,7 +215,7 @@ public class EmailService {
         }
     }
 
-    // --- NEW METHOD: Send email requesting customer to approve additional cost ---
+    // --- ADDITIONAL COST REQUEST (To Customer) ---
     @Async
     public void sendAdditionalCostApprovalRequestEmail(AppUser owner, MaintenanceHistory ticket) {
         try {
@@ -224,18 +223,17 @@ public class EmailService {
             context.setVariable("customerName", owner.getFullName());
             context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
             context.setVariable("reason", ticket.getAdditionalCostReason());
-            // Format amount nicely
             String formattedAmount = String.format("%,.0f VND", ticket.getAdditionalCostAmount());
             context.setVariable("amount", formattedAmount);
 
             String htmlContent = templateEngine.process("additional-cost-approval-request", context);
-            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Request for Additional Cost Approval for Ticket #" + ticket.getId(), htmlContent);
+            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Additional Cost Approval Required - Order #" + ticket.getId(), htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send additional cost approval request email: " + e.getMessage());
         }
     }
 
-    // --- OPTIONAL NEW METHOD: Notify staff when customer approves ---
+    // --- COST APPROVED NOTIFICATION (To Staff) ---
     @Async
     public void sendCostApprovedNotificationToStaff(AppUser staff, MaintenanceHistory ticket) {
         try {
@@ -246,7 +244,7 @@ public class EmailService {
             context.setVariable("ticketId", ticket.getId());
 
             String htmlContent = templateEngine.process("cost-approved-notification", context);
-            sendHtmlEmail(staff.getEmail(), "[Notification] Customer has approved cost for Ticket #" + ticket.getId(), htmlContent);
+            sendHtmlEmail(staff.getEmail(), "[Notification] Customer has approved additional cost for Order #" + ticket.getId(), htmlContent);
         } catch (Exception e) {
             System.err.println("Failed to send cost approved notification email: " + e.getMessage());
         }
@@ -266,5 +264,87 @@ public class EmailService {
         System.out.println("Email sent to: " + to);
     }
 
+    // --- ADDITIONAL COST REQUEST (To Staff - Internal) ---
+    public void sendAdditionalCostRequestEmail(AppUser recipient, MaintenanceHistory ticket) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
+            helper.setTo(recipient.getEmail());
+            helper.setSubject("[ECar] Additional Cost Approval Request - Order #" + ticket.getId());
+
+            String htmlContent = "<h3>Hello " + recipient.getFullName() + ",</h3>"
+                    + "<p>The technician has reported an additional cost for vehicle: <b>" + ticket.getVehicle().getLicensePlate() + "</b></p>"
+                    + "<ul>"
+                    + "<li><b>Amount:</b> " + ticket.getAdditionalCostAmount() + " VND</li>"
+                    + "<li><b>Reason:</b> " + ticket.getAdditionalCostReason() + "</li>"
+                    + "</ul>"
+                    + "<p>Please contact the customer and update the status in the system.</p>";
+
+            helper.setText(htmlContent, true); // true = html
+
+            mailSender.send(message);
+            System.out.println("Sent additional cost email to " + recipient.getEmail());
+
+        } catch (MessagingException e) {
+            System.err.println("Error sending email: " + e.getMessage());
+        }
+    }
+
+    // 1. Gửi cho Staff khi Tech báo cáo
+    @Async
+    public void sendInternalCostAlert(AppUser staff, MaintenanceHistory ticket) {
+        try {
+            Context context = new Context();
+            context.setVariable("staffName", staff.getFullName());
+            context.setVariable("technicianName", ticket.getTechnician().getFullName());
+            context.setVariable("ticketId", ticket.getId());
+            context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
+            context.setVariable("amount", String.format("%,.0f VND", ticket.getAdditionalCostAmount()));
+            context.setVariable("reason", ticket.getAdditionalCostReason());
+
+            String htmlContent = templateEngine.process("additional-cost-request-internal", context);
+            sendHtmlEmail(staff.getEmail(), "[ACTION REQUIRED] Technician Reported Cost - Order #" + ticket.getId(), htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send internal cost alert: " + e.getMessage());
+        }
+    }
+
+    // 2. Gửi cho Khách hàng để xin duyệt (Đã có hàm sendAdditionalCostApprovalRequestEmail, nhớ update template name)
+    // Sửa lại tên template trong hàm cũ thành "additional-cost-approval-request"
+
+    // 3. Gửi thông báo Khách đã duyệt (Cho cả Staff và Tech nếu cần)
+    @Async
+    public void sendApprovalNotification(AppUser recipient, MaintenanceHistory ticket) {
+        try {
+            Context context = new Context();
+            context.setVariable("recipientName", recipient.getFullName());
+            context.setVariable("customerName", ticket.getOwner().getFullName());
+            context.setVariable("ticketId", ticket.getId());
+
+            String htmlContent = templateEngine.process("cost-approved-notification", context);
+            sendHtmlEmail(recipient.getEmail(), "[APPROVED] Customer Approved Cost - Order #" + ticket.getId(), htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send approval notification: " + e.getMessage());
+        }
+    }
+    // --- NEW: Gửi email thông báo hủy đơn hàng ---
+    @Async
+    public void sendOrderCancelledEmail(AppUser owner, MaintenanceHistory ticket, String reason) {
+        try {
+            Context context = new Context();
+            context.setVariable("customerName", owner.getFullName());
+            context.setVariable("ticketId", ticket.getId());
+            context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
+            context.setVariable("reason", reason);
+            context.setVariable("cancelledAt", LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy")));
+
+            // Đảm bảo bạn đã tạo file order-cancelled-email.html trong resources/templates
+            String htmlContent = templateEngine.process("order-cancelled-email", context);
+
+            sendHtmlEmail(owner.getEmail(), "[Ecar Service] Order #" + ticket.getId() + " Cancelled", htmlContent);
+        } catch (Exception e) {
+            System.err.println("Failed to send cancellation email: " + e.getMessage());
+        }
+    }
 }

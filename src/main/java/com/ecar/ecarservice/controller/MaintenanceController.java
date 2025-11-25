@@ -179,7 +179,7 @@ public class MaintenanceController {
     public ResponseEntity<Void> addOrUpdateAdditionalCost(
             @PathVariable Long ticketId,
             @RequestBody AdditionalCostRequest request) {
-        maintenanceService.addOrUpdateAdditionalCost(ticketId, request.getAmount(), request.getReason());
+        maintenanceService.addOrUpdateAdditionalCost(ticketId, request.amount(), request.reason());
         return ResponseEntity.ok().build();
     }
 
@@ -197,6 +197,23 @@ public class MaintenanceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Collections.singletonMap("message", "Error: " + e.getMessage()));
         }
+    }
+
+    // 1. Technician gửi yêu cầu phát sinh chi phí
+    @PostMapping("/add-cost")
+    // @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<?> requestAdditionalCost(@RequestBody AdditionalCostRequest request) {
+        maintenanceService.requestAdditionalCost(request);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Request sent to Staff successfully!"));
+    }
+
+    // 2. Staff xử lý phản hồi của khách (Duyệt hoặc Từ chối)
+    // status: 'APPROVE' hoặc 'REJECT'
+    @PutMapping("/{id}/approval")
+    // @PreAuthorize("hasRole('STAFF')")
+    public ResponseEntity<?> processCustomerDecision(@PathVariable Long id, @RequestParam String decision) {
+        maintenanceService.processCustomerDecision(id, decision);
+        return ResponseEntity.ok(Collections.singletonMap("message", "Order updated successfully based on customer decision."));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.service.impl;
 
+import com.ecar.ecarservice.dto.AdditionalCostRequest;
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
 import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.*;
@@ -13,7 +14,6 @@ import com.ecar.ecarservice.service.MaintenanceService;
 import com.ecar.ecarservice.service.UserService;
 import com.ecar.ecarservice.threads.EmailThread;
 import com.ecar.ecarservice.threads.TechnicianEmailThread;
-import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -238,7 +238,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .toList();
     }
 
-    // ====================== TAO SERVICE ======================
+    // ====================== TAO SERVICE (GÁN TECHNICIAN) ======================
     @Override
     @Transactional
     public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
@@ -254,6 +254,19 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         AppUser assignedTechnician = appUserRepository.findById(request.technicianId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Technician not found with ID: " + request.technicianId()));
+
+        // --- [MỚI] KIỂM TRA GIỚI HẠN 3 TASK/NGÀY CHO TECHNICIAN ---
+        // Logic: Kiểm tra số lượng đơn chưa hoàn thành của technician này trong ngày hẹn của khách
+        long currentTasks = maintenanceHistoryRepository.countTasksByTechnicianAndDate(
+                assignedTechnician.getId(),
+                maintenanceHistory.getScheduleDate() // Lấy ngày hẹn (LocalDate)
+        );
+
+        if (currentTasks >= 3) {
+            // Ném lỗi để frontend bắt được và hiện thông báo
+            throw new IllegalStateException("This technician has reached the daily limit of 3 tasks!");
+        }
+        // -----------------------------------------------------------
 
         // Cập nhật số km, staff và technician
         maintenanceHistory.setNumOfKm(request.numOfKm());
@@ -287,10 +300,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
         maintenanceItemRepository.saveAll(items);
 
-        // ======================= GỬI MAIL THÔNG BÁO PHÂN CÔNG TECHNICIAN =======================
+        // ======================= GỬI MAIL =======================
         emailService.sendTechnicianAssignedEmail(assignedTechnician, saved);
 
-        // ======================= GỬI MAIL NGAY KHI TECHNICIAN NHẬN XE =======================
         AppUser owner = saved.getOwner();
         Vehicle vehicle = saved.getVehicle();
         if (owner != null && assignedTechnician != null && vehicle != null && vehicle.getCarModel() != null) {
@@ -299,7 +311,6 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             System.err.println("Cannot send technician received email: missing owner, technician, or vehicle data.");
         }
     }
-
 
     // ====================== LAY PHIEU KY THUAT VIEN ======================
     @Override
@@ -410,7 +421,15 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setRemark("Cancelled by staff/user");
         ticket.setUpdatedAt(LocalDateTime.now());
 
+        // Cập nhật trạng thái sang CANCELLED để khớp với logic Report Cost
+        ticket.setStatus(MaintenanceStatus.CANCELLED);
+
         maintenanceHistoryRepository.save(ticket);
+
+        if (ticket.getOwner() != null) {
+            emailService.sendOrderCancelledEmail(ticket.getOwner(), ticket, "Cancelled by Staff request");
+        }
+
     }
 
 
@@ -430,6 +449,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setIsMaintenance(true);
         ticket.setRemark("Reopened by staff/admin");
         ticket.setUpdatedAt(LocalDateTime.now());
+
+        // (Optional) Đặt lại trạng thái
+        // ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
 
         maintenanceHistoryRepository.save(ticket);
     }
@@ -510,12 +532,11 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setAdditionalCostReason(reason);
 
         // Chuyển trạng thái sang chờ khách hàng duyệt
-        ticket.setStatus(MaintenanceStatus.CUSTOMER_APPROVAL_PENDING);
+        ticket.setStatus(MaintenanceStatus.PENDING_APPROVAL); // SỬA CHO CHUẨN ENUM
 
         maintenanceHistoryRepository.save(ticket);
 
         // Gửi email thông báo cho khách hàng
-        // Giả định EmailService có phương thức này
         emailService.sendAdditionalCostApprovalRequestEmail(ticket.getOwner(), ticket);
     }
 
@@ -532,8 +553,8 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             throw new AccessDeniedException("You are not authorized to approve costs for this ticket.");
         }
 
-        // Kiểm tra trạng thái hợp lệ
-        if (ticket.getStatus() != MaintenanceStatus.CUSTOMER_APPROVAL_PENDING) {
+        // Kiểm tra trạng thái hợp lệ (Dùng PENDING_APPROVAL)
+        if (ticket.getStatus() != MaintenanceStatus.PENDING_APPROVAL) {
             throw new IllegalStateException("This ticket is not awaiting customer approval.");
         }
 
@@ -568,11 +589,78 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         // Cập nhật trạng thái
         ticket.setStatus(MaintenanceStatus.DONE);
 
-        // Cập nhật thời gian giao xe (nếu entity có trường này - thấy trong log có field hand_over_at)
+        // Cập nhật thời gian giao xe
         ticket.setHandOverAt(LocalDateTime.now());
 
         // Lưu
         maintenanceHistoryRepository.save(ticket);
     }
 
+
+    @Override
+    @Transactional
+    public void requestAdditionalCost(AdditionalCostRequest request) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(request.ticketId())
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        // Chỉ cho phép khi đang sửa chữa
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
+            throw new RuntimeException("Invalid status. Must be IN PROGRESS.");
+        }
+
+        // Cập nhật thông tin chi phí
+        ticket.setHasAdditionalCost(true);
+        ticket.setAdditionalCostAmount(request.amount());
+        ticket.setAdditionalCostReason(request.reason());
+
+        // Đổi trạng thái sang CHỜ DUYỆT (Dùng PENDING_APPROVAL)
+        ticket.setStatus(MaintenanceStatus.PENDING_APPROVAL);
+
+        MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
+
+        // --- GỬI MAIL CHO STAFF (Hoặc Owner) ---
+        // Lấy Staff phụ trách đơn này
+        AppUser staff = savedTicket.getStaff();
+
+        // Nếu có Staff phụ trách -> Gửi mail cho Staff
+        if (staff != null) {
+            try {
+                emailService.sendAdditionalCostRequestEmail(staff, savedTicket);
+            } catch (Exception e) {
+                System.err.println("Failed to send email: " + e.getMessage());
+            }
+        } else {
+            System.out.println("No staff assigned to this ticket to send email.");
+        }
+    }
+
+    @Override
+    @Transactional
+    public void processCustomerDecision(Long id, String decision) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        if (ticket.getStatus() != MaintenanceStatus.PENDING_APPROVAL) {
+            throw new RuntimeException("Ticket is not pending approval.");
+        }
+
+        if ("APPROVE".equalsIgnoreCase(decision)) {
+            // Khách duyệt -> Quay lại trạng thái RECEIVED để Tech làm tiếp
+            ticket.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
+            ticket.setRemark(ticket.getRemark() + " | Customer Approved Additional Cost.");
+        } else if ("REJECT".equalsIgnoreCase(decision)) {
+            // Khách từ chối -> Hủy đơn
+            ticket.setStatus(MaintenanceStatus.CANCELLED);
+            ticket.setRemark(ticket.getRemark() + " | Customer Rejected Cost -> Cancelled.");
+
+            // Logic gửi mail khi hủy
+            if (ticket.getOwner() != null) {
+                emailService.sendOrderCancelledEmail(ticket.getOwner(), ticket, "Customer declined additional service costs");
+            }
+        } else {
+            throw new RuntimeException("Invalid decision. Use APPROVE or REJECT.");
+        }
+
+        maintenanceHistoryRepository.save(ticket);
+    }
 }

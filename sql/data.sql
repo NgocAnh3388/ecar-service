@@ -4,6 +4,10 @@ CREATE SCHEMA public;
 -- Kích hoạt extension để tìm kiếm không dấu (nếu chưa có)
 CREATE EXTENSION IF NOT EXISTS unaccent;
 
+
+
+
+
 -- RUN THIS COMMAND FIRST TO CLEAR OLD DATA IF NEEDED
 TRUNCATE TABLE
     public.app_user,
@@ -475,7 +479,7 @@ VALUES
     (
         (SELECT id FROM vehicles WHERE license_plate = '29A-111.11'),
         (SELECT id FROM app_user WHERE email = 'lengochan090105@gmail.com'),
-        2, 'CUSTOMER_APPROVAL_PENDING', true, true, 'Check engine light', 15000,
+        2, 'PENDING_APPROVAL', true, true, 'Check engine light', 15000,
         true, 550000, 'Requires replacement of ABS sensor.',
         '2025-11-20', '09:00:00', NOW(), null, null, null, null,
         null, null,
