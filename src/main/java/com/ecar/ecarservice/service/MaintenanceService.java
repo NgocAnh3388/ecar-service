@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.service;
 
+import com.ecar.ecarservice.dto.AdditionalCostRequest;
 import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
 import com.ecar.ecarservice.dto.UsedPartDto;
 import com.ecar.ecarservice.entities.MaintenanceHistory;
@@ -62,5 +63,8 @@ public interface MaintenanceService {
      */
     void approveAdditionalCost(Long ticketId, OidcUser oidcUser);
     void handoverCarToCustomer(Long id);
+
+    void requestAdditionalCost(AdditionalCostRequest request);
+    void processCustomerDecision(Long id, String decision);
 
 }

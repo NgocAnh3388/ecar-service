@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Additional Cost Request (Internal)</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f7; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; padding: 25px 30px; }
+        .header { background-color: #ffc107; color: #333; text-align: center; padding: 20px; } /* Màu vàng cảnh báo */
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { line-height: 1.6; }
+        .content h2 { color: #d39e00; font-size: 20px; margin-bottom: 10px; }
+        .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 12px 15px; border-radius: 8px; margin: 15px 0; font-size: 15px; }
+        .footer { text-align: center; background-color: #f1f5f9; padding: 20px; font-size: 13px; color: #666; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Ecar Service - Internal Alert</h1>
+    </div>
+    <div class="content">
+        <h2>Technician Reported Additional Cost</h2>
+        <p>Hello <strong th:text="${staffName}"></strong>,</p>
+        <p>The technician <strong><span th:text="${technicianName}"></span></strong> has reported an issue requiring additional cost for order #<strong th:text="${ticketId}"></strong>.</p>
+
+        <div class="highlight">
+            <p><strong>Vehicle:</strong> <span th:text="${licensePlate}"></span></p>
+            <p><strong>Additional Amount:</strong> <span style="color: #dc3545; font-weight: bold;" th:text="${amount}"></span></p>
+            <p><strong>Reason:</strong> <span th:text="${reason}"></span></p>
+        </div>
+
+        <p>Please contact the customer immediately to get approval or rejection, then update the system.</p>
+    </div>
+    <div class="footer">This is an automated internal notification.</div>
+</div>
+</body>
+</html>

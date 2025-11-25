@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -48,4 +49,15 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
             "WHERE mh.status = :status AND mh.technician.id IN :technicianIds " +
             "GROUP BY mh.technician.id")
     List<TechnicianLoad> getTechnicianLoadByStatusAndIds(@Param("status") MaintenanceStatus status, @Param("technicianIds") List<Long> technicianIds);
+
+
+    // --- Đếm số lượng task của Technician trong 1 ngày ---
+    // Logic: Đếm các đơn của Technician này, vào ngày này, và trạng thái KHÔNG PHẢI là CANCELLED
+    @Query("SELECT COUNT(m) FROM MaintenanceHistory m " +
+            "WHERE m.technician.id = :technicianId " +
+            "AND m.scheduleDate = :date " +
+            "AND m.status <> 'CANCELLED'")
+    long countTasksByTechnicianAndDate(@Param("technicianId") Long technicianId,
+                                       @Param("date") LocalDate date);
+
 }

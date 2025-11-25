@@ -2,89 +2,34 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Additional Expense Approved</title>
+    <title>Customer Approved Additional Cost</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #eef2f7;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 40px auto;
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            overflow: hidden;
-            padding: 25px 30px;
-        }
-
-        .header {
-            background-color: #0D6EFD;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-        }
-
-        .content {
-            line-height: 1.6;
-        }
-
-        .content h2 {
-            color: #0D6EFD;
-            font-size: 20px;
-            margin-bottom: 10px;
-        }
-
-        .highlight {
-            background: #eaf3ff;
-            border-left: 4px solid #0D6EFD;
-            padding: 12px 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            font-size: 15px;
-        }
-
-        .highlight p {
-            margin: 6px 0;
-        }
-
-        .footer {
-            text-align: center;
-            background-color: #f1f5f9;
-            padding: 20px;
-            font-size: 13px;
-            color: #666;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f7; color: #333; margin: 0; padding: 0; }
+        .container { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; padding: 25px 30px; }
+        .header { background-color: #198754; color: white; text-align: center; padding: 20px; } /* Màu xanh thành công */
+        .header h1 { margin: 0; font-size: 24px; }
+        .content { line-height: 1.6; }
+        .content h2 { color: #198754; font-size: 20px; margin-bottom: 10px; }
+        .highlight { background: #d1e7dd; border-left: 4px solid #198754; padding: 12px 15px; border-radius: 8px; margin: 15px 0; font-size: 15px; }
+        .footer { text-align: center; background-color: #f1f5f9; padding: 20px; font-size: 13px; color: #666; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="header">
-        <h1>Ecar Service Center</h1>
+        <h1>Ecar Service - Notification</h1>
     </div>
-
     <div class="content">
-        <h2>Additional Expense Approved</h2>
-
-        <p>Customer <strong th:text="${customerName}"></strong> has approved the additional expense <strong th:text="${amount}"></strong> for service ticket #<strong th:text="${ticketId}"></strong>.</p>
+        <h2>Customer Approved!</h2>
+        <p>Hello <strong th:text="${recipientName}"></strong>,</p>
+        <p>Good news! The customer <strong><span th:text="${customerName}"></span></strong> has <strong>APPROVED</strong> the additional cost for order #<strong th:text="${ticketId}"></strong>.</p>
 
         <div class="highlight">
-            <p>Please continue the process and assign the task to the technician accordingly.</p>
+            <p>The order status has been updated to <strong>IN PROGRESS</strong>.</p>
+            <p>Technician can now proceed with the repair.</p>
         </div>
     </div>
-
-    <div class="footer">
-        This is an automated email from Ecar Service Center. Please do not reply to this email.
-    </div>
+    <div class="footer">This is an automated notification.</div>
 </div>
 </body>
 </html>

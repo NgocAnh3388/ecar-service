@@ -9,8 +9,8 @@ import java.math.BigDecimal;
  * khi một nhân viên thêm hoặc cập nhật chi phí phát sinh cho một phiếu dịch vụ.
  */
 
-@Data
-public class AdditionalCostRequest {
-    private BigDecimal amount;
-    private String reason;
-}
+public record AdditionalCostRequest(
+        Long ticketId,
+        BigDecimal amount,
+        String reason
+) {}
