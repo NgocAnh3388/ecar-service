@@ -28,7 +28,7 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
 
     @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
     @Query("SELECT mh FROM MaintenanceHistory mh WHERE mh.center.id = :centerId ORDER BY mh.status ASC, mh.submittedAt DESC")
-    List<MaintenanceHistory> findAllByCenterIdSortedForManagement(Long centerId);
+    List<MaintenanceHistory> findAllByCenterIdSortedForManagement(@Param("centerId") Long centerId);
 
     // =================== TRUY VẤN CHO KỸ THUẬT VIÊN (TECHNICIAN) ===================
     @EntityGraph(attributePaths = {"vehicle", "vehicle.carModel", "owner", "center", "staff", "technician"})
@@ -52,12 +52,10 @@ public interface MaintenanceHistoryRepository extends JpaRepository<MaintenanceH
 
 
     // --- Đếm số lượng task của Technician trong 1 ngày ---
-    // Logic: Đếm các đơn của Technician này, vào ngày này, và trạng thái KHÔNG PHẢI là CANCELLED
     @Query("SELECT COUNT(m) FROM MaintenanceHistory m " +
             "WHERE m.technician.id = :technicianId " +
             "AND m.scheduleDate = :date " +
             "AND m.status <> 'CANCELLED'")
     long countTasksByTechnicianAndDate(@Param("technicianId") Long technicianId,
                                        @Param("date") LocalDate date);
-
 }

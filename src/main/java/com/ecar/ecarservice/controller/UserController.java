@@ -147,4 +147,9 @@ public class UserController {
         return ResponseEntity.ok(dtos);
     }
 
+    @GetMapping("/technicians/my-center")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public ResponseEntity<List<UserDto>> getTechniciansForAssignment(@AuthenticationPrincipal OidcUser oidcUser) {
+        return ResponseEntity.ok(userService.getTechniciansByCurrentStaffCenter(oidcUser));
+    }
 }

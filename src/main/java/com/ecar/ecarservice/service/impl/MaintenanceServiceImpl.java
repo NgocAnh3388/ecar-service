@@ -167,14 +167,27 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
 
     private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
-        return MaintenanceHistoryDTO.builder()
+        // 1. Khởi tạo Builder
+        MaintenanceHistoryDTO.MaintenanceHistoryDTOBuilder builder = MaintenanceHistoryDTO.builder()
+                .id(maintenanceHistory.getId())
                 .carType(maintenanceHistory.getVehicle().getCarModel().getCarType())
                 .carName(maintenanceHistory.getVehicle().getCarModel().getCarName())
                 .licensePlate(maintenanceHistory.getVehicle().getLicensePlate())
                 .submittedAt(maintenanceHistory.getSubmittedAt())
                 .completedAt(maintenanceHistory.getCompletedAt())
-                .status(maintenanceHistory.getStatus())
-                .build();
+                .status(maintenanceHistory.getStatus());
+
+        // 2. Thêm Logic lấy Booking ID (nếu có)
+        // Lưu ý: Bạn cần kiểm tra xem class MaintenanceHistory có getter getBooking() hay không
+        // Nếu MaintenanceHistory chưa có quan hệ với Booking, bạn cần thêm vào Entity trước.
+        // Giả sử entity MaintenanceHistory ĐÃ CÓ quan hệ ManyToOne với Booking:
+
+        // if (maintenanceHistory.getBooking() != null) {
+        //     builder.bookingId(maintenanceHistory.getBooking().getId());
+        // }
+
+        // 3. Build và trả về
+        return builder.build();
     }
 
     // ====================== MILESTONE ======================
@@ -451,7 +464,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setUpdatedAt(LocalDateTime.now());
 
         // (Optional) Đặt lại trạng thái
-        // ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
+         ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
 
         maintenanceHistoryRepository.save(ticket);
     }

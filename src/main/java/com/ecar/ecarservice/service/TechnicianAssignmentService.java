@@ -26,9 +26,10 @@ public class TechnicianAssignmentService {
 
     public List<AppUser> getAvailableTechniciansByCenter(Long centerId) {
 
-        // 1. Lấy tất cả technician thuộc trung tâm này (Giữ nguyên)
+        // 1. Lấy tất cả technician thuộc trung tâm này (Sửa tên hàm cho đúng)
+        // Tên đúng trong Repository là: findByCenterIdAndRolesContaining(centerId, role)
         List<AppUser> allTechniciansInCenter = appUserRepository
-                .findByRolesContainingAndCenterId(AppRole.TECHNICIAN, centerId);
+                .findByCenterIdAndRolesContaining(centerId, AppRole.TECHNICIAN);
 
         //Nếu không có tech nào, trả về luôn
         if (allTechniciansInCenter.isEmpty()) {

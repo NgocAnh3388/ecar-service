@@ -12,6 +12,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,9 +79,14 @@ public class BookingServiceImpl implements BookingService {
 
         // 2. Cập nhật trạng thái của nó
         booking.setStatus(BookingStatus.CANCELLED);
+        //  Dùng LocalDateTime.now() thay vì new Date()
+        booking.setUpdatedAt(LocalDateTime.now());
 
         // 3. Lưu lại vào database
         Booking cancelledBooking = bookingRepository.save(booking);
+
+        // Admin hủy cũng nên gửi mail báo khách (tùy chọn)
+         emailService.sendOrderCancelledEmail(cancelledBooking);
 
         // 4. Chuyển đổi sang DTO và trả về để xác nhận
         return convertToDto(cancelledBooking);
@@ -99,8 +106,21 @@ public class BookingServiceImpl implements BookingService {
             throw new IllegalStateException("This booking cannot be cancelled as it has already been " + booking.getStatus());
         }
 
+        // 4. Cập nhật trạng thái và thời gian
         booking.setStatus(BookingStatus.CANCELLED);
+        // Dùng LocalDateTime.now()
+        booking.setUpdatedAt(LocalDateTime.now());
+
         Booking cancelledBooking = bookingRepository.save(booking);
+
+        // 5. Gửi email thông báo hủy đơn (Sử dụng template order-cancelled-email.html)
+        try {
+            // Bạn cần đảm bảo hàm sendOrderCancelledEmail đã có trong EmailService
+            emailService.sendOrderCancelledEmail(cancelledBooking);
+        } catch (Exception e) {
+            // Log lỗi nếu gửi mail thất bại nhưng không rollback transaction (đơn vẫn hủy thành công)
+            System.err.println("Lỗi gửi email hủy đơn: " + e.getMessage());
+        }
 
         return convertToDto(cancelledBooking);
     }

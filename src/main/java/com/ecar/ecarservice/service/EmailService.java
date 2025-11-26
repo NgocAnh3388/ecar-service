@@ -1,10 +1,6 @@
 package com.ecar.ecarservice.service;
 
-import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.entities.Center;
-import com.ecar.ecarservice.entities.Inventory;
-import com.ecar.ecarservice.entities.MaintenanceHistory;
-import com.ecar.ecarservice.entities.Vehicle;
+import com.ecar.ecarservice.entities.*;
 import com.ecar.ecarservice.payload.requests.BookingRequest;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -17,9 +13,11 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -347,4 +345,46 @@ public class EmailService {
             System.err.println("Failed to send cancellation email: " + e.getMessage());
         }
     }
+
+    // =========================================================================
+    // --- NEW METHOD: CHO TRƯỜNG HỢP BOOKING (Mới thêm) ---
+    // =========================================================================
+    @Async
+    public void sendOrderCancelledEmail(Booking booking) {
+        try {
+            Context context = new Context();
+            // Xử lý tên khách hàng
+            String customerName = (booking.getUser() != null) ? booking.getUser().getFullName() : "Customer";
+            context.setVariable("customerName", customerName);
+            context.setVariable("bookingId", booking.getId());
+
+            // Format ngày hủy
+            String formattedDate = "";
+            if (booking.getUpdatedAt() != null) {
+                // Booking dùng java.util.Date nên dùng SimpleDateFormat
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+                formattedDate = sdf.format(booking.getUpdatedAt());
+            } else {
+                // Fallback nếu null
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm dd-MM-yyyy");
+                formattedDate = sdf.format(new Date());
+            }
+            context.setVariable("cancelDate", formattedDate);
+
+            // Xử lý template
+            String htmlContent = templateEngine.process("order-cancelled-email", context);
+
+            // Gửi email
+            String emailTo = (booking.getUser() != null) ? booking.getUser().getEmail() : null;
+            if (emailTo != null) {
+                sendHtmlEmail(emailTo, "Ecar Service - Booking Cancelled", htmlContent);
+            } else {
+                System.err.println("Cannot send cancellation email: Booking User email is null.");
+            }
+
+        } catch (Exception e) {
+            System.err.println("Failed to send booking cancellation email: " + e.getMessage());
+        }
+    }
+
 }

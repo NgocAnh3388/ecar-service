@@ -25,6 +25,10 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+/**
+ * Lớp triển khai logic nghiệp vụ cho quản lý User.
+ * Bao gồm: CRUD User, Phân quyền, Lấy dữ liệu liên quan (Xe, Lịch sử bảo dưỡng).
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -33,6 +37,7 @@ public class UserServiceImpl implements UserService {
     private final SubscriptionInfoRepository subscriptionInfoRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
 
+    // Constructor Injection (Khuyên dùng thay vì @Autowired)
     public UserServiceImpl(AppUserRepository appUserRepository,
                            MaintenanceHistoryRepository maintenanceHistoryRepository,
                            SubscriptionInfoRepository subscriptionInfoRepository,
@@ -43,14 +48,14 @@ public class UserServiceImpl implements UserService {
         this.paymentHistoryRepository = paymentHistoryRepository;
     }
 
-    // ===================== THEM MOI (giữ tu file 2) =====================
+    // ===================== LẤY USER HIỆN TẠI (ACTIVE) =====================
     @Override
     public AppUser getCurrentUserById(Long id) {
         return appUserRepository.findByIdAndActiveTrue(id)
-                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+                .orElseThrow(() -> new RuntimeException("User not found or inactive with id: " + id));
     }
 
-    // ===================== LAY TAT CA NGUOI DUNG =====================
+    // ===================== LẤY TẤT CẢ USER =====================
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
@@ -59,7 +64,7 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    // ===================== LAY USER THEO ID =====================
+    // ===================== LẤY CHI TIẾT USER (KÈM LỊCH SỬ) =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
@@ -68,12 +73,12 @@ public class UserServiceImpl implements UserService {
 
         UserDto dto = convertToDto(user);
 
-        // 🔹 Lấy lịch sử bảo dưỡng (chuyển sang DTO)
         List<MaintenanceHistoryDTO> histories = maintenanceHistoryRepository
                 .searchByOwner(id, "", PageRequest.of(0, 100))
                 .getContent()
                 .stream()
                 .map(mh -> MaintenanceHistoryDTO.builder()
+                        .id(mh.getId())
                         .carName(mh.getVehicle() != null && mh.getVehicle().getCarModel() != null
                                 ? mh.getVehicle().getCarModel().getCarName() : null)
                         .carType(mh.getVehicle() != null && mh.getVehicle().getCarModel() != null
@@ -86,7 +91,6 @@ public class UserServiceImpl implements UserService {
                 ).toList();
         dto.setMaintenanceHistories(histories);
 
-        // 🔹 Lấy gói dịch vụ (chuyển sang DTO)
         List<SubscriptionInfoDto> subscriptions = subscriptionInfoRepository.findByOwnerId(id)
                 .stream()
                 .map(sub -> {
@@ -102,8 +106,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-
-    // ===================== CAP NHAT THONG TIN USER =====================
+    // ===================== CẬP NHẬT USER =====================
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserCreateDTO userUpdateDTO) {
@@ -142,7 +145,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    // ===================== XOA USER =====================
+    // ===================== XÓA MỀM USER =====================
     @Override
     @Transactional
     public void deleteUser(Long id) {
@@ -152,7 +155,7 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-    // ===================== CHUYEN TRANG THAI ACTIVE =====================
+    // ===================== BẬT/TẮT TRẠNG THÁI USER =====================
     @Override
     @Transactional
     public void toggleActiveUser(Long id) {
@@ -163,7 +166,7 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-    // ===================== TIM KIEM USER =====================
+    // ===================== TÌM KIẾM USER (NÂNG CAO) =====================
     @Override
     @Transactional(readOnly = true)
     public Page<AppUser> searchUsers(UserSearchRequest request) {
@@ -187,7 +190,7 @@ public class UserServiceImpl implements UserService {
         return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
     }
 
-    // ===================== CHUYEN ENTITY -> DTO =====================
+    // ===================== MAPPER: ENTITY -> DTO =====================
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
@@ -214,7 +217,7 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    // ===================== TAO USER MOI =====================
+    // ===================== TẠO USER MỚI =====================
     @Override
     @Transactional
     public void createUser(UserCreateDTO userCreateDTO) {
@@ -226,6 +229,7 @@ public class UserServiceImpl implements UserService {
         appUser.setEmail(userCreateDTO.getEmail());
         appUser.setFullName(userCreateDTO.getFullName());
         appUser.setPhoneNo(userCreateDTO.getPhoneNo());
+        appUser.setActive(true);
 
         Set<AppRole> roles = new HashSet<>();
         roles.add(AppRole.valueOf(userCreateDTO.getRole().toUpperCase()));
@@ -234,20 +238,20 @@ public class UserServiceImpl implements UserService {
         this.appUserRepository.save(appUser);
     }
 
-    // ===================== LAY USER HIEN TAI (OIDC) =====================
+    // ===================== LẤY USER TỪ TOKEN (OIDC) =====================
     @Override
     public AppUser getCurrentUser(OidcUser oidcUser) {
         return this.appUserRepository.findBySub(oidcUser.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // ===================== LAY DANH SACH USER THEO ROLE =====================
+    // ===================== LẤY USER THEO ROLE =====================
     @Override
     public List<AppUser> getUserListByRole(String role) {
         return this.appUserRepository.findByRoles(AppRole.valueOf(role.toUpperCase()));
     }
 
-    // ===================== LAY USER THEO EMAIL =====================
+    // ===================== LẤY USER THEO EMAIL =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserByEmail(String email) {
@@ -256,12 +260,33 @@ public class UserServiceImpl implements UserService {
         return convertToDto(user);
     }
 
-    // ===================== Lấy danh sách technician chỉ thuộc về một center cụ thể =====================
+    /**
+     * Hàm 1: Lấy danh sách Technician theo Center ID (Dựa trên ID truyền vào)
+     */
     @Override
-    @Transactional(readOnly = true)
     public List<AppUser> getTechniciansByCenter(Long centerId) {
-        // Cần tạo phương thức mới trong AppUserRepository
-        return appUserRepository.findByRolesContainingAndCenterId(AppRole.TECHNICIAN, centerId);
+        return appUserRepository.findByCenterIdAndRolesContaining(centerId, AppRole.TECHNICIAN);
     }
 
+    /**
+     * Hàm 2: Lấy danh sách Technician dựa trên Center của Staff đang đăng nhập.
+     * Đổi tên hàm thành getTechniciansByCurrentStaffCenter để khớp với Interface (hoặc ngược lại).
+     */
+    @Override
+    public List<UserDto> getTechniciansByCurrentStaffCenter(OidcUser oidcUser) {
+        AppUser currentStaff = getCurrentUser(oidcUser);
+
+        if (currentStaff.getCenter() == null) {
+            return Collections.emptyList();
+        }
+
+        List<AppUser> technicians = appUserRepository.findByCenterIdAndRolesContaining(
+                currentStaff.getCenter().getId(),
+                AppRole.TECHNICIAN
+        );
+
+        return technicians.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
 }
