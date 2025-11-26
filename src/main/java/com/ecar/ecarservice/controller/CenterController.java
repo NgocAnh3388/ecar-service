@@ -1,28 +1,34 @@
 package com.ecar.ecarservice.controller;
 
-import com.ecar.ecarservice.payload.responses.CenterResponse;
-import com.ecar.ecarservice.service.CenterService;
+import com.ecar.ecarservice.entities.Center;
+import com.ecar.ecarservice.repositories.CenterRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/center")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CenterController {
 
-    private final CenterService centerService;
+    private final CenterRepository centerRepository;
 
-    public CenterController(CenterService centerService) {
-        this.centerService = centerService;
+    // Lấy danh sách
+    @GetMapping
+    public ResponseEntity<List<Center>> getAllCenters() {
+        return ResponseEntity.ok(centerRepository.findAll());
     }
 
-    // =================== LẤY TẤT CẢ TRUNG TÂM ===================
-    @RequestMapping(value = "", method = RequestMethod.GET)
-    public ResponseEntity<List<CenterResponse>> getAllCenter() {
-        return ResponseEntity.ok(this.centerService.getAllCenter());
+    // Xóa
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCenter(@PathVariable Long id) {
+        if (centerRepository.existsById(id)) {
+            centerRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
-
 }

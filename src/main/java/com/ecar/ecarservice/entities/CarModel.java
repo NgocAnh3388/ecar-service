@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "car_model")
@@ -49,4 +51,9 @@ public class CarModel {
     @LastModifiedBy
     @Column(name = "updated_by", insertable = false)
     private String updatedBy;
+
+    @JsonIgnore // <--- QUAN TRỌNG: Ngắt vòng lặp CarModel -> Vehicle -> CarModel
+    @OneToMany(mappedBy = "carModel")
+    private List<Vehicle> vehicles;
+
 }
