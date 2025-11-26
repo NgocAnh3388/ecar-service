@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @Data
 @Builder
 public class MaintenanceHistoryDTO {
+    private Long id;
+    private Long bookingId;
     private String carName;
 
     private String carType;

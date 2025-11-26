@@ -5,10 +5,12 @@ import com.ecar.ecarservice.dto.BookingResponseDto;
 import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.service.BookingService;
 import com.ecar.ecarservice.service.UserService;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.web.bind.annotation.*;
@@ -54,13 +56,27 @@ public class BookingController {
 
     // =================== KHÁCH HÀNG TỰ HỦY LỊCH HẸN ===================
     @PutMapping("/{id}/cancel")
-    public ResponseEntity<BookingResponseDto> cancelBookingByCustomer(
+    public ResponseEntity<?> cancelBookingByCustomer(
             @PathVariable Long id,
             @AuthenticationPrincipal OidcUser oidcUser) {
 
-        AppUser currentUser = userService.getCurrentUser(oidcUser);
+        try {
+            // 1. Lấy thông tin User hiện tại từ Token
+            AppUser currentUser = userService.getCurrentUser(oidcUser);
 
-        BookingResponseDto cancelledBooking = bookingService.cancelBookingByCustomer(id, currentUser);
-        return ResponseEntity.ok(cancelledBooking);
+            // 2. Gọi Service xử lý
+            BookingResponseDto cancelledBooking = bookingService.cancelBookingByCustomer(id, currentUser);
+
+            return ResponseEntity.ok(cancelledBooking);
+
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(e.getMessage()); // Lỗi do trạng thái không phải PENDING
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Đã xảy ra lỗi: " + e.getMessage());
+        }
     }
 }

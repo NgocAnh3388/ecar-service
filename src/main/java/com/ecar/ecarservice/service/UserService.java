@@ -26,4 +26,6 @@ public interface UserService {
 
     List<AppUser> getTechniciansByCenter(Long centerId);
 
+    List<UserDto> getTechniciansByCurrentStaffCenter(OidcUser oidcUser);
+
 }
