@@ -19,6 +19,7 @@ public class UserDto {
     private String email;
     private String fullName;
     private String phoneNo;
+    private String centerName;
     private Set<AppRole> roles;
     private boolean active;
 

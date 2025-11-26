@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
     // Tìm bản ghi tồn kho của 1 phụ tùng tại 1 center cụ thể
+    // Tìm Inventory theo Center ID và SparePart ID
     Optional<Inventory> findByCenterIdAndSparePartId(Long centerId, Long sparePartId);
 
     // Tìm tất cả tồn kho của một phụ tùng ở mọi center

@@ -20,8 +20,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true") // <--- KIỂM TRA DÒNG NÀY
-
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class UserController {
 
     private final UserService userService;
@@ -55,7 +54,6 @@ public class UserController {
 
     // 4. Update user
     @PutMapping("/{id:[0-9]+}")
-    // Cho phép nều là ADMIN  -HOẶC-  Email của người gửi request trùng với email trong body update
     @PreAuthorize("hasRole('ADMIN') or #userUpdateDTO.email == authentication.principal.email")
     public ResponseEntity<UserDto> updateUser(@PathVariable Long id, @Valid @RequestBody UserCreateDTO userUpdateDTO) {
         return ResponseEntity.ok(userService.updateUser(id, userUpdateDTO));
@@ -72,8 +70,9 @@ public class UserController {
     // 6. Search users (POST /api/users/search)
     @PostMapping("/search")
     @PreAuthorize("hasAnyRole('ADMIN','STAFF')")
-    public ResponseEntity<Page<AppUser>> searchUsers(@RequestBody UserSearchRequest request) {
-        Page<AppUser> searchResult = userService.searchUsers(request);
+    // SỬA LẠI TẠI ĐÂY: Đổi Page<AppUser> thành Page<UserDto>
+    public ResponseEntity<Page<UserDto>> searchUsers(@RequestBody UserSearchRequest request) {
+        Page<UserDto> searchResult = userService.searchUsers(request); // Giờ kiểu trả về đã khớp
         return ResponseEntity.ok(searchResult);
     }
 
@@ -113,13 +112,32 @@ public class UserController {
         return ResponseEntity.ok(technicianDtos);
     }
 
-    // Chuyển AppUser → UserDto
+    @GetMapping("/get-by-role/technician")
+    public ResponseEntity<List<UserDto>> getTechnicians() {
+        List<AppUser> techs = userService.getUserListByRole("TECHNICIAN");
+        List<UserDto> dtos = techs.stream().map(this::convertToDto).collect(Collectors.toList());
+        return ResponseEntity.ok(dtos);
+    }
+
+    @GetMapping("/technicians/my-center")
+    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
+    public ResponseEntity<List<UserDto>> getTechniciansForAssignment(@AuthenticationPrincipal OidcUser oidcUser) {
+        return ResponseEntity.ok(userService.getTechniciansByCurrentStaffCenter(oidcUser));
+    }
+
+    // Helper Method
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setFullName(user.getFullName());
         dto.setPhoneNo(user.getPhoneNo());
+
+        // Map Center Name
+        if (user.getCenter() != null) {
+            dto.setCenterName(user.getCenter().getCenterName());
+        }
+
         dto.setRoles(user.getRoles());
         dto.setActive(user.isActive());
 
@@ -137,19 +155,6 @@ public class UserController {
             }).collect(Collectors.toList());
             dto.setVehicles(vehicleDtos);
         }
-
         return dto;
-    }
-    @GetMapping("/get-by-role/technician")
-    public ResponseEntity<List<UserDto>> getTechnicians() {
-        List<AppUser> techs = userService.getUserListByRole("TECHNICIAN");
-        List<UserDto> dtos = techs.stream().map(this::convertToDto).collect(Collectors.toList());
-        return ResponseEntity.ok(dtos);
-    }
-
-    @GetMapping("/technicians/my-center")
-    @PreAuthorize("hasAnyRole('STAFF', 'ADMIN')")
-    public ResponseEntity<List<UserDto>> getTechniciansForAssignment(@AuthenticationPrincipal OidcUser oidcUser) {
-        return ResponseEntity.ok(userService.getTechniciansByCurrentStaffCenter(oidcUser));
     }
 }

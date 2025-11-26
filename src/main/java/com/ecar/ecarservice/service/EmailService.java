@@ -387,4 +387,25 @@ public class EmailService {
         }
     }
 
+    // --- [NEW] Gửi email thông báo Tech từ chối việc ---
+    @Async
+    public void sendTaskDeclinedEmail(AppUser staff, AppUser technician, MaintenanceHistory ticket) {
+        try {
+            if (staff == null || technician == null) return;
+
+            Context context = new Context();
+            context.setVariable("staffName", staff.getFullName());
+            context.setVariable("technicianName", technician.getFullName());
+            context.setVariable("ticketId", ticket.getId());
+            context.setVariable("licensePlate", ticket.getVehicle().getLicensePlate());
+
+            String htmlContent = templateEngine.process("task-declined-email", context);
+
+            // Gửi email cho Staff phụ trách
+            sendHtmlEmail(staff.getEmail(), "[URGENT] Task Declined - Ticket #" + ticket.getId(), htmlContent);
+
+        } catch (Exception e) {
+            System.err.println("Failed to send task declined email: " + e.getMessage());
+        }
+    }
 }

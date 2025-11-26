@@ -49,6 +49,7 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final ExecutorService executorService = Executors.newFixedThreadPool(10);
     private final MaintenanceItemPartRepository maintenanceItemPartRepository;
     private final SparePartRepository sparePartRepository;
+    private final InventoryRepository inventoryRepository;
 
     // ====================== LICH SU BAO DUONG ======================
     @Override
@@ -498,25 +499,63 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Override
     @Transactional
     public void updateUsedParts(Long ticketId, List<UsedPartDto> usedParts) {
-        // Tìm phiếu dịch vụ gốc
+        // 1. Tìm phiếu dịch vụ
         MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(ticketId)
-                .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
 
-        // 1. Xóa tất cả các bản ghi phụ tùng cũ của ticket này để đảm bảo dữ liệu mới là duy nhất
+        // Lấy Center của phiếu này
+        Long centerId = maintenanceHistory.getCenter().getId();
+
+        // 2. Hoàn trả lại kho các phụ tùng cũ (nếu có update lại)
+        // Lấy danh sách phụ tùng ĐANG sử dụng trong DB
+        List<MaintenanceItemPart> currentParts = maintenanceItemPartRepository.findByMaintenanceHistoryId(ticketId);
+        for (MaintenanceItemPart oldPart : currentParts) {
+            // Cộng lại vào kho
+            Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(centerId, oldPart.getSparePart().getId())
+                    .orElseThrow(() -> new IllegalStateException("Inventory not found for part: " + oldPart.getSparePart().getPartName()));
+
+            inventory.setStockQuantity(inventory.getStockQuantity() + oldPart.getQuantity());
+            inventoryRepository.save(inventory);
+        }
+
+        // 3. Xóa danh sách cũ trong bảng liên kết
         maintenanceItemPartRepository.deleteByMaintenanceHistoryId(ticketId);
 
-        // 2. Tạo các bản ghi mới từ request
+        // 4. Thêm mới và Trừ kho
         if (usedParts != null && !usedParts.isEmpty()) {
-            List<MaintenanceItemPart> newItemParts = usedParts.stream().map(partDto -> {
-                SparePart sparePart = sparePartRepository.findById(partDto.partId())
-                        .orElseThrow(() -> new EntityNotFoundException("Spare part not found with id: " + partDto.partId()));
+            List<MaintenanceItemPart> newItemParts = new ArrayList<>();
 
+            for (UsedPartDto partDto : usedParts) {
+                SparePart sparePart = sparePartRepository.findById(partDto.partId())
+                        .orElseThrow(() -> new EntityNotFoundException("Spare part not found"));
+
+                // 4.1. Tìm trong kho
+                Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(centerId, sparePart.getId())
+                        .orElseThrow(() -> new IllegalStateException("Part " + sparePart.getPartName() + " is not available in this center"));
+
+                // 4.2. Kiểm tra số lượng tồn
+                if (inventory.getStockQuantity() < partDto.quantity()) {
+                    throw new IllegalStateException("Not enough stock for part: " + sparePart.getPartName() +
+                            ". Available: " + inventory.getStockQuantity());
+                }
+
+                // 4.3. Trừ kho
+                inventory.setStockQuantity(inventory.getStockQuantity() - partDto.quantity());
+                inventoryRepository.save(inventory);
+
+                // (Optional) Check Min Stock để gửi mail cảnh báo
+                if (inventory.getStockQuantity() <= inventory.getMinStockLevel()) {
+                    // Gửi mail cho Admin kho (bạn tự implement)
+                    // emailService.sendLowStockAlertEmail(inventory);
+                }
+
+                // 4.4. Tạo record sử dụng
                 MaintenanceItemPart itemPart = new MaintenanceItemPart();
                 itemPart.setMaintenanceHistory(maintenanceHistory);
                 itemPart.setSparePart(sparePart);
                 itemPart.setQuantity(partDto.quantity());
-                return itemPart;
-            }).collect(Collectors.toList());
+                newItemParts.add(itemPart);
+            }
 
             maintenanceItemPartRepository.saveAll(newItemParts);
         }
@@ -675,5 +714,32 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
 
         maintenanceHistoryRepository.save(ticket);
+    }
+
+    @Override
+    @Transactional
+    public void declineTask(Long id) {
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
+
+        if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
+            throw new IllegalStateException("Can only decline tasks that are currently assigned.");
+        }
+
+        // Lưu lại thông tin Tech và Staff trước khi xóa để gửi mail
+        AppUser technician = ticket.getTechnician();
+        AppUser staff = ticket.getStaff();
+
+        // Reset trạng thái
+        ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
+        ticket.setTechnician(null);
+        ticket.setTechnicianReceivedAt(null);
+
+        maintenanceHistoryRepository.save(ticket);
+
+        // Gửi email thông báo cho Staff
+        if (staff != null && technician != null) {
+            emailService.sendTaskDeclinedEmail(staff, technician, ticket);
+        }
     }
 }

@@ -1,5 +1,7 @@
 package com.ecar.ecarservice.service.impl;
 
+import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
+import com.ecar.ecarservice.dto.SubscriptionInfoDto;
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
 import com.ecar.ecarservice.dto.VehicleDto;
@@ -7,6 +9,9 @@ import com.ecar.ecarservice.entities.AppUser;
 import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import com.ecar.ecarservice.repositories.AppUserRepository;
+import com.ecar.ecarservice.repositories.MaintenanceHistoryRepository;
+import com.ecar.ecarservice.repositories.PaymentHistoryRepository;
+import com.ecar.ecarservice.repositories.SubscriptionInfoRepository;
 import com.ecar.ecarservice.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.data.domain.Page;
@@ -15,20 +20,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.ecar.ecarservice.repositories.SubscriptionInfoRepository;
-import com.ecar.ecarservice.repositories.MaintenanceHistoryRepository;
-import com.ecar.ecarservice.dto.SubscriptionInfoDto;
-import com.ecar.ecarservice.dto.MaintenanceHistoryDTO;
-import com.ecar.ecarservice.repositories.PaymentHistoryRepository;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/**
- * Lớp triển khai logic nghiệp vụ cho quản lý User.
- * Bao gồm: CRUD User, Phân quyền, Lấy dữ liệu liên quan (Xe, Lịch sử bảo dưỡng).
- */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -37,7 +33,6 @@ public class UserServiceImpl implements UserService {
     private final SubscriptionInfoRepository subscriptionInfoRepository;
     private final PaymentHistoryRepository paymentHistoryRepository;
 
-    // Constructor Injection (Khuyên dùng thay vì @Autowired)
     public UserServiceImpl(AppUserRepository appUserRepository,
                            MaintenanceHistoryRepository maintenanceHistoryRepository,
                            SubscriptionInfoRepository subscriptionInfoRepository,
@@ -48,14 +43,12 @@ public class UserServiceImpl implements UserService {
         this.paymentHistoryRepository = paymentHistoryRepository;
     }
 
-    // ===================== LẤY USER HIỆN TẠI (ACTIVE) =====================
     @Override
     public AppUser getCurrentUserById(Long id) {
         return appUserRepository.findByIdAndActiveTrue(id)
                 .orElseThrow(() -> new RuntimeException("User not found or inactive with id: " + id));
     }
 
-    // ===================== LẤY TẤT CẢ USER =====================
     @Override
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
@@ -64,7 +57,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
-    // ===================== LẤY CHI TIẾT USER (KÈM LỊCH SỬ) =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserById(Long id) {
@@ -106,7 +98,6 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    // ===================== CẬP NHẬT USER =====================
     @Override
     @Transactional
     public UserDto updateUser(Long id, UserCreateDTO userUpdateDTO) {
@@ -145,7 +136,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    // ===================== XÓA MỀM USER =====================
     @Override
     @Transactional
     public void deleteUser(Long id) {
@@ -155,7 +145,6 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-    // ===================== BẬT/TẮT TRẠNG THÁI USER =====================
     @Override
     @Transactional
     public void toggleActiveUser(Long id) {
@@ -166,10 +155,9 @@ public class UserServiceImpl implements UserService {
         appUserRepository.save(user);
     }
 
-    // ===================== TÌM KIẾM USER (NÂNG CAO) =====================
     @Override
     @Transactional(readOnly = true)
-    public Page<AppUser> searchUsers(UserSearchRequest request) {
+    public Page<UserDto> searchUsers(UserSearchRequest request) {
         PageRequest pageRequest = PageRequest.of(request.getPage(), request.getSize());
 
         Page<Long> idsPage = this.appUserRepository.searchUserIdsByValue(request.getSearchValue(), pageRequest);
@@ -183,20 +171,25 @@ public class UserServiceImpl implements UserService {
         Map<Long, AppUser> userMap = usersWithDetails.stream()
                 .collect(Collectors.toMap(AppUser::getId, Function.identity()));
 
-        List<AppUser> sortedUsers = userIds.stream()
+        List<UserDto> sortedUserDtos = userIds.stream()
                 .map(userMap::get)
+                .map(this::convertToDto)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(sortedUsers, pageRequest, idsPage.getTotalElements());
+        return new PageImpl<>(sortedUserDtos, pageRequest, idsPage.getTotalElements());
     }
 
-    // ===================== MAPPER: ENTITY -> DTO =====================
     private UserDto convertToDto(AppUser user) {
         UserDto dto = new UserDto();
         dto.setId(user.getId());
         dto.setEmail(user.getEmail());
         dto.setFullName(user.getFullName());
         dto.setPhoneNo(user.getPhoneNo());
+
+        if (user.getCenter() != null) {
+            dto.setCenterName(user.getCenter().getCenterName());
+        }
+
         dto.setRoles(user.getRoles());
         dto.setActive(user.isActive());
 
@@ -217,7 +210,6 @@ public class UserServiceImpl implements UserService {
         return dto;
     }
 
-    // ===================== TẠO USER MỚI =====================
     @Override
     @Transactional
     public void createUser(UserCreateDTO userCreateDTO) {
@@ -238,20 +230,17 @@ public class UserServiceImpl implements UserService {
         this.appUserRepository.save(appUser);
     }
 
-    // ===================== LẤY USER TỪ TOKEN (OIDC) =====================
     @Override
     public AppUser getCurrentUser(OidcUser oidcUser) {
         return this.appUserRepository.findBySub(oidcUser.getSubject())
                 .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    // ===================== LẤY USER THEO ROLE =====================
     @Override
     public List<AppUser> getUserListByRole(String role) {
         return this.appUserRepository.findByRoles(AppRole.valueOf(role.toUpperCase()));
     }
 
-    // ===================== LẤY USER THEO EMAIL =====================
     @Override
     @Transactional(readOnly = true)
     public UserDto getUserByEmail(String email) {
@@ -260,18 +249,11 @@ public class UserServiceImpl implements UserService {
         return convertToDto(user);
     }
 
-    /**
-     * Hàm 1: Lấy danh sách Technician theo Center ID (Dựa trên ID truyền vào)
-     */
     @Override
     public List<AppUser> getTechniciansByCenter(Long centerId) {
         return appUserRepository.findByCenterIdAndRolesContaining(centerId, AppRole.TECHNICIAN);
     }
 
-    /**
-     * Hàm 2: Lấy danh sách Technician dựa trên Center của Staff đang đăng nhập.
-     * Đổi tên hàm thành getTechniciansByCurrentStaffCenter để khớp với Interface (hoặc ngược lại).
-     */
     @Override
     public List<UserDto> getTechniciansByCurrentStaffCenter(OidcUser oidcUser) {
         AppUser currentStaff = getCurrentUser(oidcUser);
