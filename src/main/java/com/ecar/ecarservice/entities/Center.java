@@ -1,5 +1,6 @@
 package com.ecar.ecarservice.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -52,7 +53,21 @@ public class Center {
     @Column(name = "updated_by", insertable = false)
     private String updatedBy;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "center", fetch = FetchType.LAZY)
-    @JsonManagedReference // Quản lý quan hệ
     private List<AppUser> technicians;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "center")
+    private List<MaintenanceHistory> maintenanceHistories;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "center")
+    private List<MaintenanceSchedule> maintenanceSchedules;
+
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "center")
+    private List<Inventory> inventories; // Nếu có quan hệ với kho
+
 }

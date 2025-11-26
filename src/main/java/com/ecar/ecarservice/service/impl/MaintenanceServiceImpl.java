@@ -11,6 +11,7 @@ import com.ecar.ecarservice.payload.responses.*;
 import com.ecar.ecarservice.repositories.*;
 import com.ecar.ecarservice.service.EmailService;
 import com.ecar.ecarservice.service.MaintenanceService;
+import com.ecar.ecarservice.service.NotificationService;
 import com.ecar.ecarservice.service.UserService;
 import com.ecar.ecarservice.threads.EmailThread;
 import com.ecar.ecarservice.threads.TechnicianEmailThread;
@@ -50,6 +51,9 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     private final MaintenanceItemPartRepository maintenanceItemPartRepository;
     private final SparePartRepository sparePartRepository;
     private final InventoryRepository inventoryRepository;
+
+    // Inject Notification Service
+    private final NotificationService notificationService;
 
     // ====================== LICH SU BAO DUONG ======================
     @Override
@@ -96,6 +100,12 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         );
         executorService.submit(new EmailThread(bookingRequest, emailService));
 
+        // --- THONG BAO CHO KHACH HANG ---
+        notificationService.createNotification(currentUser,
+                "Booking Confirmed",
+                "Your appointment for " + vehicle.getLicensePlate() + " has been submitted successfully.",
+                "BOOKING");
+
         return maintenanceHistoryRepository.save(history);
     }
 
@@ -103,23 +113,16 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Override
     @Transactional(readOnly = true)
     public List<MaintenanceTicketResponse> getTickets(OidcUser oidcUser) {
-        // Lấy thông tin người dùng hiện tại, bao gồm cả vai trò và center
         AppUser currentUser = userService.getCurrentUser(oidcUser);
-
         List<MaintenanceHistory> tickets;
 
-        // --- LOGIC PHÂN QUYỀN ĐƯỢC ĐẶT Ở ĐÂY ---
         if (currentUser.getRoles().contains(AppRole.ADMIN)) {
-            // NẾU LÀ ADMIN: Lấy tất cả các phiếu từ tất cả các center
             tickets = maintenanceHistoryRepository.findAllAndSortForManagement();
         } else {
-            // NẾU LÀ STAFF HOẶC TECHNICIAN: Chỉ lấy các phiếu thuộc center của họ
             Center userCenter = currentUser.getCenter();
             if (userCenter == null) {
-                // Xử lý trường hợp một staff/technician chưa được gán center (trả về danh sách rỗng)
                 return Collections.emptyList();
             }
-            // Cần tạo phương thức mới trong MaintenanceHistoryRepository
             tickets = maintenanceHistoryRepository.findAllByCenterIdSortedForManagement(userCenter.getId());
         }
 
@@ -168,7 +171,6 @@ public class MaintenanceServiceImpl implements MaintenanceService {
 
 
     private MaintenanceHistoryDTO convertToDTO(MaintenanceHistory maintenanceHistory) {
-        // 1. Khởi tạo Builder
         MaintenanceHistoryDTO.MaintenanceHistoryDTOBuilder builder = MaintenanceHistoryDTO.builder()
                 .id(maintenanceHistory.getId())
                 .carType(maintenanceHistory.getVehicle().getCarModel().getCarType())
@@ -177,17 +179,6 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .submittedAt(maintenanceHistory.getSubmittedAt())
                 .completedAt(maintenanceHistory.getCompletedAt())
                 .status(maintenanceHistory.getStatus());
-
-        // 2. Thêm Logic lấy Booking ID (nếu có)
-        // Lưu ý: Bạn cần kiểm tra xem class MaintenanceHistory có getter getBooking() hay không
-        // Nếu MaintenanceHistory chưa có quan hệ với Booking, bạn cần thêm vào Entity trước.
-        // Giả sử entity MaintenanceHistory ĐÃ CÓ quan hệ ManyToOne với Booking:
-
-        // if (maintenanceHistory.getBooking() != null) {
-        //     builder.bookingId(maintenanceHistory.getBooking().getId());
-        // }
-
-        // 3. Build và trả về
         return builder.build();
     }
 
@@ -256,56 +247,42 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Override
     @Transactional
     public void createService(ServiceCreateRequest request, OidcUser oidcUser) {
-        // Lấy thông tin staff hiện tại
         AppUser currentUser = userService.getCurrentUser(oidcUser);
 
-        // Lấy thông tin MaintenanceHistory theo ticketId
         MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(request.ticketId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Service ticket not found with ID: " + request.ticketId()));
 
-        // Lấy thông tin kỹ thuật viên được giao
         AppUser assignedTechnician = appUserRepository.findById(request.technicianId())
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Technician not found with ID: " + request.technicianId()));
 
-        // --- [MỚI] KIỂM TRA GIỚI HẠN 3 TASK/NGÀY CHO TECHNICIAN ---
-        // Logic: Kiểm tra số lượng đơn chưa hoàn thành của technician này trong ngày hẹn của khách
         long currentTasks = maintenanceHistoryRepository.countTasksByTechnicianAndDate(
                 assignedTechnician.getId(),
-                maintenanceHistory.getScheduleDate() // Lấy ngày hẹn (LocalDate)
+                maintenanceHistory.getScheduleDate()
         );
 
         if (currentTasks >= 3) {
-            // Ném lỗi để frontend bắt được và hiện thông báo
             throw new IllegalStateException("This technician has reached the daily limit of 3 tasks!");
         }
-        // -----------------------------------------------------------
 
-        // Cập nhật số km, staff và technician
         maintenanceHistory.setNumOfKm(request.numOfKm());
         maintenanceHistory.setStaff(currentUser);
         maintenanceHistory.setTechnician(assignedTechnician);
         maintenanceHistory.setStaffReceiveAt(LocalDateTime.now());
         maintenanceHistory.setTechnicianReceivedAt(LocalDateTime.now());
         maintenanceHistory.setMaintenanceScheduleId(request.scheduleId());
-
-        // Cập nhật trạng thái đã được technician nhận
         maintenanceHistory.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
 
-        // Lưu thông tin maintenanceHistory
         MaintenanceHistory saved = maintenanceHistoryRepository.save(maintenanceHistory);
 
-        // ======================= LƯU CÁC SERVICE =======================
+        // Lưu các service được chọn
         List<MaintenanceItem> items = new ArrayList<>();
-
-        // Lưu milestone
         MaintenanceItem milestone = new MaintenanceItem();
         milestone.setMaintenanceHistoryId(saved.getId());
         milestone.setMaintenanceMilestoneId(request.scheduleId());
         items.add(milestone);
 
-        // Lưu các service được chọn
         for (Long id : request.checkedServiceIds()) {
             MaintenanceItem s = new MaintenanceItem();
             s.setMaintenanceHistoryId(saved.getId());
@@ -314,8 +291,13 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
         maintenanceItemRepository.saveAll(items);
 
-        // ======================= GỬI MAIL =======================
         emailService.sendTechnicianAssignedEmail(assignedTechnician, saved);
+
+        // --- THONG BAO CHO TECHNICIAN ---
+        notificationService.createNotification(assignedTechnician,
+                "New Task Assigned",
+                "You have been assigned a new task for vehicle " + saved.getVehicle().getLicensePlate(),
+                "TASK");
 
         AppUser owner = saved.getOwner();
         Vehicle vehicle = saved.getVehicle();
@@ -342,48 +324,40 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     public MaintenanceHistoryDTO completeServiceByTechnician(Long ticketId, OidcUser oidcUser) {
         AppUser currentTechnician = userService.getCurrentUser(oidcUser);
 
-        // Lấy ticket
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Service ticket not found with id: " + ticketId));
 
-        // Kiểm tra quyền
         if (ticket.getTechnician() == null || !ticket.getTechnician().getId().equals(currentTechnician.getId())) {
             throw new AccessDeniedException("You are not assigned to this service ticket.");
         }
 
-        // Kiểm tra trạng thái
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
             throw new IllegalStateException("Ticket is not ready to be completed. Current state: " + ticket.getStatus());
         }
 
-        // Cập nhật trạng thái và thời gian hoàn thành
         ticket.setStatus(MaintenanceStatus.TECHNICIAN_COMPLETED);
         ticket.setCompletedAt(LocalDateTime.now());
         MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
 
-        // Cập nhật thông tin xe
-        Vehicle vehicle = savedTicket.getVehicle();
-        if (vehicle != null) {
-            long nextKm = (savedTicket.getNumOfKm() / 12000 + 1) * 12000;
-            LocalDateTime nextDate = savedTicket.getCompletedAt().plusYears(1);
-            vehicle.setOldKm(savedTicket.getNumOfKm());
-            vehicle.setOldDate(savedTicket.getCompletedAt());
-            vehicle.setNextKm(nextKm);
-            vehicle.setNextDate(nextDate);
-            vehicleRepository.save(vehicle);
-        }
+        updateVehicleNextMaintenance(savedTicket);
 
-        // Gửi email thông báo cho khách hàng (bất đồng bộ)
+        // Gửi email
         AppUser owner = savedTicket.getOwner();
+        Vehicle vehicle = savedTicket.getVehicle();
         if (owner != null && currentTechnician != null && vehicle != null) {
             executorService.submit(() ->
                     emailService.sendTechnicianCompletedEmail(owner, currentTechnician, savedTicket)
             );
-        } else {
-            System.err.println("Cannot send technician completed email: missing owner, technician, or vehicle data.");
         }
 
-        // Trả về DTO
+        // --- THONG BAO CHO STAFF ---
+        if (savedTicket.getStaff() != null) {
+            notificationService.createNotification(savedTicket.getStaff(),
+                    "Task Completed",
+                    "Technician " + currentTechnician.getFullName() + " has completed task for " + vehicle.getLicensePlate(),
+                    "TASK");
+        }
+
         return convertToDTO(savedTicket);
     }
 
@@ -403,6 +377,20 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         ticket.setCompletedAt(LocalDateTime.now());
         MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
 
+        updateVehicleNextMaintenance(savedTicket);
+
+        // --- THONG BAO CHO STAFF ---
+        if (savedTicket.getStaff() != null) {
+            notificationService.createNotification(savedTicket.getStaff(),
+                    "Task Completed",
+                    "Technician has completed task #" + id,
+                    "TASK");
+        }
+
+        return convertToDTO(savedTicket);
+    }
+
+    private void updateVehicleNextMaintenance(MaintenanceHistory savedTicket) {
         Vehicle vehicle = savedTicket.getVehicle();
         if (vehicle != null) {
             long nextKm = (savedTicket.getNumOfKm() / 12000 + 1) * 12000;
@@ -413,8 +401,6 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             vehicle.setNextDate(nextDate);
             vehicleRepository.save(vehicle);
         }
-
-        return convertToDTO(savedTicket);
     }
 
     // ====================== HỦY PHIẾU ======================
@@ -424,26 +410,27 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Maintenance record not found with id: " + id));
 
-        // Không cho hủy nếu phiếu đã hoàn thành
         if (ticket.getStatus() == MaintenanceStatus.DONE
                 || ticket.getStatus() == MaintenanceStatus.TECHNICIAN_COMPLETED) {
             throw new IllegalStateException("Cannot cancel a completed order.");
         }
 
-        // Đánh dấu phiếu này không còn là bảo dưỡng
         ticket.setIsMaintenance(false);
         ticket.setRemark("Cancelled by staff/user");
         ticket.setUpdatedAt(LocalDateTime.now());
-
-        // Cập nhật trạng thái sang CANCELLED để khớp với logic Report Cost
         ticket.setStatus(MaintenanceStatus.CANCELLED);
 
         maintenanceHistoryRepository.save(ticket);
 
         if (ticket.getOwner() != null) {
             emailService.sendOrderCancelledEmail(ticket.getOwner(), ticket, "Cancelled by Staff request");
-        }
 
+            // --- THONG BAO HUY DON ---
+            notificationService.createNotification(ticket.getOwner(),
+                    "Order Cancelled",
+                    "Your maintenance order for " + ticket.getVehicle().getLicensePlate() + " has been cancelled.",
+                    "CANCEL");
+        }
     }
 
 
@@ -454,18 +441,14 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Maintenance record not found with id: " + id));
 
-        // Chỉ mở lại nếu phiếu đang bị hủy
         if (Boolean.TRUE.equals(ticket.getIsMaintenance())) {
             throw new IllegalStateException("Only cancelled tickets can be reopened.");
         }
 
-        // Kích hoạt lại
         ticket.setIsMaintenance(true);
         ticket.setRemark("Reopened by staff/admin");
         ticket.setUpdatedAt(LocalDateTime.now());
-
-        // (Optional) Đặt lại trạng thái
-         ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
+        ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
 
         maintenanceHistoryRepository.save(ticket);
     }
@@ -486,12 +469,18 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             if (owner != null) {
                 try {
                     emailService.sendMaintenanceReminderEmail(owner, vehicle, vehicle.getNextDate().toLocalDate());
+
+                    // --- THONG BAO NHAC LICH ---
+                    notificationService.createNotification(owner,
+                            "Maintenance Reminder",
+                            "Your vehicle " + vehicle.getLicensePlate() + " is due for maintenance on " + reminderDate,
+                            "REMINDER");
+
                 } catch (Exception e) {
                     System.err.println("Failed to send reminder to " + owner.getEmail() + ": " + e.getMessage());
                 }
             }
         }
-
         System.out.println("Maintenance reminder emails sent for vehicles due on: " + reminderDate);
     }
 
@@ -500,25 +489,28 @@ public class MaintenanceServiceImpl implements MaintenanceService {
     @Transactional
     public void updateUsedParts(Long ticketId, List<UsedPartDto> usedParts) {
         // 1. Tìm phiếu dịch vụ
-        MaintenanceHistory maintenanceHistory = maintenanceHistoryRepository.findById(ticketId)
+        MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Ticket not found"));
 
-        // Lấy Center của phiếu này
-        Long centerId = maintenanceHistory.getCenter().getId();
+        // --- QUAN TRỌNG: Xác định Center của phiếu này ---
+        if (ticket.getCenter() == null) {
+            throw new IllegalStateException("This ticket does not belong to any center. Cannot deduct stock.");
+        }
+        Long currentCenterId = ticket.getCenter().getId();
+        String centerName = ticket.getCenter().getCenterName();
 
-        // 2. Hoàn trả lại kho các phụ tùng cũ (nếu có update lại)
-        // Lấy danh sách phụ tùng ĐANG sử dụng trong DB
+        // 2. Hoàn trả lại kho các phụ tùng cũ (nếu sửa lại danh sách)
         List<MaintenanceItemPart> currentParts = maintenanceItemPartRepository.findByMaintenanceHistoryId(ticketId);
         for (MaintenanceItemPart oldPart : currentParts) {
-            // Cộng lại vào kho
-            Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(centerId, oldPart.getSparePart().getId())
-                    .orElseThrow(() -> new IllegalStateException("Inventory not found for part: " + oldPart.getSparePart().getPartName()));
+            // Tìm kho của đúng Center này để cộng lại
+            Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(currentCenterId, oldPart.getSparePart().getId())
+                    .orElseThrow(() -> new IllegalStateException("Inventory record missing for part: " + oldPart.getSparePart().getPartName() + " at " + centerName));
 
             inventory.setStockQuantity(inventory.getStockQuantity() + oldPart.getQuantity());
             inventoryRepository.save(inventory);
         }
 
-        // 3. Xóa danh sách cũ trong bảng liên kết
+        // 3. Xóa danh sách cũ
         maintenanceItemPartRepository.deleteByMaintenanceHistoryId(ticketId);
 
         // 4. Thêm mới và Trừ kho
@@ -529,34 +521,44 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 SparePart sparePart = sparePartRepository.findById(partDto.partId())
                         .orElseThrow(() -> new EntityNotFoundException("Spare part not found"));
 
-                // 4.1. Tìm trong kho
-                Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(centerId, sparePart.getId())
-                        .orElseThrow(() -> new IllegalStateException("Part " + sparePart.getPartName() + " is not available in this center"));
+                // --- QUAN TRỌNG: Tìm trong kho của CENTER ĐÓ ---
+                Inventory inventory = inventoryRepository.findByCenterIdAndSparePartId(currentCenterId, sparePart.getId())
+                        .orElseThrow(() -> new IllegalStateException("Part '" + sparePart.getPartName() + "' is NOT available at " + centerName));
 
-                // 4.2. Kiểm tra số lượng tồn
+                // Kiểm tra số lượng
                 if (inventory.getStockQuantity() < partDto.quantity()) {
-                    throw new IllegalStateException("Not enough stock for part: " + sparePart.getPartName() +
-                            ". Available: " + inventory.getStockQuantity());
+                    throw new IllegalStateException("Not enough stock at " + centerName +
+                            ". Part: " + sparePart.getPartName() +
+                            ". Available: " + inventory.getStockQuantity() +
+                            ", Requested: " + partDto.quantity());
                 }
 
-                // 4.3. Trừ kho
+                // Trừ kho
                 inventory.setStockQuantity(inventory.getStockQuantity() - partDto.quantity());
                 inventoryRepository.save(inventory);
 
-                // (Optional) Check Min Stock để gửi mail cảnh báo
+                // --- XỬ LÝ TODO: CẢNH BÁO HẾT HÀNG ---
                 if (inventory.getStockQuantity() <= inventory.getMinStockLevel()) {
-                    // Gửi mail cho Admin kho (bạn tự implement)
-                    // emailService.sendLowStockAlertEmail(inventory);
+                    // Gửi thông báo cho Staff quản lý đơn này
+                    AppUser staff = ticket.getStaff();
+                    if (staff != null) {
+                        notificationService.createNotification(staff,
+                                "Low Stock Alert",
+                                "Part '" + sparePart.getPartName() + "' is running low at " + centerName + ". Current: " + inventory.getStockQuantity(),
+                                "INVENTORY");
+                    }
                 }
+                // ---------------------------------------
 
-                // 4.4. Tạo record sử dụng
+                // Tạo record sử dụng
                 MaintenanceItemPart itemPart = new MaintenanceItemPart();
-                itemPart.setMaintenanceHistory(maintenanceHistory);
+                itemPart.setMaintenanceHistory(ticket);
                 itemPart.setSparePart(sparePart);
                 itemPart.setQuantity(partDto.quantity());
+                // Lưu giá tại thời điểm dùng (nếu entity có trường này, nếu không thì bỏ dòng dưới)
+                // itemPart.setPriceAtTimeOfUse(sparePart.getUnitPrice());
                 newItemParts.add(itemPart);
             }
-
             maintenanceItemPartRepository.saveAll(newItemParts);
         }
     }
@@ -570,26 +572,26 @@ public class MaintenanceServiceImpl implements MaintenanceService {
                 .collect(Collectors.toList());
     }
 
-
-
     @Override
     @Transactional
     public void addOrUpdateAdditionalCost(Long ticketId, BigDecimal amount, String reason) {
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
 
-        // Cập nhật thông tin chi phí phát sinh
         ticket.setHasAdditionalCost(true);
         ticket.setAdditionalCostAmount(amount);
         ticket.setAdditionalCostReason(reason);
-
-        // Chuyển trạng thái sang chờ khách hàng duyệt
-        ticket.setStatus(MaintenanceStatus.PENDING_APPROVAL); // SỬA CHO CHUẨN ENUM
+        ticket.setStatus(MaintenanceStatus.PENDING_APPROVAL);
 
         maintenanceHistoryRepository.save(ticket);
 
-        // Gửi email thông báo cho khách hàng
         emailService.sendAdditionalCostApprovalRequestEmail(ticket.getOwner(), ticket);
+
+        // --- THONG BAO CUSTOMER ---
+        notificationService.createNotification(ticket.getOwner(),
+                "Cost Approval Required",
+                "Technician has reported additional costs. Please review and approve.",
+                "APPROVAL");
     }
 
     @Override
@@ -600,52 +602,49 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(ticketId)
                 .orElseThrow(() -> new EntityNotFoundException("Maintenance ticket not found with id: " + ticketId));
 
-        // Xác thực đúng là chủ của phiếu dịch vụ
         if (!ticket.getOwner().getId().equals(currentUser.getId())) {
             throw new AccessDeniedException("You are not authorized to approve costs for this ticket.");
         }
 
-        // Kiểm tra trạng thái hợp lệ (Dùng PENDING_APPROVAL)
         if (ticket.getStatus() != MaintenanceStatus.PENDING_APPROVAL) {
             throw new IllegalStateException("This ticket is not awaiting customer approval.");
         }
 
-        // Cập nhật trạng thái
         ticket.setStatus(MaintenanceStatus.CUSTOMER_APPROVED);
-
         maintenanceHistoryRepository.save(ticket);
 
-        // Lấy thông tin nhân viên đã được gán cho phiếu này
         AppUser staffAssigned = ticket.getStaff();
-
-        // Chỉ gửi email nếu phiếu này đã có nhân viên phụ trách
         if (staffAssigned != null) {
             emailService.sendCostApprovedNotificationToStaff(staffAssigned, ticket);
+
+            // --- THONG BAO STAFF ---
+            notificationService.createNotification(staffAssigned,
+                    "Cost Approved",
+                    "Customer approved the additional cost for ticket #" + ticket.getId(),
+                    "APPROVAL");
         }
     }
 
     @Override
     public void handoverCarToCustomer(Long id) {
-        // Tìm trong bảng HISTORY (đơn hàng), không phải Schedule
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Order not found with id: " + id));
 
-        // Log ra để debug nếu cần
-        System.out.println("Current Status: " + ticket.getStatus());
-
-        // Kiểm tra trạng thái
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_COMPLETED) {
             throw new RuntimeException("Invalid status for handover. Current: " + ticket.getStatus());
         }
 
-        // Cập nhật trạng thái
         ticket.setStatus(MaintenanceStatus.DONE);
-
-        // Cập nhật thời gian giao xe
         ticket.setHandOverAt(LocalDateTime.now());
-
-        // Lưu
         maintenanceHistoryRepository.save(ticket);
+
+        // --- THONG BAO KHACH HANG ---
+        if (ticket.getOwner() != null) {
+            notificationService.createNotification(ticket.getOwner(),
+                    "Service Completed",
+                    "Your vehicle is ready for pickup. Thank you for using Ecar Service.",
+                    "DONE");
+        }
     }
 
 
@@ -655,34 +654,30 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         MaintenanceHistory ticket = maintenanceHistoryRepository.findById(request.ticketId())
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
 
-        // Chỉ cho phép khi đang sửa chữa
         if (ticket.getStatus() != MaintenanceStatus.TECHNICIAN_RECEIVED) {
             throw new RuntimeException("Invalid status. Must be IN PROGRESS.");
         }
 
-        // Cập nhật thông tin chi phí
         ticket.setHasAdditionalCost(true);
         ticket.setAdditionalCostAmount(request.amount());
         ticket.setAdditionalCostReason(request.reason());
-
-        // Đổi trạng thái sang CHỜ DUYỆT (Dùng PENDING_APPROVAL)
         ticket.setStatus(MaintenanceStatus.PENDING_APPROVAL);
 
         MaintenanceHistory savedTicket = maintenanceHistoryRepository.save(ticket);
 
-        // --- GỬI MAIL CHO STAFF (Hoặc Owner) ---
-        // Lấy Staff phụ trách đơn này
         AppUser staff = savedTicket.getStaff();
-
-        // Nếu có Staff phụ trách -> Gửi mail cho Staff
         if (staff != null) {
             try {
                 emailService.sendAdditionalCostRequestEmail(staff, savedTicket);
+
+                // --- THONG BAO STAFF ---
+                notificationService.createNotification(staff,
+                        "Cost Approval Request",
+                        "Technician requested additional cost for ticket #" + ticket.getId(),
+                        "APPROVAL");
             } catch (Exception e) {
                 System.err.println("Failed to send email: " + e.getMessage());
             }
-        } else {
-            System.out.println("No staff assigned to this ticket to send email.");
         }
     }
 
@@ -697,15 +692,21 @@ public class MaintenanceServiceImpl implements MaintenanceService {
         }
 
         if ("APPROVE".equalsIgnoreCase(decision)) {
-            // Khách duyệt -> Quay lại trạng thái RECEIVED để Tech làm tiếp
             ticket.setStatus(MaintenanceStatus.TECHNICIAN_RECEIVED);
             ticket.setRemark(ticket.getRemark() + " | Customer Approved Additional Cost.");
+
+            // --- THONG BAO TECHNICIAN ---
+            if(ticket.getTechnician() != null) {
+                notificationService.createNotification(ticket.getTechnician(),
+                        "Cost Approved",
+                        "Customer approved the cost. You can resume work on ticket #" + ticket.getId(),
+                        "TASK");
+            }
+
         } else if ("REJECT".equalsIgnoreCase(decision)) {
-            // Khách từ chối -> Hủy đơn
             ticket.setStatus(MaintenanceStatus.CANCELLED);
             ticket.setRemark(ticket.getRemark() + " | Customer Rejected Cost -> Cancelled.");
 
-            // Logic gửi mail khi hủy
             if (ticket.getOwner() != null) {
                 emailService.sendOrderCancelledEmail(ticket.getOwner(), ticket, "Customer declined additional service costs");
             }
@@ -726,20 +727,23 @@ public class MaintenanceServiceImpl implements MaintenanceService {
             throw new IllegalStateException("Can only decline tasks that are currently assigned.");
         }
 
-        // Lưu lại thông tin Tech và Staff trước khi xóa để gửi mail
         AppUser technician = ticket.getTechnician();
         AppUser staff = ticket.getStaff();
 
-        // Reset trạng thái
         ticket.setStatus(MaintenanceStatus.CUSTOMER_SUBMITTED);
         ticket.setTechnician(null);
         ticket.setTechnicianReceivedAt(null);
 
         maintenanceHistoryRepository.save(ticket);
 
-        // Gửi email thông báo cho Staff
         if (staff != null && technician != null) {
             emailService.sendTaskDeclinedEmail(staff, technician, ticket);
+
+            // --- THONG BAO STAFF ---
+            notificationService.createNotification(staff,
+                    "Task Declined",
+                    "Technician " + technician.getFullName() + " declined task #" + id + ". Please reassign.",
+                    "URGENT");
         }
     }
 }

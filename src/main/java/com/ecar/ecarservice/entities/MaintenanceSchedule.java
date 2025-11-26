@@ -66,4 +66,9 @@ public class MaintenanceSchedule {
         }
         return "";
     }
+
+    @ManyToOne
+    @JoinColumn(name = "center_id") // Tên cột khóa ngoại trong DB
+    private Center center;
+
 }
