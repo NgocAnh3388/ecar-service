@@ -66,5 +66,6 @@ public interface MaintenanceService {
 
     void requestAdditionalCost(AdditionalCostRequest request);
     void processCustomerDecision(Long id, String decision);
+    void declineTask(Long id);
 
 }

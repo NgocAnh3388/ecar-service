@@ -3,13 +3,11 @@ package com.ecar.ecarservice.service;
 import com.ecar.ecarservice.dto.UserCreateDTO;
 import com.ecar.ecarservice.dto.UserDto;
 import com.ecar.ecarservice.entities.AppUser;
-import com.ecar.ecarservice.enums.AppRole;
 import com.ecar.ecarservice.payload.requests.UserSearchRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.List;
-import java.util.Set;
 
 public interface UserService {
     List<UserDto> getAllUsers();
@@ -18,14 +16,18 @@ public interface UserService {
     UserDto updateUser(Long id, UserCreateDTO userUpdateDTO);
     void createUser(UserCreateDTO userCreateDTO);
     void deleteUser(Long id);
-    Page<AppUser> searchUsers(UserSearchRequest request);
+
+    // SỬA TẠI ĐÂY: Đổi Page<AppUser> thành Page<UserDto>
+    Page<UserDto> searchUsers(UserSearchRequest request);
+
     AppUser getCurrentUser(OidcUser oidcUser);
     List<AppUser> getUserListByRole(String role);
     AppUser getCurrentUserById(Long id);
     void toggleActiveUser(Long id);
 
+    // Hàm lấy Tech theo Center ID (cho Admin)
     List<AppUser> getTechniciansByCenter(Long centerId);
 
+    // Hàm lấy Tech theo Center của Staff đang login (cho Staff)
     List<UserDto> getTechniciansByCurrentStaffCenter(OidcUser oidcUser);
-
 }

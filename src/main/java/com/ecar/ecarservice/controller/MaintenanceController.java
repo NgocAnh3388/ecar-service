@@ -192,4 +192,11 @@ public class MaintenanceController {
         maintenanceService.processCustomerDecision(id, decision);
         return ResponseEntity.ok(Collections.singletonMap("message", "Order updated successfully based on customer decision."));
     }
+
+    @PutMapping("/{id}/decline")
+    @PreAuthorize("hasRole('TECHNICIAN')")
+    public ResponseEntity<Void> declineTask(@PathVariable Long id) {
+        maintenanceService.declineTask(id);
+        return ResponseEntity.ok().build();
+    }
 }
