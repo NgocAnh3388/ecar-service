@@ -20,11 +20,13 @@ public class InventoryServiceImpl implements InventoryService {
     private final CarModelRepository carModelRepository;
     private final InventoryRepository inventoryRepository;
     private final ServicePartUsageRepository servicePartUsageRepository;
+    private final CenterRepository centerRepository;
 
     // =================== SPARE PART (Thông tin chung) ===================
     @Override
     @Transactional
     public SparePartDTO createPart(SparePartCreateDTO dto) {
+        // 1. Lưu SparePart như bình thường
         CarModel carModel = carModelRepository.findById(dto.getCarModelId())
                 .orElseThrow(() -> new EntityNotFoundException("Car model not found with id: " + dto.getCarModelId()));
 
@@ -36,8 +38,24 @@ public class InventoryServiceImpl implements InventoryService {
         part.setCarModel(carModel);
 
         SparePart savedPart = sparePartRepository.save(part);
+
+        // 2.Tự động tạo bản ghi Inventory cho TẤT CẢ các Center hiện có
+        List<Center> allCenters = centerRepository.findAll();
+
+        List<Inventory> inventories = allCenters.stream().map(center -> {
+            Inventory inv = new Inventory();
+            inv.setCenter(center);
+            inv.setSparePart(savedPart);
+            inv.setStockQuantity(0); // Mặc định tồn kho = 0
+            inv.setMinStockLevel(5); // Mức cảnh báo mặc định
+            return inv;
+        }).toList();
+
+        inventoryRepository.saveAll(inventories);
+
         return toSparePartDTO(savedPart);
     }
+
 
     @Override
     @Transactional
